@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300" role="img" aria-label="Tabs">
+  <rect width="480" height="300" fill="#2b2419"/>
+  <rect x="28" y="28" width="424" height="244" rx="18" fill="#ffffff" fill-opacity=".08" stroke="#ffffff" stroke-opacity=".18"/>
+  <rect x="54" y="58" width="156" height="14" rx="7" fill="#f4cf81" fill-opacity=".92"/>
+  <rect x="54" y="90" width="260" height="8" rx="4" fill="#ffffff" fill-opacity=".4"/>
+  <rect x="54" y="116" width="358" height="8" rx="4" fill="#ffffff" fill-opacity=".22"/>
+  <rect x="102" y="158" width="118" height="82" rx="12" fill="#f4cf81" fill-opacity=".24"/>
+  <rect x="238" y="158" width="118" height="82" rx="12" fill="#ffffff" fill-opacity=".12"/>
+  <rect x="302" y="158" width="86" height="82" rx="12" fill="#ffffff" fill-opacity=".08"/>
+  <text x="54" y="258" fill="#ffffff" fill-opacity=".8" font-family="Arial, sans-serif" font-size="16">Tabs</text>
+</svg>

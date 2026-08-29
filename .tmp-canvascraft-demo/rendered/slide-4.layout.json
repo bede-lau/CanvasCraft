@@ -1,0 +1,3590 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/zkh7tc",
+    "id": "zkh7tc",
+    "slide": 4,
+    "layoutId": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#0A0B0F",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rihsn6x8",
+      "id": "1",
+      "name": "grid-v-0",
+      "bbox": [
+        0,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cjq9wbed",
+      "id": "2",
+      "name": "grid-v-48",
+      "bbox": [
+        48,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dkzapgfy",
+      "id": "3",
+      "name": "grid-v-96",
+      "bbox": [
+        96,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/el8rylwj",
+      "id": "4",
+      "name": "grid-v-144",
+      "bbox": [
+        144,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zmhsrqd4",
+      "id": "5",
+      "name": "grid-v-192",
+      "bbox": [
+        192,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0na90bep",
+      "id": "6",
+      "name": "grid-v-240",
+      "bbox": [
+        240,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1ojatgva",
+      "id": "7",
+      "name": "grid-v-288",
+      "bbox": [
+        288,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mpsr2lwv",
+      "id": "8",
+      "name": "grid-v-336",
+      "bbox": [
+        336,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nq1svqd0",
+      "id": "9",
+      "name": "grid-v-384",
+      "bbox": [
+        384,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vah03ahw",
+      "id": "10",
+      "name": "grid-v-432",
+      "bbox": [
+        432,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u98zu5gb",
+      "id": "11",
+      "name": "grid-v-480",
+      "bbox": [
+        480,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hczi5kz2",
+      "id": "12",
+      "name": "grid-v-528",
+      "bbox": [
+        528,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wbq1wfyh",
+      "id": "13",
+      "name": "grid-v-576",
+      "bbox": [
+        576,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/76x0zah0",
+      "id": "14",
+      "name": "grid-v-624",
+      "bbox": [
+        624,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m5ozq50f",
+      "id": "15",
+      "name": "grid-v-672",
+      "bbox": [
+        672,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/98fi10zq",
+      "id": "16",
+      "name": "grid-v-720",
+      "bbox": [
+        720,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/876hsfy5",
+      "id": "17",
+      "name": "grid-v-768",
+      "bbox": [
+        768,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r210buh4",
+      "id": "18",
+      "name": "grid-v-816",
+      "bbox": [
+        816,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61sj2pgj",
+      "id": "19",
+      "name": "grid-v-864",
+      "bbox": [
+        864,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/29wbqx43",
+      "id": "20",
+      "name": "grid-v-912",
+      "bbox": [
+        912,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/na5cj25o",
+      "id": "21",
+      "name": "grid-v-960",
+      "bbox": [
+        960,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/obeds7m9",
+      "id": "22",
+      "name": "grid-v-1008",
+      "bbox": [
+        1008,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pcnulsne",
+      "id": "23",
+      "name": "grid-v-1056",
+      "bbox": [
+        1056,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adgvux4z",
+      "id": "24",
+      "name": "grid-v-1104",
+      "bbox": [
+        1104,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bepcn25k",
+      "id": "25",
+      "name": "grid-v-1152",
+      "bbox": [
+        1152,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/czydw7m5",
+      "id": "26",
+      "name": "grid-v-1200",
+      "bbox": [
+        1200,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 27,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x07upcnq",
+      "id": "27",
+      "name": "grid-v-1248",
+      "bbox": [
+        1248,
+        0,
+        1,
+        720
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 28,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qhcbidov",
+      "id": "28",
+      "name": "grid-h-0",
+      "bbox": [
+        0,
+        0,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 29,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rilcbi5g",
+      "id": "29",
+      "name": "grid-h-48",
+      "bbox": [
+        0,
+        48,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 30,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/twbexg7y",
+      "id": "30",
+      "name": "grid-h-96",
+      "bbox": [
+        0,
+        96,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 31,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8vixob6d",
+      "id": "31",
+      "name": "grid-h-144",
+      "bbox": [
+        0,
+        144,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 32,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7u9wv6ps",
+      "id": "32",
+      "name": "grid-h-192",
+      "bbox": [
+        0,
+        192,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 33,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6t0fm1o7",
+      "id": "33",
+      "name": "grid-h-240",
+      "bbox": [
+        0,
+        240,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 34,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h0by1g7u",
+      "id": "34",
+      "name": "grid-h-288",
+      "bbox": [
+        0,
+        288,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 35,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gz2xsv69",
+      "id": "35",
+      "name": "grid-h-336",
+      "bbox": [
+        0,
+        336,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 36,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vytgzqp4",
+      "id": "36",
+      "name": "grid-h-384",
+      "bbox": [
+        0,
+        384,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 37,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uxkfqloj",
+      "id": "37",
+      "name": "grid-h-432",
+      "bbox": [
+        0,
+        432,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 38,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x47epw7q",
+      "id": "38",
+      "name": "grid-h-480",
+      "bbox": [
+        0,
+        480,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 39,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c3yxgr65",
+      "id": "39",
+      "name": "grid-h-528",
+      "bbox": [
+        0,
+        528,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 40,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0j6hozqt",
+      "id": "40",
+      "name": "grid-h-576",
+      "bbox": [
+        0,
+        576,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 41,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kfix4re",
+      "id": "41",
+      "name": "grid-h-624",
+      "bbox": [
+        0,
+        624,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 42,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/exozmp8n",
+      "id": "42",
+      "name": "grid-h-672",
+      "bbox": [
+        0,
+        672,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 43,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fyx0vu98",
+      "id": "43",
+      "name": "grid-h-720",
+      "bbox": [
+        0,
+        720,
+        1280,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#10141C",
+      "lineWidth": 0
+    },
+    {
+      "order": 44,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sv6hkfqh",
+      "id": "44",
+      "name": "architecture-title",
+      "bbox": [
+        72,
+        54,
+        1000,
+        52
+      ],
+      "geometry": "rect",
+      "text": "Every integration is visible in the demo trace.",
+      "textPreview": "Every integration is visible in the demo trace.",
+      "resolvedFontSize": 40,
+      "resolvedTextStyle": {
+        "fontSize": 40,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Every integration is visible in the demo trace."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Every integration is visible in the demo trace.",
+          "resolvedTextStyle": {
+            "fontSize": 40,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Every integration is visible in the demo trace.",
+              "fontSize": 40,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 45,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dwfitkr2",
+      "id": "45",
+      "name": "architecture-subtitle",
+      "bbox": [
+        72,
+        112,
+        1080,
+        28
+      ],
+      "geometry": "rect",
+      "text": "A deliberately narrow stack: browser studio → credentialed orchestration → GPU matching → isolated previews.",
+      "textPreview": "A deliberately narrow stack: browser studio → credentialed orchestration → GPU matching → isolated previews.",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "fontSize": 19,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "A deliberately narrow stack: browser studio → credentialed orchestration → GPU matching → isolated previews."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "A deliberately narrow stack: browser studio → credentialed orchestration → GPU matching → isolated previews.",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A deliberately narrow stack: browser studio → credentialed orchestration → GPU matching → isolated previews.",
+              "fontSize": 19,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 46,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qt4zip8r",
+      "id": "46",
+      "name": "architecture-arrow-1-shaft",
+      "bbox": [
+        250,
+        265,
+        44,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 47,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rud0ru9c",
+      "id": "47",
+      "name": "architecture-arrow-1-head",
+      "bbox": [
+        292,
+        258,
+        16,
+        16
+      ],
+      "rotation": 90,
+      "geometry": "triangle",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 48,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4rmhgfql",
+      "id": "48",
+      "name": "architecture-arrow-2-shaft",
+      "bbox": [
+        520,
+        265,
+        44,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 49,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5svipkr6",
+      "id": "49",
+      "name": "architecture-arrow-2-head",
+      "bbox": [
+        562,
+        258,
+        16,
+        16
+      ],
+      "rotation": 90,
+      "geometry": "triangle",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 50,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7mt0zats",
+      "id": "50",
+      "name": "architecture-arrow-3-shaft",
+      "bbox": [
+        790,
+        265,
+        44,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 51,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6lkjq5cn",
+      "id": "51",
+      "name": "architecture-arrow-3-head",
+      "bbox": [
+        832,
+        258,
+        16,
+        16
+      ],
+      "rotation": 90,
+      "geometry": "triangle",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 52,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tovi1kby",
+      "id": "52",
+      "name": "architecture-arrow-4-shaft",
+      "bbox": [
+        1060,
+        265,
+        44,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 53,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8n21sfud",
+      "id": "53",
+      "name": "architecture-arrow-4-head",
+      "bbox": [
+        1102,
+        258,
+        16,
+        16
+      ],
+      "rotation": 90,
+      "geometry": "triangle",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 54,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vqd03at4",
+      "id": "54",
+      "name": "architecture-client",
+      "bbox": [
+        72,
+        186,
+        178,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 55,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/up4jupcj",
+      "id": "55",
+      "name": "architecture-client-title",
+      "bbox": [
+        96,
+        210,
+        135,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Canvas Studio",
+      "textPreview": "Canvas Studio",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Canvas"
+          },
+          {
+            "index": 2,
+            "text": "Studio"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Canvas Studio",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Canvas Studio",
+              "fontSize": 21,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 56,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hsv25kba",
+      "id": "56",
+      "name": "architecture-client-copy",
+      "bbox": [
+        96,
+        240,
+        120,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Capture intent",
+      "textPreview": "Capture intent",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Capture intent"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Capture intent",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Capture intent",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 57,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zq5gve9g",
+      "id": "57",
+      "bbox": [
+        96,
+        278,
+        32,
+        32
+      ],
+      "alt": "React logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "d92c3d21-ed78-46af-8942-67a0f7366106",
+        "contentType": "image/svg+xml",
+        "byteLength": 2926
+      }
+    },
+    {
+      "order": 58,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/gvaxczax",
+      "id": "58",
+      "bbox": [
+        139,
+        278,
+        32,
+        32
+      ],
+      "alt": "Vite logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "ecd6afba-ad86-4a9e-b9cd-570585ee21e5",
+        "contentType": "image/svg+xml",
+        "byteLength": 447
+      }
+    },
+    {
+      "order": 59,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/hwjyl4ri",
+      "id": "59",
+      "bbox": [
+        182,
+        278,
+        32,
+        32
+      ],
+      "alt": "TypeScript logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "b2452951-8258-4519-a034-87fac71aaaf9",
+        "contentType": "image/svg+xml",
+        "byteLength": 1294
+      }
+    },
+    {
+      "order": 60,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/xgr6twfu",
+      "id": "60",
+      "bbox": [
+        96,
+        317,
+        32,
+        22
+      ],
+      "alt": "Tailwind CSS logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "bc20662f-f982-425c-9623-fe27b43b3ef3",
+        "contentType": "image/svg+xml",
+        "byteLength": 602
+      }
+    },
+    {
+      "order": 61,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fqh4zyd8",
+      "id": "61",
+      "name": "architecture-client-stack",
+      "bbox": [
+        135,
+        318,
+        108,
+        30
+      ],
+      "geometry": "rect",
+      "text": "React · Vite · TS · Tailwind",
+      "textPreview": "React · Vite · TS · Tailwind",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "React · Vite · TS ·"
+          },
+          {
+            "index": 2,
+            "text": "Tailwind"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "React · Vite · TS · Tailwind",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "React · Vite · TS · Tailwind",
+              "fontSize": 10,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 62,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0bql83et",
+      "id": "62",
+      "name": "architecture-orchestrator",
+      "bbox": [
+        312,
+        186,
+        208,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 63,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1czm18ve",
+      "id": "63",
+      "name": "architecture-orch-title",
+      "bbox": [
+        336,
+        210,
+        150,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Orchestrator",
+      "textPreview": "Orchestrator",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Orchestrator"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Orchestrator",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Orchestrator",
+              "fontSize": 21,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 64,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qlo329wr",
+      "id": "64",
+      "name": "architecture-orch-copy",
+      "bbox": [
+        336,
+        240,
+        170,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Schemas · credentials · SSE",
+      "textPreview": "Schemas · credentials · SSE",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Schemas · credentials ·"
+          },
+          {
+            "index": 2,
+            "text": "SSE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Schemas · credentials · SSE",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Schemas · credentials · SSE",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 65,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/kj254ryl",
+      "id": "65",
+      "bbox": [
+        336,
+        277,
+        47,
+        28
+      ],
+      "alt": "Fastify logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "609f294a-4dc7-406c-a55a-1a293f6acc4a",
+        "contentType": "image/svg+xml",
+        "byteLength": 1165
+      }
+    },
+    {
+      "order": 66,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/jitov6x0",
+      "id": "66",
+      "bbox": [
+        394,
+        277,
+        34,
+        34
+      ],
+      "alt": "Node.js logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "14be3009-ddb7-4ab5-a58a-c121119f7168",
+        "contentType": "image/svg+xml",
+        "byteLength": 1608
+      }
+    },
+    {
+      "order": 67,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/yhkn21gf",
+      "id": "67",
+      "bbox": [
+        438,
+        277,
+        34,
+        34
+      ],
+      "alt": "Zod logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "e0673a6d-b75a-4a1f-b468-8ef55bc5ddf1",
+        "contentType": "image/svg+xml",
+        "byteLength": 515
+      }
+    },
+    {
+      "order": 68,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/t8v61gf2",
+      "id": "68",
+      "bbox": [
+        482,
+        277,
+        30,
+        30
+      ],
+      "alt": "OpenAI logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "9664ff22-e3e1-4272-b2f7-292efde91de1",
+        "contentType": "image/svg+xml",
+        "byteLength": 1894
+      }
+    },
+    {
+      "order": 69,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bi147idg",
+      "id": "69",
+      "name": "architecture-orch-stack",
+      "bbox": [
+        336,
+        318,
+        170,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Fastify · Node · Zod · OpenAI-compatible",
+      "textPreview": "Fastify · Node · Zod · OpenAI-compatible",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Fastify · Node · Zod ·"
+          },
+          {
+            "index": 2,
+            "text": "OpenAI-compatible"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Fastify · Node · Zod · OpenAI-compatible",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Fastify · Node · Zod · OpenAI-compatible",
+              "fontSize": 10,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 70,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5onytgju",
+      "id": "70",
+      "name": "architecture-nosana",
+      "bbox": [
+        582,
+        186,
+        208,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 71,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ru5kvidk",
+      "id": "71",
+      "bbox": [
+        608,
+        213,
+        122,
+        28
+      ],
+      "alt": "Nosana logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "3c334733-e441-4c27-87a4-81522b0502b5",
+        "contentType": "image/svg+xml",
+        "byteLength": 4192
+      }
+    },
+    {
+      "order": 72,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jm5gr61o",
+      "id": "72",
+      "name": "architecture-nosana-title",
+      "bbox": [
+        608,
+        248,
+        140,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Visual matching",
+      "textPreview": "Visual matching",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Visual"
+          },
+          {
+            "index": 2,
+            "text": "matching"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Visual matching",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Visual matching",
+              "fontSize": 20,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 73,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ylwfi1kj",
+      "id": "73",
+      "name": "architecture-nosana-copy",
+      "bbox": [
+        608,
+        278,
+        150,
+        18
+      ],
+      "geometry": "rect",
+      "text": "CLIP rank + local gate",
+      "textPreview": "CLIP rank + local gate",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CLIP rank + local gate"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CLIP rank + local gate",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CLIP rank + local gate",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 74,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/exw36dwb",
+      "id": "74",
+      "bbox": [
+        608,
+        312,
+        29,
+        29
+      ],
+      "alt": "FastAPI logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "fd485072-a19e-4a3a-958d-22c25b3148d2",
+        "contentType": "image/svg+xml",
+        "byteLength": 347
+      }
+    },
+    {
+      "order": 75,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zypkzidw",
+      "id": "75",
+      "bbox": [
+        646,
+        312,
+        29,
+        29
+      ],
+      "alt": "Python logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "e3e968b4-8155-4900-a796-912b1646c94d",
+        "contentType": "image/svg+xml",
+        "byteLength": 1518
+      }
+    },
+    {
+      "order": 76,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bilgnm1s",
+      "id": "76",
+      "name": "architecture-nosana-stack",
+      "bbox": [
+        682,
+        316,
+        90,
+        22
+      ],
+      "geometry": "rect",
+      "text": "FastAPI · Python · CLIP",
+      "textPreview": "FastAPI · Python · CLIP",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "FastAPI · Python"
+          },
+          {
+            "index": 2,
+            "text": "· CLIP"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "FastAPI · Python · CLIP",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "FastAPI · Python · CLIP",
+              "fontSize": 10,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 77,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ahcfehk7",
+      "id": "77",
+      "name": "architecture-daytona",
+      "bbox": [
+        852,
+        186,
+        208,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 78,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/mlg3axw7",
+      "id": "78",
+      "bbox": [
+        876,
+        213,
+        126,
+        26
+      ],
+      "alt": "Daytona logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "87b6107b-379a-49ea-902e-008e93a29e72",
+        "contentType": "image/svg+xml",
+        "byteLength": 5274
+      }
+    },
+    {
+      "order": 79,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gfyhsvih",
+      "id": "79",
+      "name": "architecture-daytona-title",
+      "bbox": [
+        876,
+        248,
+        154,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Parallel branches",
+      "textPreview": "Parallel branches",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Parallel"
+          },
+          {
+            "index": 2,
+            "text": "branches"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Parallel branches",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Parallel branches",
+              "fontSize": 20,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 80,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cb21kz2p",
+      "id": "80",
+      "name": "architecture-daytona-copy",
+      "bbox": [
+        876,
+        278,
+        160,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Snapshot → sandbox → preview",
+      "textPreview": "Snapshot → sandbox → preview",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Snapshot → sandbox →"
+          },
+          {
+            "index": 2,
+            "text": "preview"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Snapshot → sandbox → preview",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Snapshot → sandbox → preview",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 81,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/mdwz6p0n",
+      "id": "81",
+      "bbox": [
+        876,
+        312,
+        35,
+        27
+      ],
+      "alt": "Docker logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "a6c6bd0b-7f33-4675-b1c6-e867f8cf1551",
+        "contentType": "image/svg+xml",
+        "byteLength": 1765
+      }
+    },
+    {
+      "order": 82,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/9gny14ze",
+      "id": "82",
+      "bbox": [
+        923,
+        312,
+        29,
+        29
+      ],
+      "alt": "Framer Motion logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "d5ab8306-18f0-49dc-b258-d8b98114f886",
+        "contentType": "image/svg+xml",
+        "byteLength": 146
+      }
+    },
+    {
+      "order": 83,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ra90rul4",
+      "id": "83",
+      "name": "architecture-daytona-stack",
+      "bbox": [
+        961,
+        316,
+        80,
+        22
+      ],
+      "geometry": "rect",
+      "text": "Docker · Motion",
+      "textPreview": "Docker · Motion",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Docker ·"
+          },
+          {
+            "index": 2,
+            "text": "Motion"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Docker · Motion",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Docker · Motion",
+              "fontSize": 10,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 84,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0f21oz21",
+      "id": "84",
+      "name": "architecture-outputs",
+      "bbox": [
+        1122,
+        186,
+        86,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#F0B860",
+      "lineWidth": 0
+    },
+    {
+      "order": 85,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1gbix43m",
+      "id": "85",
+      "name": "architecture-outputs-number",
+      "bbox": [
+        1122,
+        210,
+        86,
+        64
+      ],
+      "geometry": "rect",
+      "text": "3",
+      "textPreview": "3",
+      "resolvedFontSize": 54,
+      "resolvedTextStyle": {
+        "fontSize": 54,
+        "typeface": "+mn-lt",
+        "color": "#0A0B0F",
+        "bold": true,
+        "alignment": "center",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3",
+          "resolvedTextStyle": {
+            "fontSize": 54,
+            "color": "#0A0B0F",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "3",
+              "fontSize": 54,
+              "color": "#0A0B0F",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 86,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/edkjmpkv",
+      "id": "86",
+      "name": "architecture-outputs-label",
+      "bbox": [
+        1124,
+        277,
+        82,
+        44
+      ],
+      "geometry": "rect",
+      "text": "live\npreviews",
+      "textPreview": "live | previews",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#0A0B0F",
+        "bold": true,
+        "alignment": "center",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "live"
+          },
+          {
+            "index": 2,
+            "text": "previews"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "live",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#0A0B0F",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "live",
+              "fontSize": 14,
+              "color": "#0A0B0F",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "previews",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#0A0B0F",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "previews",
+              "fontSize": 14,
+              "color": "#0A0B0F",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 87,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zet0vulg",
+      "id": "87",
+      "name": "architecture-boundary",
+      "bbox": [
+        72,
+        410,
+        1136,
+        124
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 88,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gji1cfmh",
+      "id": "88",
+      "name": "architecture-boundary-kicker",
+      "bbox": [
+        96,
+        434,
+        180,
+        18
+      ],
+      "geometry": "rect",
+      "text": "SECURITY BOUNDARY",
+      "textPreview": "SECURITY BOUNDARY",
+      "resolvedFontSize": 12,
+      "resolvedTextStyle": {
+        "fontSize": 12,
+        "typeface": "+mn-lt",
+        "color": "#F0B860",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SECURITY BOUNDARY"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SECURITY BOUNDARY",
+          "resolvedTextStyle": {
+            "fontSize": 12,
+            "color": "#F0B860",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SECURITY BOUNDARY",
+              "fontSize": 12,
+              "color": "#F0B860",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 89,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hkril032",
+      "id": "89",
+      "name": "architecture-boundary-title",
+      "bbox": [
+        96,
+        462,
+        760,
+        31
+      ],
+      "geometry": "rect",
+      "text": "The browser never holds API keys or talks to integrations directly.",
+      "textPreview": "The browser never holds API keys or talks to integrations directly.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The browser never holds API keys or talks to integrations directly."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The browser never holds API keys or talks to integrations directly.",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The browser never holds API keys or talks to integrations directly.",
+              "fontSize": 24,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 90,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jyx4ri5k",
+      "id": "90",
+      "name": "architecture-boundary-copy",
+      "bbox": [
+        96,
+        500,
+        940,
+        18
+      ],
+      "geometry": "rect",
+      "text": "The orchestrator owns provider credentials, sandbox capability, progress events, and explicit fallback states.",
+      "textPreview": "The orchestrator owns provider credentials, sandbox capability, progress events, and explicit fallback states.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The orchestrator owns provider credentials, sandbox capability, progress events, and explicit fallback states."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The orchestrator owns provider credentials, sandbox capability, progress events, and explicit fallback states.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The orchestrator owns provider credentials, sandbox capability, progress events, and explicit fallback states.",
+              "fontSize": 15,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 91,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yxo3id4z",
+      "id": "91",
+      "name": "architecture-stack-label",
+      "bbox": [
+        72,
+        580,
+        170,
+        20
+      ],
+      "geometry": "rect",
+      "text": "IMPLEMENTED STACK",
+      "textPreview": "IMPLEMENTED STACK",
+      "resolvedFontSize": 12,
+      "resolvedTextStyle": {
+        "fontSize": 12,
+        "typeface": "+mn-lt",
+        "color": "#F0B860",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "IMPLEMENTED STACK"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "IMPLEMENTED STACK",
+          "resolvedTextStyle": {
+            "fontSize": 12,
+            "color": "#F0B860",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "IMPLEMENTED STACK",
+              "fontSize": 12,
+              "color": "#F0B860",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 92,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l0fmt8nq",
+      "id": "92",
+      "name": "architecture-chip-react-surface",
+      "bbox": [
+        72,
+        610,
+        154,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 93,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kz6lknm5",
+      "id": "93",
+      "name": "architecture-chip-react-accent",
+      "bbox": [
+        72,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#7AA7FF",
+      "lineWidth": 0
+    },
+    {
+      "order": 94,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/snyxkjex",
+      "id": "94",
+      "bbox": [
+        90,
+        625,
+        38,
+        38
+      ],
+      "alt": "React logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "9bd775d3-7453-48df-a7ea-de9cb010632d",
+        "contentType": "image/svg+xml",
+        "byteLength": 2926
+      }
+    },
+    {
+      "order": 95,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/a943et43",
+      "id": "95",
+      "name": "architecture-chip-react-title",
+      "bbox": [
+        138,
+        629,
+        74,
+        24
+      ],
+      "geometry": "rect",
+      "text": "React",
+      "textPreview": "React",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "React"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "React",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "React",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 96,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xwfmp8nu",
+      "id": "96",
+      "name": "architecture-chip-vite-surface",
+      "bbox": [
+        240,
+        610,
+        136,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 97,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wb6lg3m9",
+      "id": "97",
+      "name": "architecture-chip-vite-accent",
+      "bbox": [
+        240,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#E9897E",
+      "lineWidth": 0
+    },
+    {
+      "order": 98,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/4jyxgzel",
+      "id": "98",
+      "bbox": [
+        258,
+        625,
+        38,
+        38
+      ],
+      "alt": "Vite logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "6af7ab33-a9b7-4daa-a921-d8491be8a25d",
+        "contentType": "image/svg+xml",
+        "byteLength": 447
+      }
+    },
+    {
+      "order": 99,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m543ato7",
+      "id": "99",
+      "name": "architecture-chip-vite-title",
+      "bbox": [
+        306,
+        629,
+        56,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Vite",
+      "textPreview": "Vite",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Vite"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Vite",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Vite",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 100,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ba9krulg",
+      "id": "100",
+      "name": "architecture-chip-typescript-surface",
+      "bbox": [
+        390,
+        610,
+        166,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 101,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/a90jyp4v",
+      "id": "101",
+      "name": "architecture-chip-typescript-accent",
+      "bbox": [
+        390,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#7AA7FF",
+      "lineWidth": 0
+    },
+    {
+      "order": 102,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/03ex8rut",
+      "id": "102",
+      "bbox": [
+        408,
+        625,
+        38,
+        38
+      ],
+      "alt": "TypeScript logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "6031328c-4098-48cd-8ace-33726a71e902",
+        "contentType": "image/svg+xml",
+        "byteLength": 1294
+      }
+    },
+    {
+      "order": 103,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wbi10zm1",
+      "id": "103",
+      "name": "architecture-chip-typescript-title",
+      "bbox": [
+        456,
+        629,
+        86,
+        24
+      ],
+      "geometry": "rect",
+      "text": "TypeScript",
+      "textPreview": "TypeScript",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "TypeScri"
+          },
+          {
+            "index": 2,
+            "text": "pt"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "TypeScript",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "TypeScript",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 104,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jetkvelc",
+      "id": "104",
+      "name": "architecture-chip-tailwind-surface",
+      "bbox": [
+        570,
+        610,
+        164,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 105,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yd0j2947",
+      "id": "105",
+      "name": "architecture-chip-tailwind-accent",
+      "bbox": [
+        570,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#7BC89A",
+      "lineWidth": 0
+    },
+    {
+      "order": 106,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/czux47uh",
+      "id": "106",
+      "bbox": [
+        588,
+        625,
+        38,
+        38
+      ],
+      "alt": "Tailwind logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "c23d6eee-8c5f-4130-a97e-917c87a3b25f",
+        "contentType": "image/svg+xml",
+        "byteLength": 602
+      }
+    },
+    {
+      "order": 107,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kf21ojmx",
+      "id": "107",
+      "name": "architecture-chip-tailwind-title",
+      "bbox": [
+        636,
+        629,
+        84,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Tailwind",
+      "textPreview": "Tailwind",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Tailwind"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Tailwind",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Tailwind",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 108,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7itkzelo",
+      "id": "108",
+      "name": "architecture-chip-fastify-surface",
+      "bbox": [
+        748,
+        610,
+        156,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 109,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6hk3q943",
+      "id": "109",
+      "name": "architecture-chip-fastify-accent",
+      "bbox": [
+        748,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#E9897E",
+      "lineWidth": 0
+    },
+    {
+      "order": 110,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/5orid0vi",
+      "id": "110",
+      "bbox": [
+        766,
+        625,
+        38,
+        38
+      ],
+      "alt": "Fastify logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "f5f67aa2-a72a-40e4-be80-4ba62e63aafd",
+        "contentType": "image/svg+xml",
+        "byteLength": 1165
+      }
+    },
+    {
+      "order": 111,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/58vipojm",
+      "id": "111",
+      "name": "architecture-chip-fastify-title",
+      "bbox": [
+        814,
+        629,
+        76,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Fastify",
+      "textPreview": "Fastify",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Fastify"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Fastify",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Fastify",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 112,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i54jet0b",
+      "id": "112",
+      "name": "architecture-chip-docker-surface",
+      "bbox": [
+        918,
+        610,
+        150,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 113,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/36d0ne1w",
+      "id": "113",
+      "name": "architecture-chip-docker-accent",
+      "bbox": [
+        918,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#7AA7FF",
+      "lineWidth": 0
+    },
+    {
+      "order": 114,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/x07i90vm",
+      "id": "114",
+      "bbox": [
+        936,
+        625,
+        38,
+        38
+      ],
+      "alt": "Docker logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "fc804409-33e6-433d-b7dd-e8bb9ca41c3c",
+        "contentType": "image/svg+xml",
+        "byteLength": 1765
+      }
+    },
+    {
+      "order": 115,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hkbilojq",
+      "id": "115",
+      "name": "architecture-chip-docker-title",
+      "bbox": [
+        984,
+        629,
+        70,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Docker",
+      "textPreview": "Docker",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Docke"
+          },
+          {
+            "index": 2,
+            "text": "r"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Docker",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Docker",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 116,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uhkja9kz",
+      "id": "116",
+      "name": "architecture-chip-zod-surface",
+      "bbox": [
+        1082,
+        610,
+        126,
+        48
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 117,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vit0je1k",
+      "id": "117",
+      "name": "architecture-chip-zod-accent",
+      "bbox": [
+        1082,
+        610,
+        4,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#7BC89A",
+      "lineWidth": 0
+    },
+    {
+      "order": 118,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/hwbilkvq",
+      "id": "118",
+      "bbox": [
+        1100,
+        625,
+        38,
+        38
+      ],
+      "alt": "Zod logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "f1ff636f-0095-490e-83bd-332c8e9a7648",
+        "contentType": "image/svg+xml",
+        "byteLength": 515
+      }
+    },
+    {
+      "order": 119,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tgbih4ju",
+      "id": "119",
+      "name": "architecture-chip-zod-title",
+      "bbox": [
+        1148,
+        629,
+        46,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Zod",
+      "textPreview": "Zod",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "fontSize": 18,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Zo"
+          },
+          {
+            "index": 2,
+            "text": "d"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Zod",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Zod",
+              "fontSize": 18,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 120,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9c3yl0bi",
+      "id": "120",
+      "name": "footer-rule",
+      "bbox": [
+        72,
+        672,
+        1136,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#2A2F3B",
+      "lineWidth": 0
+    },
+    {
+      "order": 121,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8buhcvux",
+      "id": "121",
+      "name": "footer-brand",
+      "bbox": [
+        72,
+        682,
+        160,
+        18
+      ],
+      "geometry": "rect",
+      "text": "CANVASCRAFT",
+      "textPreview": "CANVASCRAFT",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#F0B860",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CANVASCRAFT"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CANVASCRAFT",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#F0B860",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CANVASCRAFT",
+              "fontSize": 11,
+              "color": "#F0B860",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 122,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nalgjqtc",
+      "id": "122",
+      "name": "footer-text",
+      "bbox": [
+        802,
+        682,
+        406,
+        18
+      ],
+      "geometry": "rect",
+      "text": "CREDENTIALS STAY SERVER-SIDE · FAILURES STAY VISIBLE",
+      "textPreview": "CREDENTIALS STAY SERVER-SIDE · FAILURES STAY VISIBLE",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CREDENTIALS STAY SERVER-SIDE · FAILURES STAY VISIBLE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CREDENTIALS STAY SERVER-SIDE · FAILURES STAY VISIBLE",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#8B93A7",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CREDENTIALS STAY SERVER-SIDE · FAILURES STAY VISIBLE",
+              "fontSize": 11,
+              "color": "#8B93A7",
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

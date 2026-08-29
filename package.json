@@ -1,0 +1,28 @@
+{
+  "name": "canvascraft",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Turn a rough wireframe into three comparable, live frontend prototype branches.",
+  "type": "module",
+  "packageManager": "pnpm@10.29.3",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:web": "pnpm --filter @canvascraft/web dev",
+    "dev:orchestrator": "pnpm --filter @canvascraft/orchestrator dev",
+    "build": "pnpm --filter @canvascraft/schema build && pnpm --filter @canvascraft/registry build && pnpm --filter @canvascraft/orchestrator build && pnpm --filter @canvascraft/web build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm typecheck",
+    "test": "pnpm -r test",
+    "registry:index": "pnpm --filter @canvascraft/registry index",
+    "registry:validate": "pnpm --filter @canvascraft/registry validate",
+    "snapshot:build": "node scripts/build-daytona-snapshot.mjs",
+    "nosana:build": "node scripts/build-nosana-image.mjs",
+    "doctor": "node scripts/doctor.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "tsx": "^4.20.6",
+    "@types/node": "^24.10.1"
+  }
+}

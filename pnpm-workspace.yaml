@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+  - "packages/schema"
+  - "packages/registry"
+
+# packages/branch-template is deliberately EXCLUDED from the workspace.
+# It is a standalone project that gets copied verbatim into Daytona sandboxes,
+# so it must never resolve dependencies through the host workspace's node_modules.
+
+onlyBuiltDependencies:
+  - esbuild
+  - "@tailwindcss/oxide"
+  - sharp

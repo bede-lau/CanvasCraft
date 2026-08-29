@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+.env
+.env.local
+.env.*.local
+!.env.example
+
+.omc/
+.canvascraft/
+.codegraph/
+.DS_Store
+Thumbs.db
+
+# generated artifacts
+packages/registry/data/embeddings.json
+services/nosana-clip/.venv/
+services/nosana-clip/__pycache__/
+**/__pycache__/

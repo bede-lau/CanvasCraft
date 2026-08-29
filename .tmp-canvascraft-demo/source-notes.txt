@@ -1,0 +1,14 @@
+CanvasCraft deck source notes
+
+Internal product sources
+- CanvasCraft_PRD.md
+- docs/architecture.md
+- DESIGN.md
+- apps/web/public/brand/canvascraft-social.png
+- apps/web/public/brand/canvascraft-mark-512.png
+
+External marks
+- OpenAI symbol and wordmark: https://upload.wikimedia.org/wikipedia/commons/6/66/OpenAI_logo_2025_%28symbol%29.svg and https://upload.wikimedia.org/wikipedia/commons/a/af/OpenAI_logo_2025_%28wordmark%29.svg
+- Nosana logo: https://nosana.com/_astro/nosanaLogoDark.D176lt8U_ZVySwW.svg
+- Daytona logo: https://framerusercontent.com/images/1POXYvdCDtiBLbQGEcarnytrtQ.svg
+- React, Vite, TypeScript, Tailwind CSS, Fastify, FastAPI, Docker, Zod, Node.js, Python, and Framer marks: https://github.com/simple-icons/simple-icons

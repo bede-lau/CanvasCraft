@@ -1,0 +1,22 @@
+{
+  "name": "CanvasCraft",
+  "short_name": "CanvasCraft",
+  "description": "CanvasCraft turns a rough wireframe into three comparable frontend directions.",
+  "lang": "en",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0b0f",
+  "theme_color": "#0a0b0f",
+  "icons": [
+    {
+      "src": "/brand/canvascraft-mark-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand/canvascraft-mark-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
