@@ -12,12 +12,17 @@ import { AnimatePresence, motion } from 'motion/react';
 import { AlertCircle, CheckCircle2, X } from 'lucide-react';
 import { SCREEN_SPEC } from './generated/screen-spec';
 import { VARIANT_MANIFEST } from './generated/variant-manifest';
+import { ADAPTER_PATTERNS } from './patterns/adapters';
+import { ARCHETYPE_PATTERNS } from './patterns/archetype';
 import { EXPRESSIVE_PATTERNS } from './patterns/expressive';
 import { NEUTRAL_PATTERNS } from './patterns/neutral';
+import { Backdrop } from './patterns/backdrop';
 import { BranchProvider, useBranch } from './runtime/branch-context';
 import { createBridge, reportErrors, send } from './runtime/bridge';
 import { ScreenProvider, useScreen } from './runtime/screen-store';
 import { cssVariableStyle } from './runtime/tokens';
+import { useScrollRefresh, useScrollReveal, useSmoothScroll } from './runtime/scroll';
+import { WEIGHT_DISTANCE, WEIGHT_SPAN, weightFor } from './runtime/archetype';
 import type {
   LayoutRegion,
   PreviewCommand,
@@ -65,6 +70,55 @@ const REGION_ORDER: LayoutRegion[] = [
 
 type PatternSelection = RegionSelection;
 
+/**
+ * Roles that compile to one region per drawn element but read as a single
+ * set to a visitor — three proof-point cards, not three sections that each
+ * happen to contain one card. Kept narrow (just `insight-card` today):
+ * clustering discards each member's own heading, so it is only safe for
+ * roles whose whole point is being seen together.
+ */
+const CLUSTERABLE_ROLES: ReadonlySet<SemanticRole> = new Set<SemanticRole>(['insight-card']);
+
+/**
+ * Groups consecutive clusterable regions in one area into single render
+ * units, but only when they'd resolve to the *same* pattern component —
+ * a registry match that gave three proof points three different
+ * treatments (bento/stream/grid) is a deliberate per-region choice, and
+ * merging it away would erase that instead of fixing the stacking bug.
+ */
+function groupRegions(
+  regions: SpecRegion[],
+  selections: readonly PatternSelection[],
+): Array<SpecRegion | SpecRegion[]> {
+  const selectionFor = (region: SpecRegion) =>
+    selections.find((candidate) => candidate.regionId === region.id) ?? null;
+
+  const groups: Array<SpecRegion | SpecRegion[]> = [];
+  let index = 0;
+  while (index < regions.length) {
+    const region = regions[index]!;
+    if (!CLUSTERABLE_ROLES.has(region.role)) {
+      groups.push(region);
+      index += 1;
+      continue;
+    }
+    const pattern = resolvePattern(region, selectionFor(region));
+    const run = [region];
+    let next = index + 1;
+    while (
+      next < regions.length &&
+      CLUSTERABLE_ROLES.has(regions[next]!.role) &&
+      resolvePattern(regions[next]!, selectionFor(regions[next]!)) === pattern
+    ) {
+      run.push(regions[next]!);
+      next += 1;
+    }
+    groups.push(run.length > 1 ? run : region);
+    index = next;
+  }
+  return groups;
+}
+
 export function App() {
   const onStateChange = useCallback((state: StateKind) => {
     send(VARIANT_MANIFEST.id, { type: 'state-changed', state });
@@ -90,11 +144,25 @@ export function App() {
   );
 }
 
-function PreviewRuntime() {
+/**
+ * The layout renderer, one level below {@link App}.
+ *
+ * Exported so an out-of-tree QA harness can mount it against an arbitrary
+ * manifest and Screen Spec (via its own `ScreenProvider` / `BranchProvider`)
+ * without going through the two generated modules `App` imports statically.
+ * Nothing in the running sandbox imports it by this name.
+ */
+export function PreviewRuntime() {
   const { spec, screen, dispatch, runInteraction, reducedMotion } = useScreen();
-  const { manifest, branchId } = useBranch();
+  const { manifest, branchId, layout } = useBranch();
   const previewRef = useRef<HTMLDivElement>(null);
   const [containerNarrow, setContainerNarrow] = useState(false);
+
+  // Scroll choreography is opt-in per archetype and off entirely under reduced
+  // motion, so a dashboard and a screen-reader user both get a plain document.
+  const choreographed = layout.scrollChoreography && !reducedMotion;
+  useSmoothScroll(manifest.motion, !choreographed);
+  useScrollRefresh(choreographed);
 
   useEffect(() => {
     const element = previewRef.current;
@@ -176,9 +244,12 @@ function PreviewRuntime() {
     () =>
       REGION_ORDER.map((area) => ({
         area,
-        regions: topLevelRegions.filter((region) => region.region === area),
-      })).filter((group) => group.regions.length > 0),
-    [topLevelRegions],
+        groups: groupRegions(
+          topLevelRegions.filter((region) => region.region === area),
+          manifest.selections,
+        ),
+      })).filter((group) => group.groups.length > 0),
+    [topLevelRegions, manifest.selections],
   );
 
   const narrow =
@@ -190,22 +261,37 @@ function PreviewRuntime() {
       className={clsx('cc-preview', narrow && 'cc-preview--narrow')}
       data-state={screen.state}
       data-scheme={manifest.palette.scheme}
+      data-archetype={manifest.archetype}
+      data-shell={layout.shell}
+      data-surface={manifest.form.surface}
+      data-motion-language={manifest.motion.language}
       data-button-fill={manifest.controls.buttonFill}
       data-input-style={manifest.controls.inputStyle}
       data-focus-ring={manifest.controls.focusRing}
       data-reduced-motion={reducedMotion ? 'true' : 'false'}
-      style={cssVariableStyle(manifest)}
+      style={
+        {
+          ...cssVariableStyle(manifest),
+          '--page-max': `${layout.maxWidthPx}px`,
+          '--measure': `${layout.measureCh}ch`,
+        } as React.CSSProperties
+      }
     >
       <a className="cc-skip-link" href="#cc-main">
         Skip to main content
       </a>
+      <Backdrop />
       <div className="cc-page">
         <main id="cc-main" className="cc-layout" aria-label={spec.name}>
-          {regionsByArea.map(({ area, regions }) => (
+          {regionsByArea.map(({ area, groups }) => (
             <div key={area} className={clsx('cc-area', `cc-area--${area}`)}>
-              {regions.map((region) => (
-                <RegionRenderer key={region.id} region={region} />
-              ))}
+              {groups.map((group) =>
+                Array.isArray(group) ? (
+                  <ClusteredRegionRenderer key={group[0]!.id} regions={group} />
+                ) : (
+                  <RegionRenderer key={group.id} region={group} />
+                ),
+              )}
             </div>
           ))}
         </main>
@@ -223,8 +309,16 @@ function RegionRenderer({ region }: { region: SpecRegion }) {
     isRegionVisible,
     isRegionPlaceholder,
     runInteraction,
+    reducedMotion,
   } = useScreen();
-  const { manifest, branchId } = useBranch();
+  const { manifest, branchId, layout } = useBranch();
+  const weight = weightFor(region.role, region.region);
+
+  // A region enters once. Which mechanism it enters by is the branch's own
+  // motion language; how far it travels is its weight in the composition.
+  const revealRef = useScrollReveal(manifest.motion, reducedMotion || !layout.scrollChoreography, {
+    distance: WEIGHT_DISTANCE[weight],
+  });
 
   if (!isRegionVisible(region.id)) return null;
 
@@ -249,13 +343,16 @@ function RegionRenderer({ region }: { region: SpecRegion }) {
 
   return (
     <div
+      ref={revealRef}
       className={clsx(
         'cc-region',
         `cc-region--${region.region}`,
         screen.highlightedRegionId === region.id && 'cc-region--highlighted',
       )}
       data-region-frame={region.id}
+      data-weight={weight}
       data-source-element-id={region.sourceElementId ?? undefined}
+      style={{ '--span': String(WEIGHT_SPAN[weight]) } as React.CSSProperties}
       onClick={onRegionClick}
     >
       <Pattern
@@ -280,14 +377,87 @@ function RegionRenderer({ region }: { region: SpecRegion }) {
   );
 }
 
+/**
+ * Renders a {@link groupRegions} cluster as one region: one reveal, one
+ * pattern instance, records from every member combined. The heading is
+ * suppressed (an individual member's own label, e.g. "Fast", would misname
+ * the whole set) — `RegionHeading` already treats an empty label as "no
+ * heading", so this needs no change on the pattern side.
+ */
+function ClusteredRegionRenderer({ regions }: { regions: SpecRegion[] }) {
+  const { spec, screen, recordsFor, isRegionVisible, isRegionPlaceholder, runInteraction, reducedMotion } =
+    useScreen();
+  const { manifest, branchId, layout } = useBranch();
+  const primary = regions[0]!;
+  const weight = weightFor(primary.role, primary.region);
+
+  const revealRef = useScrollReveal(manifest.motion, reducedMotion || !layout.scrollChoreography, {
+    distance: WEIGHT_DISTANCE[weight],
+  });
+
+  const visible = regions.filter((region) => isRegionVisible(region.id));
+  if (visible.length === 0) return null;
+
+  const interaction = spec.interactions.find(
+    (candidate) =>
+      candidate.fromRegion === primary.id &&
+      (candidate.fromState === null || candidate.fromState === screen.state),
+  );
+  const selection = manifest.selections.find((candidate) => candidate.regionId === primary.id) ?? null;
+  const Pattern = resolvePattern(primary, selection);
+  const records = visible.flatMap((region) => recordsFor(region.id));
+  const placeholder = visible.some((region) => isRegionPlaceholder(region.id));
+  const headingRegion: SpecRegion = { ...primary, label: '' };
+
+  const onRegionClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest('[data-region-frame]') === event.currentTarget) {
+      send(branchId, { type: 'region-clicked', regionId: primary.id });
+    }
+  };
+
+  return (
+    <div
+      ref={revealRef}
+      className={clsx(
+        'cc-region',
+        `cc-region--${primary.region}`,
+        regions.some((region) => screen.highlightedRegionId === region.id) && 'cc-region--highlighted',
+      )}
+      data-region-frame={primary.id}
+      data-weight={weight}
+      style={{ '--span': String(WEIGHT_SPAN[weight]) } as React.CSSProperties}
+      onClick={onRegionClick}
+    >
+      <Pattern
+        region={headingRegion}
+        records={records}
+        selection={selection}
+        placeholder={placeholder}
+        highlighted={regions.some((region) => screen.highlightedRegionId === region.id)}
+        onAct={() => {
+          if (interaction) runInteraction(interaction.id);
+        }}
+        interactive={interaction !== undefined}
+      />
+    </div>
+  );
+}
+
 function resolvePattern(
   region: SpecRegion,
   selection: PatternSelection | null,
 ): PatternComponent {
+  if (selection && selection.recordId in ADAPTER_PATTERNS) {
+    return ADAPTER_PATTERNS[selection.recordId as keyof typeof ADAPTER_PATTERNS];
+  }
   if (selection && selection.recordId in EXPRESSIVE_PATTERNS) {
     return EXPRESSIVE_PATTERNS[
       selection.recordId as keyof typeof EXPRESSIVE_PATTERNS
     ];
+  }
+  if (selection && selection.recordId in ARCHETYPE_PATTERNS) {
+    return ARCHETYPE_PATTERNS[selection.recordId as keyof typeof ARCHETYPE_PATTERNS];
   }
   if (selection && selection.recordId in NEUTRAL_PATTERNS) {
     return NEUTRAL_PATTERNS[selection.recordId as keyof typeof NEUTRAL_PATTERNS];
@@ -296,11 +466,29 @@ function resolvePattern(
 }
 
 function OverlayLayer() {
-  const { spec, screen, dispatch } = useScreen();
-  const { overlay, transition } = useBranch();
-  const overlayRegion = spec.regions
-    .filter((region) => region.region === 'overlay')
-    .find((region) => region.visibleInStates.includes(screen.state));
+  const { spec, screen, dispatch, isRegionVisible } = useScreen();
+  const { overlay, transition, exitFor } = useBranch();
+  // A dialog and a toast are both screen-level, so both leave on the screen
+  // exit: the accelerating curve at 70% of the arrival. Reusing the entrance
+  // transition for the exit — which is what this did — is why dismissing
+  // anything felt like waiting on the animation to agree with a decision the
+  // reader had already made.
+  const screenExit = exitFor('screen');
+  // Carried on the variant rather than the `transition` prop, which
+  // AnimatePresence would otherwise apply to the entrance as well.
+  const overlayWithExit = {
+    ...overlay,
+    exit: { ...(overlay.exit as Record<string, unknown>), transition: screenExit },
+  };
+  // An empty `visibleInStates` means "every state" (see SpecRegion), so an
+  // overlay drawn without an explicit state variant must still render. Prefer a
+  // region scoped to the current state, then fall back to an unscoped one.
+  const overlayCandidates = spec.regions.filter(
+    (region) => region.region === 'overlay' && isRegionVisible(region.id),
+  );
+  const overlayRegion =
+    overlayCandidates.find((region) => region.visibleInStates.includes(screen.state)) ??
+    overlayCandidates[0];
   const showDialog = screen.state === 'modal' || screen.state === 'drawer';
   const showToast = screen.state === 'success' || screen.state === 'error';
   const close = useCallback(
@@ -331,7 +519,7 @@ function OverlayLayer() {
           initial="hidden"
           animate="visible"
           exit="exit"
-          variants={overlay}
+          variants={overlayWithExit}
           transition={transition}
           onMouseDown={(event) => {
             if (event.currentTarget === event.target) close();
@@ -366,7 +554,7 @@ function OverlayLayer() {
           initial="hidden"
           animate="visible"
           exit="exit"
-          variants={overlay}
+          variants={overlayWithExit}
           transition={transition}
         >
           {screen.state === 'error' ? (

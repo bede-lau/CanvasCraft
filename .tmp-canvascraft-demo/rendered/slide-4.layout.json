@@ -2,13 +2,13 @@
   "schema": "openai.presentation.layout/v4",
   "unit": "px",
   "slide": {
-    "aid": "sl/zkh7tc",
-    "id": "zkh7tc",
+    "aid": "sl/cd9i9n",
+    "id": "cd9i9n",
     "slide": 4,
-    "layoutId": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+    "layoutId": "72d78271-f7bd-4cff-b532-964be5693c3e",
     "layoutName": "Title Slide",
     "layoutType": "title",
-    "masterLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+    "masterLayoutId": "ba6ee152-46bd-4509-860e-3d032eaee72c",
     "masterLayoutName": "Master",
     "backgroundColor": "#0A0B0F",
     "frame": {
@@ -45,15 +45,15 @@
   "inheritedLayers": [
     {
       "scope": "layout",
-      "id": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+      "id": "72d78271-f7bd-4cff-b532-964be5693c3e",
       "name": "Title Slide",
       "type": "title",
-      "parentLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "parentLayoutId": "ba6ee152-46bd-4509-860e-3d032eaee72c",
       "elements": []
     },
     {
       "scope": "master",
-      "id": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "id": "ba6ee152-46bd-4509-860e-3d032eaee72c",
       "name": "Master",
       "type": "master",
       "elements": []
@@ -64,7 +64,7 @@
       "order": 1,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/rihsn6x8",
+      "aid": "sh/cv6lsjq9",
       "id": "1",
       "name": "grid-v-0",
       "bbox": [
@@ -81,7 +81,7 @@
       "order": 2,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/cjq9wbed",
+      "aid": "sh/buxkje9o",
       "id": "2",
       "name": "grid-v-48",
       "bbox": [
@@ -98,7 +98,7 @@
       "order": 3,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/dkzapgfy",
+      "aid": "sh/qto3q98j",
       "id": "3",
       "name": "grid-v-96",
       "bbox": [
@@ -115,7 +115,7 @@
       "order": 4,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/el8rylwj",
+      "aid": "sh/psv2hory",
       "id": "4",
       "name": "grid-v-144",
       "bbox": [
@@ -132,7 +132,7 @@
       "order": 5,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zmhsrqd4",
+      "aid": "sh/ormlojqd",
       "id": "5",
       "name": "grid-v-192",
       "bbox": [
@@ -149,7 +149,7 @@
       "order": 6,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0na90bep",
+      "aid": "sh/3qdkfe9s",
       "id": "6",
       "name": "grid-v-240",
       "bbox": [
@@ -166,7 +166,7 @@
       "order": 7,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1ojatgva",
+      "aid": "sh/2543m987",
       "id": "7",
       "name": "grid-v-288",
       "bbox": [
@@ -183,7 +183,7 @@
       "order": 8,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/mpsr2lwv",
+      "aid": "sh/9ozmt872",
       "id": "8",
       "name": "grid-v-336",
       "bbox": [
@@ -200,7 +200,7 @@
       "order": 9,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/nq1svqd0",
+      "aid": "sh/8nql03qh",
       "id": "9",
       "name": "grid-v-384",
       "bbox": [
@@ -217,7 +217,7 @@
       "order": 10,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vah03ahw",
+      "aid": "sh/i58rqt4b",
       "id": "10",
       "name": "grid-v-432",
       "bbox": [
@@ -234,7 +234,7 @@
       "order": 11,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/u98zu5gb",
+      "aid": "sh/j6h8jy5g",
       "id": "11",
       "name": "grid-v-480",
       "bbox": [
@@ -251,7 +251,7 @@
       "order": 12,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hczi5kz2",
+      "aid": "sh/k7a9s3m1",
       "id": "12",
       "name": "grid-v-528",
       "bbox": [
@@ -268,7 +268,7 @@
       "order": 13,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/wbq1wfyh",
+      "aid": "sh/58jql8nm",
       "id": "13",
       "name": "grid-v-576",
       "bbox": [
@@ -285,7 +285,7 @@
       "order": 14,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/76x0zah0",
+      "aid": "sh/a187mt4z",
       "id": "14",
       "name": "grid-v-624",
       "bbox": [
@@ -302,7 +302,7 @@
       "order": 15,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/m5ozq50f",
+      "aid": "sh/v2h8fe5k",
       "id": "15",
       "name": "grid-v-672",
       "bbox": [
@@ -319,7 +319,7 @@
       "order": 16,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/98fi10zq",
+      "aid": "sh/w3q9ojm5",
       "id": "16",
       "name": "grid-v-720",
       "bbox": [
@@ -336,7 +336,7 @@
       "order": 17,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/876hsfy5",
+      "aid": "sh/x4zqhonq",
       "id": "17",
       "name": "grid-v-768",
       "bbox": [
@@ -353,7 +353,7 @@
       "order": 18,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/r210buh4",
+      "aid": "sh/uxsryd43",
       "id": "18",
       "name": "grid-v-816",
       "bbox": [
@@ -370,7 +370,7 @@
       "order": 19,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/61sj2pgj",
+      "aid": "sh/fy18rilo",
       "id": "19",
       "name": "grid-v-864",
       "bbox": [
@@ -387,7 +387,7 @@
       "order": 20,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/29wbqx43",
+      "aid": "sh/ridojalg",
       "id": "20",
       "name": "grid-v-912",
       "bbox": [
@@ -404,7 +404,7 @@
       "order": 21,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/na5cj25o",
+      "aid": "sh/qh4nq5kv",
       "id": "21",
       "name": "grid-v-960",
       "bbox": [
@@ -421,7 +421,7 @@
       "order": 22,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/obeds7m9",
+      "aid": "sh/dkv6lk36",
       "id": "22",
       "name": "grid-v-1008",
       "bbox": [
@@ -438,7 +438,7 @@
       "order": 23,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/pcnulsne",
+      "aid": "sh/cjm5sf2l",
       "id": "23",
       "name": "grid-v-1056",
       "bbox": [
@@ -455,7 +455,7 @@
       "order": 24,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/adgvux4z",
+      "aid": "sh/z6donulc",
       "id": "24",
       "name": "grid-v-1104",
       "bbox": [
@@ -472,7 +472,7 @@
       "order": 25,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/bepcn25k",
+      "aid": "sh/e54nupkr",
       "id": "25",
       "name": "grid-v-1152",
       "bbox": [
@@ -489,7 +489,7 @@
       "order": 26,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/czydw7m5",
+      "aid": "sh/18f6pk3i",
       "id": "26",
       "name": "grid-v-1200",
       "bbox": [
@@ -506,7 +506,7 @@
       "order": 27,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/x07upcnq",
+      "aid": "sh/07m5wf2x",
       "id": "27",
       "name": "grid-v-1248",
       "bbox": [
@@ -523,7 +523,7 @@
       "order": 28,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/qhcbidov",
+      "aid": "sh/naxorul8",
       "id": "28",
       "name": "grid-h-0",
       "bbox": [
@@ -540,7 +540,7 @@
       "order": 29,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/rilcbi5g",
+      "aid": "sh/m9onypk3",
       "id": "29",
       "name": "grid-h-48",
       "bbox": [
@@ -557,7 +557,7 @@
       "order": 30,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/twbexg7y",
+      "aid": "sh/kfq58zi1",
       "id": "30",
       "name": "grid-h-96",
       "bbox": [
@@ -574,7 +574,7 @@
       "order": 31,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8vixob6d",
+      "aid": "sh/5gzmh4zm",
       "id": "31",
       "name": "grid-h-144",
       "bbox": [
@@ -591,7 +591,7 @@
       "order": 32,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/7u9wv6ps",
+      "aid": "sh/ydon6p0v",
       "id": "32",
       "name": "grid-h-192",
       "bbox": [
@@ -608,7 +608,7 @@
       "order": 33,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/6t0fm1o7",
+      "aid": "sh/jex4fuhg",
       "id": "33",
       "name": "grid-h-240",
       "bbox": [
@@ -625,7 +625,7 @@
       "order": 34,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/h0by1g7u",
+      "aid": "sh/wb654zi5",
       "id": "34",
       "name": "grid-h-288",
       "bbox": [
@@ -642,7 +642,7 @@
       "order": 35,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gz2xsv69",
+      "aid": "sh/xcfmdkza",
       "id": "35",
       "name": "grid-h-336",
       "bbox": [
@@ -659,7 +659,7 @@
       "order": 36,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vytgzqp4",
+      "aid": "sh/a9on2p0z",
       "id": "36",
       "name": "grid-h-384",
       "bbox": [
@@ -676,7 +676,7 @@
       "order": 37,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/uxkfqloj",
+      "aid": "sh/bax4buhk",
       "id": "37",
       "name": "grid-h-432",
       "bbox": [
@@ -693,7 +693,7 @@
       "order": 38,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/x47epw7q",
+      "aid": "sh/o7ml0fit",
       "id": "38",
       "name": "grid-h-480",
       "bbox": [
@@ -710,7 +710,7 @@
       "order": 39,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/c3yxgr65",
+      "aid": "sh/98fm9kze",
       "id": "39",
       "name": "grid-h-528",
       "bbox": [
@@ -727,7 +727,7 @@
       "order": 40,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0j6hozqt",
+      "aid": "sh/dsb2hgf6",
       "id": "40",
       "name": "grid-h-576",
       "bbox": [
@@ -744,7 +744,7 @@
       "order": 41,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1kfix4re",
+      "aid": "sh/cr218byl",
       "id": "41",
       "name": "grid-h-624",
       "bbox": [
@@ -761,7 +761,7 @@
       "order": 42,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/exozmp8n",
+      "aid": "sh/rqtkf6x0",
       "id": "42",
       "name": "grid-h-672",
       "bbox": [
@@ -778,25 +778,8 @@
       "order": 43,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/fyx0vu98",
+      "aid": "sh/qpkj61gf",
       "id": "43",
-      "name": "grid-h-720",
-      "bbox": [
-        0,
-        720,
-        1280,
-        1
-      ],
-      "geometry": "rect",
-      "fillColor": "#10141C",
-      "lineWidth": 0
-    },
-    {
-      "order": 44,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/sv6hkfqh",
-      "id": "44",
       "name": "architecture-title",
       "bbox": [
         72,
@@ -854,11 +837,11 @@
       "lineWidth": 0
     },
     {
-      "order": 45,
+      "order": 44,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/dwfitkr2",
-      "id": "45",
+      "aid": "sh/1gv2l0f2",
+      "id": "44",
       "name": "architecture-subtitle",
       "bbox": [
         72,
@@ -913,11 +896,11 @@
       "lineWidth": 0
     },
     {
-      "order": 46,
+      "order": 45,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/qt4zip8r",
-      "id": "46",
+      "aid": "sh/0f21cvyx",
+      "id": "45",
       "name": "architecture-arrow-1-shaft",
       "bbox": [
         250,
@@ -930,11 +913,11 @@
       "lineWidth": 0
     },
     {
-      "order": 47,
+      "order": 46,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/rud0ru9c",
-      "id": "47",
+      "aid": "sh/zetkjqxc",
+      "id": "46",
       "name": "architecture-arrow-1-head",
       "bbox": [
         292,
@@ -948,11 +931,11 @@
       "lineWidth": 0
     },
     {
-      "order": 48,
+      "order": 47,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/4rmhgfql",
-      "id": "48",
+      "aid": "sh/edkjalgr",
+      "id": "47",
       "name": "architecture-arrow-2-shaft",
       "bbox": [
         520,
@@ -965,11 +948,11 @@
       "lineWidth": 0
     },
     {
-      "order": 49,
+      "order": 48,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/5svipkr6",
-      "id": "49",
+      "aid": "sh/hkri9wfy",
+      "id": "48",
       "name": "architecture-arrow-2-head",
       "bbox": [
         562,
@@ -983,11 +966,11 @@
       "lineWidth": 0
     },
     {
-      "order": 50,
+      "order": 49,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/7mt0zats",
-      "id": "50",
+      "aid": "sh/gji10ryd",
+      "id": "49",
       "name": "architecture-arrow-3-shaft",
       "bbox": [
         790,
@@ -1000,11 +983,11 @@
       "lineWidth": 0
     },
     {
-      "order": 51,
+      "order": 50,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/6lkjq5cn",
-      "id": "51",
+      "aid": "sh/6dw7utsz",
+      "id": "50",
       "name": "architecture-arrow-3-head",
       "bbox": [
         832,
@@ -1018,11 +1001,11 @@
       "lineWidth": 0
     },
     {
-      "order": 52,
+      "order": 51,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/tovi1kby",
-      "id": "52",
+      "aid": "sh/7e58ny9k",
+      "id": "51",
       "name": "architecture-arrow-4-shaft",
       "bbox": [
         1060,
@@ -1035,11 +1018,11 @@
       "lineWidth": 0
     },
     {
-      "order": 53,
+      "order": 52,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8n21sfud",
-      "id": "53",
+      "aid": "sh/8fepw3a5",
+      "id": "52",
       "name": "architecture-arrow-4-head",
       "bbox": [
         1102,
@@ -1053,11 +1036,11 @@
       "lineWidth": 0
     },
     {
-      "order": 54,
+      "order": 53,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vqd03at4",
-      "id": "54",
+      "aid": "sh/tgnqp8rq",
+      "id": "53",
       "name": "architecture-client",
       "bbox": [
         72,
@@ -1071,11 +1054,11 @@
       "lineWidth": 1
     },
     {
-      "order": 55,
+      "order": 54,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/up4jupcj",
-      "id": "55",
+      "aid": "sh/uhw7ydsb",
+      "id": "54",
       "name": "architecture-client-title",
       "bbox": [
         96,
@@ -1084,8 +1067,8 @@
         24
       ],
       "geometry": "rect",
-      "text": "Canvas Studio",
-      "textPreview": "Canvas Studio",
+      "text": "Canvas",
+      "textPreview": "Canvas",
       "resolvedFontSize": 21,
       "resolvedTextStyle": {
         "fontSize": 21,
@@ -1101,22 +1084,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
             "text": "Canvas"
-          },
-          {
-            "index": 2,
-            "text": "Studio"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Canvas Studio",
+          "text": "Canvas",
           "resolvedTextStyle": {
             "fontSize": 21,
             "color": "#E8EBF2",
@@ -1125,7 +1104,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "Canvas Studio",
+              "text": "Canvas",
               "fontSize": 21,
               "color": "#E8EBF2",
               "bold": true
@@ -1137,11 +1116,11 @@
       "lineWidth": 0
     },
     {
-      "order": 56,
+      "order": 55,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hsv25kba",
-      "id": "56",
+      "aid": "sh/vi58ri9w",
+      "id": "55",
       "name": "architecture-client-copy",
       "bbox": [
         96,
@@ -1150,8 +1129,8 @@
         18
       ],
       "geometry": "rect",
-      "text": "Capture intent",
-      "textPreview": "Capture intent",
+      "text": "Studio",
+      "textPreview": "Studio",
       "resolvedFontSize": 14,
       "resolvedTextStyle": {
         "fontSize": 14,
@@ -1170,14 +1149,14 @@
         "lines": [
           {
             "index": 1,
-            "text": "Capture intent"
+            "text": "Studio"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Capture intent",
+          "text": "Studio",
           "resolvedTextStyle": {
             "fontSize": 14,
             "color": "#8B93A7"
@@ -1185,7 +1164,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "Capture intent",
+              "text": "Studio",
               "fontSize": 14,
               "color": "#8B93A7"
             }
@@ -1196,11 +1175,11 @@
       "lineWidth": 0
     },
     {
-      "order": 57,
+      "order": 56,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/zq5gve9g",
-      "id": "57",
+      "aid": "im/jit0bu90",
+      "id": "56",
       "bbox": [
         96,
         278,
@@ -1211,17 +1190,17 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "d92c3d21-ed78-46af-8942-67a0f7366106",
+        "assetId": "649f7e24-5c70-4cfc-99db-9a0b8ba0e7e8",
         "contentType": "image/svg+xml",
-        "byteLength": 2926
+        "byteLength": 2941
       }
     },
     {
-      "order": 58,
+      "order": 57,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/gvaxczax",
-      "id": "58",
+      "aid": "im/ihkjipsf",
+      "id": "57",
       "bbox": [
         139,
         278,
@@ -1232,17 +1211,17 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "ecd6afba-ad86-4a9e-b9cd-570585ee21e5",
+        "assetId": "e49bf922-c5eb-4bca-b103-e7cb53ac27fb",
         "contentType": "image/svg+xml",
-        "byteLength": 447
+        "byteLength": 462
       }
     },
     {
-      "order": 59,
+      "order": 58,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/hwjyl4ri",
-      "id": "59",
+      "aid": "im/lori10rm",
+      "id": "58",
       "bbox": [
         182,
         278,
@@ -1253,17 +1232,17 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "b2452951-8258-4519-a034-87fac71aaaf9",
+        "assetId": "85ca6e49-17b6-4b88-bf2e-fa3ed7415911",
         "contentType": "image/svg+xml",
-        "byteLength": 1294
+        "byteLength": 1309
       }
     },
     {
-      "order": 60,
+      "order": 59,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/xgr6twfu",
-      "id": "60",
+      "aid": "im/0ny18va1",
+      "id": "59",
       "bbox": [
         96,
         317,
@@ -1274,17 +1253,17 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "bc20662f-f982-425c-9623-fe27b43b3ef3",
+        "assetId": "bdeabd22-6372-4a63-a304-201b38f3fe32",
         "contentType": "image/svg+xml",
-        "byteLength": 602
+        "byteLength": 617
       }
     },
     {
-      "order": 61,
+      "order": 60,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/fqh4zyd8",
-      "id": "61",
+      "aid": "sh/fqh4nap4",
+      "id": "60",
       "name": "architecture-client-stack",
       "bbox": [
         135,
@@ -1293,8 +1272,8 @@
         30
       ],
       "geometry": "rect",
-      "text": "React · Vite · TS · Tailwind",
-      "textPreview": "React · Vite · TS · Tailwind",
+      "text": "React · Vite · TS",
+      "textPreview": "React · Vite · TS",
       "resolvedFontSize": 10,
       "resolvedTextStyle": {
         "fontSize": 10,
@@ -1309,22 +1288,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "React · Vite · TS ·"
-          },
-          {
-            "index": 2,
-            "text": "Tailwind"
+            "text": "React · Vite · TS"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "React · Vite · TS · Tailwind",
+          "text": "React · Vite · TS",
           "resolvedTextStyle": {
             "fontSize": 10,
             "color": "#8B93A7"
@@ -1332,7 +1307,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "React · Vite · TS · Tailwind",
+              "text": "React · Vite · TS",
               "fontSize": 10,
               "color": "#8B93A7"
             }
@@ -1343,11 +1318,11 @@
       "lineWidth": 0
     },
     {
-      "order": 62,
+      "order": 61,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0bql83et",
-      "id": "62",
+      "aid": "sh/ep8nu58j",
+      "id": "61",
       "name": "architecture-orchestrator",
       "bbox": [
         312,
@@ -1361,11 +1336,11 @@
       "lineWidth": 1
     },
     {
-      "order": 63,
+      "order": 62,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1czm18ve",
-      "id": "63",
+      "aid": "sh/1szmpk7a",
+      "id": "62",
       "name": "architecture-orch-title",
       "bbox": [
         336,
@@ -1423,11 +1398,11 @@
       "lineWidth": 0
     },
     {
-      "order": 64,
+      "order": 63,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/qlo329wr",
-      "id": "64",
+      "aid": "sh/0rq5wfqp",
+      "id": "63",
       "name": "architecture-orch-copy",
       "bbox": [
         336,
@@ -1436,323 +1411,8 @@
         18
       ],
       "geometry": "rect",
-      "text": "Schemas · credentials · SSE",
-      "textPreview": "Schemas · credentials · SSE",
-      "resolvedFontSize": 14,
-      "resolvedTextStyle": {
-        "fontSize": 14,
-        "typeface": "+mn-lt",
-        "color": "#8B93A7",
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Schemas · credentials ·"
-          },
-          {
-            "index": 2,
-            "text": "SSE"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Schemas · credentials · SSE",
-          "resolvedTextStyle": {
-            "fontSize": 14,
-            "color": "#8B93A7"
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Schemas · credentials · SSE",
-              "fontSize": 14,
-              "color": "#8B93A7"
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 65,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/kj254ryl",
-      "id": "65",
-      "bbox": [
-        336,
-        277,
-        47,
-        28
-      ],
-      "alt": "Fastify logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "609f294a-4dc7-406c-a55a-1a293f6acc4a",
-        "contentType": "image/svg+xml",
-        "byteLength": 1165
-      }
-    },
-    {
-      "order": 66,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/jitov6x0",
-      "id": "66",
-      "bbox": [
-        394,
-        277,
-        34,
-        34
-      ],
-      "alt": "Node.js logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "14be3009-ddb7-4ab5-a58a-c121119f7168",
-        "contentType": "image/svg+xml",
-        "byteLength": 1608
-      }
-    },
-    {
-      "order": 67,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/yhkn21gf",
-      "id": "67",
-      "bbox": [
-        438,
-        277,
-        34,
-        34
-      ],
-      "alt": "Zod logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "e0673a6d-b75a-4a1f-b468-8ef55bc5ddf1",
-        "contentType": "image/svg+xml",
-        "byteLength": 515
-      }
-    },
-    {
-      "order": 68,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/t8v61gf2",
-      "id": "68",
-      "bbox": [
-        482,
-        277,
-        30,
-        30
-      ],
-      "alt": "OpenAI logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "9664ff22-e3e1-4272-b2f7-292efde91de1",
-        "contentType": "image/svg+xml",
-        "byteLength": 1894
-      }
-    },
-    {
-      "order": 69,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/bi147idg",
-      "id": "69",
-      "name": "architecture-orch-stack",
-      "bbox": [
-        336,
-        318,
-        170,
-        24
-      ],
-      "geometry": "rect",
-      "text": "Fastify · Node · Zod · OpenAI-compatible",
-      "textPreview": "Fastify · Node · Zod · OpenAI-compatible",
-      "resolvedFontSize": 10,
-      "resolvedTextStyle": {
-        "fontSize": 10,
-        "typeface": "+mn-lt",
-        "color": "#8B93A7",
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Fastify · Node · Zod ·"
-          },
-          {
-            "index": 2,
-            "text": "OpenAI-compatible"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Fastify · Node · Zod · OpenAI-compatible",
-          "resolvedTextStyle": {
-            "fontSize": 10,
-            "color": "#8B93A7"
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Fastify · Node · Zod · OpenAI-compatible",
-              "fontSize": 10,
-              "color": "#8B93A7"
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 70,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/5onytgju",
-      "id": "70",
-      "name": "architecture-nosana",
-      "bbox": [
-        582,
-        186,
-        208,
-        164
-      ],
-      "geometry": "roundRect",
-      "fillColor": "#14161C",
-      "lineColor": "#2A2F3B",
-      "lineWidth": 1
-    },
-    {
-      "order": 71,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/ru5kvidk",
-      "id": "71",
-      "bbox": [
-        608,
-        213,
-        122,
-        28
-      ],
-      "alt": "Nosana logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "3c334733-e441-4c27-87a4-81522b0502b5",
-        "contentType": "image/svg+xml",
-        "byteLength": 4192
-      }
-    },
-    {
-      "order": 72,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/jm5gr61o",
-      "id": "72",
-      "name": "architecture-nosana-title",
-      "bbox": [
-        608,
-        248,
-        140,
-        24
-      ],
-      "geometry": "rect",
-      "text": "Visual matching",
-      "textPreview": "Visual matching",
-      "resolvedFontSize": 20,
-      "resolvedTextStyle": {
-        "fontSize": 20,
-        "typeface": "+mn-lt",
-        "color": "#E8EBF2",
-        "bold": true,
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Visual"
-          },
-          {
-            "index": 2,
-            "text": "matching"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Visual matching",
-          "resolvedTextStyle": {
-            "fontSize": 20,
-            "color": "#E8EBF2",
-            "bold": true
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Visual matching",
-              "fontSize": 20,
-              "color": "#E8EBF2",
-              "bold": true
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 73,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/ylwfi1kj",
-      "id": "73",
-      "name": "architecture-nosana-copy",
-      "bbox": [
-        608,
-        278,
-        150,
-        18
-      ],
-      "geometry": "rect",
-      "text": "CLIP rank + local gate",
-      "textPreview": "CLIP rank + local gate",
+      "text": "Keys + SSE",
+      "textPreview": "Keys + SSE",
       "resolvedFontSize": 14,
       "resolvedTextStyle": {
         "fontSize": 14,
@@ -1771,14 +1431,14 @@
         "lines": [
           {
             "index": 1,
-            "text": "CLIP rank + local gate"
+            "text": "Keys + SSE"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "CLIP rank + local gate",
+          "text": "Keys + SSE",
           "resolvedTextStyle": {
             "fontSize": 14,
             "color": "#8B93A7"
@@ -1786,7 +1446,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "CLIP rank + local gate",
+              "text": "Keys + SSE",
               "fontSize": 14,
               "color": "#8B93A7"
             }
@@ -1797,63 +1457,105 @@
       "lineWidth": 0
     },
     {
-      "order": 74,
+      "order": 64,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/exw36dwb",
-      "id": "74",
+      "aid": "im/0bm1sfit",
+      "id": "64",
       "bbox": [
-        608,
-        312,
-        29,
-        29
+        336,
+        277,
+        47,
+        28
       ],
-      "alt": "FastAPI logo",
+      "alt": "Fastify logo",
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "fd485072-a19e-4a3a-958d-22c25b3148d2",
+        "assetId": "1461e144-ae9c-4292-88fe-623d8f418023",
         "contentType": "image/svg+xml",
-        "byteLength": 347
+        "byteLength": 1180
       }
     },
     {
-      "order": 75,
+      "order": 65,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/zypkzidw",
-      "id": "75",
+      "aid": "im/1cv2lkze",
+      "id": "65",
       "bbox": [
-        646,
-        312,
-        29,
-        29
+        394,
+        277,
+        34,
+        34
       ],
-      "alt": "Python logo",
+      "alt": "Node.js logo",
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "e3e968b4-8155-4900-a796-912b1646c94d",
+        "assetId": "740233d3-ef8b-439b-b361-6e2cb2f5489b",
         "contentType": "image/svg+xml",
-        "byteLength": 1518
+        "byteLength": 1623
       }
     },
     {
-      "order": 76,
+      "order": 66,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/e94jq503",
+      "id": "66",
+      "bbox": [
+        438,
+        277,
+        34,
+        34
+      ],
+      "alt": "Zod logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "5757d96d-d9b2-46eb-80ca-4d4e2218edd0",
+        "contentType": "image/svg+xml",
+        "byteLength": 530
+      }
+    },
+    {
+      "order": 67,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/zad0jaho",
+      "id": "67",
+      "bbox": [
+        482,
+        277,
+        30,
+        30
+      ],
+      "alt": "OpenAI logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "2e04ca09-dcda-44bf-ac1f-0649cf349418",
+        "contentType": "image/svg+xml",
+        "byteLength": 1909
+      }
+    },
+    {
+      "order": 68,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/bilgnm1s",
-      "id": "76",
-      "name": "architecture-nosana-stack",
+      "aid": "sh/bi1ovupc",
+      "id": "68",
+      "name": "architecture-orch-stack",
       "bbox": [
-        682,
-        316,
-        90,
-        22
+        336,
+        318,
+        170,
+        24
       ],
       "geometry": "rect",
-      "text": "FastAPI · Python · CLIP",
-      "textPreview": "FastAPI · Python · CLIP",
+      "text": "Fastify · Node · Zod",
+      "textPreview": "Fastify · Node · Zod",
       "resolvedFontSize": 10,
       "resolvedTextStyle": {
         "fontSize": 10,
@@ -1868,22 +1570,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "FastAPI · Python"
-          },
-          {
-            "index": 2,
-            "text": "· CLIP"
+            "text": "Fastify · Node · Zod"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "FastAPI · Python · CLIP",
+          "text": "Fastify · Node · Zod",
           "resolvedTextStyle": {
             "fontSize": 10,
             "color": "#8B93A7"
@@ -1891,7 +1589,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "FastAPI · Python · CLIP",
+              "text": "Fastify · Node · Zod",
               "fontSize": 10,
               "color": "#8B93A7"
             }
@@ -1902,14 +1600,14 @@
       "lineWidth": 0
     },
     {
-      "order": 77,
+      "order": 69,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/ahcfehk7",
-      "id": "77",
-      "name": "architecture-daytona",
+      "aid": "sh/axsn298r",
+      "id": "69",
+      "name": "architecture-nosana",
       "bbox": [
-        852,
+        582,
         186,
         208,
         164
@@ -1920,42 +1618,42 @@
       "lineWidth": 1
     },
     {
-      "order": 78,
+      "order": 70,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/mlg3axw7",
-      "id": "78",
+      "aid": "im/j61cbi54",
+      "id": "70",
       "bbox": [
-        876,
+        608,
         213,
-        126,
-        26
+        122,
+        28
       ],
-      "alt": "Daytona logo",
+      "alt": "Nosana logo",
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "87b6107b-379a-49ea-902e-008e93a29e72",
+        "assetId": "054bef1e-8be0-4dfe-b3b5-d44f545cbc62",
         "contentType": "image/svg+xml",
-        "byteLength": 5274
+        "byteLength": 4192
       }
     },
     {
-      "order": 79,
+      "order": 71,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gfyhsvih",
-      "id": "79",
-      "name": "architecture-daytona-title",
+      "aid": "sh/t4v2pwnu",
+      "id": "71",
+      "name": "architecture-nosana-title",
       "bbox": [
-        876,
+        608,
         248,
-        154,
+        140,
         24
       ],
       "geometry": "rect",
-      "text": "Parallel branches",
-      "textPreview": "Parallel branches",
+      "text": "Match",
+      "textPreview": "Match",
       "resolvedFontSize": 20,
       "resolvedTextStyle": {
         "fontSize": 20,
@@ -1971,22 +1669,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "Parallel"
-          },
-          {
-            "index": 2,
-            "text": "branches"
+            "text": "Match"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Parallel branches",
+          "text": "Match",
           "resolvedTextStyle": {
             "fontSize": 20,
             "color": "#E8EBF2",
@@ -1995,7 +1689,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "Parallel branches",
+              "text": "Match",
               "fontSize": 20,
               "color": "#E8EBF2",
               "bold": true
@@ -2007,21 +1701,21 @@
       "lineWidth": 0
     },
     {
-      "order": 80,
+      "order": 72,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/cb21kz2p",
-      "id": "80",
-      "name": "architecture-daytona-copy",
+      "aid": "sh/61kje1o3",
+      "id": "72",
+      "name": "architecture-nosana-copy",
       "bbox": [
-        876,
+        608,
         278,
-        160,
+        150,
         18
       ],
       "geometry": "rect",
-      "text": "Snapshot → sandbox → preview",
-      "textPreview": "Snapshot → sandbox → preview",
+      "text": "CLIP + licence gate",
+      "textPreview": "CLIP + licence gate",
       "resolvedFontSize": 14,
       "resolvedTextStyle": {
         "fontSize": 14,
@@ -2036,22 +1730,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "Snapshot → sandbox →"
-          },
-          {
-            "index": 2,
-            "text": "preview"
+            "text": "CLIP + licence gate"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Snapshot → sandbox → preview",
+          "text": "CLIP + licence gate",
           "resolvedTextStyle": {
             "fontSize": 14,
             "color": "#8B93A7"
@@ -2059,7 +1749,330 @@
           "runs": [
             {
               "index": 1,
-              "text": "Snapshot → sandbox → preview",
+              "text": "CLIP + licence gate",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 73,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/47ad4n6p",
+      "id": "73",
+      "bbox": [
+        608,
+        312,
+        29,
+        29
+      ],
+      "alt": "FastAPI logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "e10ffabe-4cd6-4eee-b9c8-7cd3b7df8365",
+        "contentType": "image/svg+xml",
+        "byteLength": 362
+      }
+    },
+    {
+      "order": 74,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/v2hc7y5s",
+      "id": "74",
+      "bbox": [
+        646,
+        312,
+        29,
+        29
+      ],
+      "alt": "Python logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "471b360b-3319-43a3-9314-a678dd215fa2",
+        "contentType": "image/svg+xml",
+        "byteLength": 1533
+      }
+    },
+    {
+      "order": 75,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hsv2tgnq",
+      "id": "75",
+      "name": "architecture-nosana-stack",
+      "bbox": [
+        682,
+        316,
+        90,
+        22
+      ],
+      "geometry": "rect",
+      "text": "FastAPI · Python",
+      "textPreview": "FastAPI · Python",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "FastAPI · Python"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "FastAPI · Python",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "FastAPI · Python",
+              "fontSize": 10,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 76,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u54ji1of",
+      "id": "76",
+      "name": "architecture-daytona",
+      "bbox": [
+        852,
+        186,
+        208,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 77,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/w3qd036d",
+      "id": "77",
+      "bbox": [
+        876,
+        208,
+        42,
+        42
+      ],
+      "alt": "Daytona logo",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "f5d8fab1-addc-4789-a543-bf8191eecfda",
+        "contentType": "image/png",
+        "byteLength": 1247
+      }
+    },
+    {
+      "order": 78,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4v6lob6h",
+      "id": "78",
+      "name": "architecture-daytona-wordmark",
+      "bbox": [
+        928,
+        220,
+        105,
+        18
+      ],
+      "geometry": "rect",
+      "text": "DAYTONA",
+      "textPreview": "DAYTONA",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "DAYTONA"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "DAYTONA",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "DAYTONA",
+              "fontSize": 13,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 79,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5wf2xgn2",
+      "id": "79",
+      "name": "architecture-daytona-title",
+      "bbox": [
+        876,
+        258,
+        154,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Launch",
+      "textPreview": "Launch",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Launch"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Launch",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Launch",
+              "fontSize": 20,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 80,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dw3e5kvu",
+      "id": "80",
+      "name": "architecture-daytona-copy",
+      "bbox": [
+        876,
+        286,
+        160,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Three live sandboxes",
+      "textPreview": "Three live sandboxes",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Three live sandboxes"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Three live sandboxes",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Three live sandboxes",
               "fontSize": 14,
               "color": "#8B93A7"
             }
@@ -2073,7 +2086,7 @@
       "order": 81,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/mdwz6p0n",
+      "aid": "im/ryxcfql8",
       "id": "81",
       "bbox": [
         876,
@@ -2085,16 +2098,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "a6c6bd0b-7f33-4675-b1c6-e867f8cf1551",
+        "assetId": "f788d473-e9b8-4e37-a906-acc343c86453",
         "contentType": "image/svg+xml",
-        "byteLength": 1765
+        "byteLength": 1780
       }
     },
     {
       "order": 82,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/9gny14ze",
+      "aid": "im/czqt8vmd",
       "id": "82",
       "bbox": [
         923,
@@ -2106,16 +2119,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "d5ab8306-18f0-49dc-b258-d8b98114f886",
+        "assetId": "b6da37ac-e00c-4c1f-886a-ce42f44a5008",
         "contentType": "image/svg+xml",
-        "byteLength": 146
+        "byteLength": 161
       }
     },
     {
       "order": 83,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/ra90rul4",
+      "aid": "sh/qtcfa5c3",
       "id": "83",
       "name": "architecture-daytona-stack",
       "bbox": [
@@ -2178,7 +2191,7 @@
       "order": 84,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0f21oz21",
+      "aid": "sh/5s3e10vi",
       "id": "84",
       "name": "architecture-outputs",
       "bbox": [
@@ -2195,7 +2208,7 @@
       "order": 85,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1gbix43m",
+      "aid": "sh/4rux8vud",
       "id": "85",
       "name": "architecture-outputs-number",
       "bbox": [
@@ -2259,7 +2272,7 @@
       "order": 86,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/edkjmpkv",
+      "aid": "sh/jq1wzqds",
       "id": "86",
       "name": "architecture-outputs-label",
       "bbox": [
@@ -2348,7 +2361,7 @@
       "order": 87,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zet0vulg",
+      "aid": "sh/ipsf6lc7",
       "id": "87",
       "name": "architecture-boundary",
       "bbox": [
@@ -2366,7 +2379,7 @@
       "order": 88,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gji1cfmh",
+      "aid": "sh/hojexgvm",
       "id": "88",
       "name": "architecture-boundary-kicker",
       "bbox": [
@@ -2428,7 +2441,7 @@
       "order": 89,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hkril032",
+      "aid": "sh/wnax4vu1",
       "id": "89",
       "name": "architecture-boundary-title",
       "bbox": [
@@ -2490,7 +2503,7 @@
       "order": 90,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/jyx4ri5k",
+      "aid": "sh/mt8behsz",
       "id": "90",
       "name": "architecture-boundary-copy",
       "bbox": [
@@ -2549,7 +2562,7 @@
       "order": 91,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/yxo3id4z",
+      "aid": "sh/7uhc7mtk",
       "id": "91",
       "name": "architecture-stack-label",
       "bbox": [
@@ -2611,7 +2624,7 @@
       "order": 92,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/l0fmt8nq",
+      "aid": "sh/8vqtgra5",
       "id": "92",
       "name": "architecture-chip-react-surface",
       "bbox": [
@@ -2629,7 +2642,7 @@
       "order": 93,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/kz6lknm5",
+      "aid": "sh/9wzu9wba",
       "id": "93",
       "name": "architecture-chip-react-accent",
       "bbox": [
@@ -2646,7 +2659,7 @@
       "order": 94,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/snyxkjex",
+      "aid": "im/983mp8ri",
       "id": "94",
       "bbox": [
         90,
@@ -2658,16 +2671,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "9bd775d3-7453-48df-a7ea-de9cb010632d",
+        "assetId": "d80842e0-d0bb-4d63-a5a3-bc88da20e6ea",
         "contentType": "image/svg+xml",
-        "byteLength": 2926
+        "byteLength": 2941
       }
     },
     {
       "order": 95,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/a943et43",
+      "aid": "sh/z6xc3mt8",
       "id": "95",
       "name": "architecture-chip-react-title",
       "bbox": [
@@ -2679,9 +2692,9 @@
       "geometry": "rect",
       "text": "React",
       "textPreview": "React",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -2707,7 +2720,7 @@
           "index": 1,
           "text": "React",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -2715,7 +2728,7 @@
             {
               "index": 1,
               "text": "React",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -2729,7 +2742,7 @@
       "order": 96,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/xwfmp8nu",
+      "aid": "sh/k76tcrat",
       "id": "96",
       "name": "architecture-chip-vite-surface",
       "bbox": [
@@ -2747,7 +2760,7 @@
       "order": 97,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/wb6lg3m9",
+      "aid": "sh/lszu5wbe",
       "id": "97",
       "name": "architecture-chip-vite-accent",
       "bbox": [
@@ -2764,7 +2777,7 @@
       "order": 98,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/4jyxgzel",
+      "aid": "im/l43mlorm",
       "id": "98",
       "bbox": [
         258,
@@ -2776,16 +2789,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "6af7ab33-a9b7-4daa-a921-d8491be8a25d",
+        "assetId": "11db2ab7-19b9-4834-9956-ce116113d93c",
         "contentType": "image/svg+xml",
-        "byteLength": 447
+        "byteLength": 462
       }
     },
     {
       "order": 99,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/m543ato7",
+      "aid": "sh/b2xcz2tc",
       "id": "99",
       "name": "architecture-chip-vite-title",
       "bbox": [
@@ -2797,9 +2810,9 @@
       "geometry": "rect",
       "text": "Vite",
       "textPreview": "Vite",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -2825,7 +2838,7 @@
           "index": 1,
           "text": "Vite",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -2833,7 +2846,7 @@
             {
               "index": 1,
               "text": "Vite",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -2847,7 +2860,7 @@
       "order": 100,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/ba9krulg",
+      "aid": "sh/gjmtg7q5",
       "id": "100",
       "name": "architecture-chip-typescript-surface",
       "bbox": [
@@ -2865,7 +2878,7 @@
       "order": 101,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/a90jyp4v",
+      "aid": "sh/hkvu9c7q",
       "id": "101",
       "name": "architecture-chip-typescript-accent",
       "bbox": [
@@ -2882,7 +2895,7 @@
       "order": 102,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/03ex8rut",
+      "aid": "im/7u18jihw",
       "id": "102",
       "bbox": [
         408,
@@ -2890,20 +2903,20 @@
         38,
         38
       ],
-      "alt": "TypeScript logo",
+      "alt": "TS logo",
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "6031328c-4098-48cd-8ace-33726a71e902",
+        "assetId": "5566231c-fd72-4474-9adc-6aa6b9fc0914",
         "contentType": "image/svg+xml",
-        "byteLength": 1294
+        "byteLength": 1309
       }
     },
     {
       "order": 103,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/wbi10zm1",
+      "aid": "sh/vidc7290",
       "id": "103",
       "name": "architecture-chip-typescript-title",
       "bbox": [
@@ -2913,11 +2926,11 @@
         24
       ],
       "geometry": "rect",
-      "text": "TypeScript",
-      "textPreview": "TypeScript",
-      "resolvedFontSize": 18,
+      "text": "TS",
+      "textPreview": "TS",
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -2930,32 +2943,28 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "TypeScri"
-          },
-          {
-            "index": 2,
-            "text": "pt"
+            "text": "TS"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "TypeScript",
+          "text": "TS",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
           "runs": [
             {
               "index": 1,
-              "text": "TypeScript",
-              "fontSize": 18,
+              "text": "TS",
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -2969,7 +2978,7 @@
       "order": 104,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/jetkvelc",
+      "aid": "sh/8fmtcnq9",
       "id": "104",
       "name": "architecture-chip-tailwind-surface",
       "bbox": [
@@ -2987,7 +2996,7 @@
       "order": 105,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/yd0j2947",
+      "aid": "sh/tgva5sru",
       "id": "105",
       "name": "architecture-chip-tailwind-accent",
       "bbox": [
@@ -3004,7 +3013,7 @@
       "order": 106,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/czux47uh",
+      "aid": "im/jqh8fihk",
       "id": "106",
       "bbox": [
         588,
@@ -3016,16 +3025,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "c23d6eee-8c5f-4130-a97e-917c87a3b25f",
+        "assetId": "a59af00b-9795-4f34-a190-6cd81ff60176",
         "contentType": "image/svg+xml",
-        "byteLength": 602
+        "byteLength": 617
       }
     },
     {
       "order": 107,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/kf21ojmx",
+      "aid": "sh/7ets3i9o",
       "id": "107",
       "name": "architecture-chip-tailwind-title",
       "bbox": [
@@ -3037,9 +3046,9 @@
       "geometry": "rect",
       "text": "Tailwind",
       "textPreview": "Tailwind",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -3065,7 +3074,7 @@
           "index": 1,
           "text": "Tailwind",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -3073,7 +3082,7 @@
             {
               "index": 1,
               "text": "Tailwind",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -3087,7 +3096,7 @@
       "order": 108,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/7itkzelo",
+      "aid": "sh/kb2t8nqd",
       "id": "108",
       "name": "architecture-chip-fastify-surface",
       "bbox": [
@@ -3105,7 +3114,7 @@
       "order": 109,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/6hk3q943",
+      "aid": "sh/lcba1sri",
       "id": "109",
       "name": "architecture-chip-fastify-accent",
       "bbox": [
@@ -3122,7 +3131,7 @@
       "order": 110,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/5orid0vi",
+      "aid": "im/m9one9w7",
       "id": "110",
       "bbox": [
         766,
@@ -3134,16 +3143,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "f5f67aa2-a72a-40e4-be80-4ba62e63aafd",
+        "assetId": "e7fc0726-2640-4b93-b8f2-5626e796bd1d",
         "contentType": "image/svg+xml",
-        "byteLength": 1165
+        "byteLength": 1180
       }
     },
     {
       "order": 111,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/58vipojm",
+      "aid": "sh/ml0bidsz",
       "id": "111",
       "name": "architecture-chip-fastify-title",
       "bbox": [
@@ -3155,9 +3164,9 @@
       "geometry": "rect",
       "text": "Fastify",
       "textPreview": "Fastify",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -3183,7 +3192,7 @@
           "index": 1,
           "text": "Fastify",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -3191,7 +3200,7 @@
             {
               "index": 1,
               "text": "Fastify",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -3205,7 +3214,7 @@
       "order": 112,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/i54jet0b",
+      "aid": "sh/98butsbq",
       "id": "112",
       "name": "architecture-chip-docker-surface",
       "bbox": [
@@ -3223,7 +3232,7 @@
       "order": 113,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/36d0ne1w",
+      "aid": "sh/o72tkna5",
       "id": "113",
       "name": "architecture-chip-docker-accent",
       "bbox": [
@@ -3240,7 +3249,7 @@
       "order": 114,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/x07i90vm",
+      "aid": "im/e54napwv",
       "id": "114",
       "bbox": [
         936,
@@ -3252,16 +3261,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "fc804409-33e6-433d-b7dd-e8bb9ca41c3c",
+        "assetId": "71592f06-71bc-4d90-91dd-3ebd75023e12",
         "contentType": "image/svg+xml",
-        "byteLength": 1765
+        "byteLength": 1780
       }
     },
     {
       "order": 115,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hkbilojq",
+      "aid": "sh/a9kvmdsv",
       "id": "115",
       "name": "architecture-chip-docker-title",
       "bbox": [
@@ -3273,9 +3282,9 @@
       "geometry": "rect",
       "text": "Docker",
       "textPreview": "Docker",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -3288,15 +3297,11 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "Docke"
-          },
-          {
-            "index": 2,
-            "text": "r"
+            "text": "Docker"
           }
         ]
       },
@@ -3305,7 +3310,7 @@
           "index": 1,
           "text": "Docker",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -3313,7 +3318,7 @@
             {
               "index": 1,
               "text": "Docker",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -3327,7 +3332,7 @@
       "order": 116,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/uhkja9kz",
+      "aid": "sh/xcbuxsbm",
       "id": "116",
       "name": "architecture-chip-zod-surface",
       "bbox": [
@@ -3345,7 +3350,7 @@
       "order": 117,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vit0je1k",
+      "aid": "sh/wb2dona1",
       "id": "117",
       "name": "architecture-chip-zod-accent",
       "bbox": [
@@ -3362,7 +3367,7 @@
       "order": 118,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/hwbilkvq",
+      "aid": "im/y18nmtwz",
       "id": "118",
       "bbox": [
         1100,
@@ -3374,16 +3379,16 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "f1ff636f-0095-490e-83bd-332c8e9a7648",
+        "assetId": "c4fb1f19-6e42-45ab-89b7-89473cc640d7",
         "contentType": "image/svg+xml",
-        "byteLength": 515
+        "byteLength": 530
       }
     },
     {
       "order": 119,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/tgbih4ju",
+      "aid": "sh/ydkvqxs7",
       "id": "119",
       "name": "architecture-chip-zod-title",
       "bbox": [
@@ -3395,9 +3400,9 @@
       "geometry": "rect",
       "text": "Zod",
       "textPreview": "Zod",
-      "resolvedFontSize": 18,
+      "resolvedFontSize": 16,
       "resolvedTextStyle": {
-        "fontSize": 18,
+        "fontSize": 16,
         "typeface": "+mn-lt",
         "color": "#E8EBF2",
         "bold": true,
@@ -3410,15 +3415,11 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
-            "text": "Zo"
-          },
-          {
-            "index": 2,
-            "text": "d"
+            "text": "Zod"
           }
         ]
       },
@@ -3427,7 +3428,7 @@
           "index": 1,
           "text": "Zod",
           "resolvedTextStyle": {
-            "fontSize": 18,
+            "fontSize": 16,
             "color": "#E8EBF2",
             "bold": true
           },
@@ -3435,7 +3436,7 @@
             {
               "index": 1,
               "text": "Zod",
-              "fontSize": 18,
+              "fontSize": 16,
               "color": "#E8EBF2",
               "bold": true
             }
@@ -3449,7 +3450,7 @@
       "order": 120,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/9c3yl0bi",
+      "aid": "sh/u9ofi1cf",
       "id": "120",
       "name": "footer-rule",
       "bbox": [
@@ -3466,7 +3467,7 @@
       "order": 121,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8buhcvux",
+      "aid": "sh/vaxwr6d0",
       "id": "121",
       "name": "footer-brand",
       "bbox": [
@@ -3528,7 +3529,7 @@
       "order": 122,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/nalgjqtc",
+      "aid": "sh/gb6xkbul",
       "id": "122",
       "name": "footer-text",
       "bbox": [

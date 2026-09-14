@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import type { CanvasDoc, RunRecord } from '@canvascraft/schema';
+import type { CanvasDoc, PatchInstruction, RunRecord } from '@canvascraft/schema';
 
 import { buildApp } from '../app.js';
 import type { OrchestratorConfig } from '../config.js';
@@ -36,6 +36,14 @@ function canvas(): CanvasDoc {
       },
     ],
     strokes: [],
+    designPreferences: {
+      archetype: 'application',
+      displayFont: 'grotesk',
+      bodyFont: 'clean',
+      buttonShape: 'soft',
+      motionPreset: 'calm',
+      motionIntensity: 'moderate',
+    },
     createdAt: timestamp,
     updatedAt: timestamp,
   };
@@ -53,7 +61,7 @@ describe('offline-first orchestrator', () => {
       dataDir,
       integrations: {
         ai: { mode: 'offline', configured: false, detail: 'Local deterministic compiler.' },
-        nosana: { mode: 'offline', configured: false, detail: 'Local registry matcher.' },
+        visualRanking: { mode: 'offline', configured: false, detail: 'Local registry matcher.' },
         daytona: { mode: 'offline', configured: false, detail: 'No live sandbox.' },
       },
     };
@@ -82,7 +90,7 @@ describe('offline-first orchestrator', () => {
       credentialsExposedToBrowser: false,
       integrations: {
         ai: { mode: 'offline' },
-        nosana: { mode: 'offline' },
+        visualRanking: { mode: 'offline' },
         daytona: { mode: 'offline' },
       },
     });
@@ -119,6 +127,9 @@ describe('offline-first orchestrator', () => {
     expect(events).toContain('"matchSource":"local"');
     expect(events).toContain('"stage":"licence-gate"');
     expect(events).toContain('"allowed":true');
+    // The layout audit runs on every run, between proposing directions and
+    // launching sandboxes, whether or not it finds anything to revise.
+    expect(events).toContain('"stage":"layout-audit"');
   });
 
   it('replays typed events over SSE', async () => {
@@ -127,13 +138,50 @@ describe('offline-first orchestrator', () => {
     expect(response.statusCode).toBe(200);
     expect(response.headers['content-type']).toContain('text/event-stream');
     expect(response.body).toContain('event: run-started');
+    expect(response.body).toContain('"stage":"layout-audit"');
     expect(response.body).toContain('event: run-finished');
   });
 
-  it('applies and reverts recommendations, creates manifest-only remixes, patches, and selects a champion', async () => {
+  it('honours a free client-chosen run id so the browser can stream a run in flight', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/runs',
+      payload: { canvas: canvas(), canvasImage: null, branchCount: 3, runId: 'run-abc123def456' },
+    });
+    expect(response.statusCode).toBe(201);
+    expect(response.json<RunRecord>().id).toBe('run-abc123def456');
+  });
+
+  it('ignores a client run id that is malformed or already taken', async () => {
+    const malformed = await app.inject({
+      method: 'POST',
+      url: '/runs',
+      payload: { canvas: canvas(), canvasImage: null, branchCount: 3, runId: 'Run 1; DROP' },
+    });
+    expect(malformed.statusCode).toBe(400);
+
+    const first = await app.inject({
+      method: 'POST',
+      url: '/runs',
+      payload: { canvas: canvas(), canvasImage: null, branchCount: 3, runId: 'run-collide00001' },
+    });
+    const second = await app.inject({
+      method: 'POST',
+      url: '/runs',
+      payload: { canvas: canvas(), canvasImage: null, branchCount: 3, runId: 'run-collide00001' },
+    });
+    expect(first.json<RunRecord>().id).toBe('run-collide00001');
+    expect(second.json<RunRecord>().id).not.toBe('run-collide00001');
+    expect(second.json<RunRecord>().id).toMatch(/^run-/);
+  });
+
+  it('applies recommendations, protects remix lineage, deletes branches, patches, and selects a champion', async () => {
     const run = await createRun();
     const recommendation = run.recommendations[0]!;
-    const originalLeading = run.branches[0]!.manifest.typography.bodyLeading;
+    // Which trait a recommendation touches depends on what the branch measured,
+    // so the round trip is asserted on the manifest as a whole.
+    const branchIndex = run.branches.findIndex((branch) => branch.id === recommendation.branchId);
+    const originalManifest = run.branches[branchIndex]!.manifest;
 
     const appliedResponse = await app.inject({
       method: 'POST',
@@ -141,14 +189,15 @@ describe('offline-first orchestrator', () => {
       payload: { recommendationId: recommendation.id, apply: true },
     });
     expect(appliedResponse.statusCode).toBe(200);
-    expect(appliedResponse.json<RunRecord>().branches[0]!.manifest.typography.bodyLeading).toBeGreaterThan(originalLeading);
+    const appliedManifest = appliedResponse.json<RunRecord>().branches[branchIndex]!.manifest;
+    expect(appliedManifest).not.toEqual(originalManifest);
 
     const revertedResponse = await app.inject({
       method: 'POST',
       url: `/runs/${run.id}/recommendations`,
       payload: { recommendationId: recommendation.id, apply: false },
     });
-    expect(revertedResponse.json<RunRecord>().branches[0]!.manifest.typography.bodyLeading).toBe(originalLeading);
+    expect(revertedResponse.json<RunRecord>().branches[branchIndex]!.manifest).toEqual(originalManifest);
 
     const sources = Object.fromEntries(
       ['palette', 'typography', 'form', 'controls', 'motion', 'selections'].map((group, index) => [
@@ -162,7 +211,25 @@ describe('offline-first orchestrator', () => {
       payload: { name: 'Calm Momentum', sources },
     });
     expect(remixResponse.statusCode).toBe(201);
-    expect(remixResponse.json().manifest.lineage.parentBranchIds.length).toBeGreaterThan(1);
+    const remix = remixResponse.json<RunRecord['branches'][number]>();
+    expect(remix.manifest.lineage.parentBranchIds.length).toBeGreaterThan(1);
+
+    const protectedDeleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/branches/${run.branches[0]!.id}`,
+    });
+    expect(protectedDeleteResponse.statusCode).toBe(409);
+    expect(protectedDeleteResponse.json()).toMatchObject({ error: expect.stringContaining('lineage') });
+
+    const deleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/branches/${remix.id}`,
+    });
+    expect(deleteResponse.statusCode).toBe(200);
+    const runAfterDelete = deleteResponse.json<RunRecord>();
+    expect(runAfterDelete.branches).toHaveLength(3);
+    expect(runAfterDelete.branches.some((branch) => branch.id === remix.id)).toBe(false);
+    expect(runAfterDelete.recommendations.some((entry) => entry.branchId === remix.id)).toBe(false);
 
     const patchResponse = await app.inject({
       method: 'POST',
@@ -175,6 +242,10 @@ describe('offline-first orchestrator', () => {
     });
     expect(patchResponse.statusCode).toBe(201);
     expect(patchResponse.json()).toMatchObject({ state: 'applied', regionId: run.spec!.regions[0]!.id });
+    // "Strict QA": a prompt that goes through must land a real, non-no-op change —
+    // never quietly report success while leaving the region exactly as it was.
+    const firstPatch = patchResponse.json<PatchInstruction>();
+    expect(firstPatch.delta).not.toEqual(firstPatch.revertTo);
 
     const scopedCalmPatchResponse = await app.inject({
       method: 'POST',
@@ -186,6 +257,8 @@ describe('offline-first orchestrator', () => {
       },
     });
     expect(scopedCalmPatchResponse.statusCode).toBe(201);
+    const calmPatch = scopedCalmPatchResponse.json<PatchInstruction>();
+    expect(calmPatch.delta).not.toEqual(calmPatch.revertTo);
 
     const rejectedPatchResponse = await app.inject({
       method: 'POST',
@@ -198,6 +271,43 @@ describe('offline-first orchestrator', () => {
     });
     expect(rejectedPatchResponse.statusCode).toBe(422);
 
+    // Chat history: the region must actually carry the latest patch's pattern —
+    // this is the "accurately executes the change" half of the QA gate.
+    const runAfterPatches = await app.inject({ method: 'GET', url: `/runs/${run.id}` });
+    const regionAfterPatches = () =>
+      runAfterPatches
+        .json<RunRecord>()
+        .branches.find((branch) => branch.id === run.branches[1]!.id)!
+        .manifest.selections.find((selection) => selection.regionId === run.spec!.regions[0]!.id)!.recordId;
+    expect(regionAfterPatches()).toBe(calmPatch.delta.selectionSwaps[0]!.recordId);
+
+    // Deleting a chat message is a real revert, not a soft "hide from the list":
+    // the branch manifest must roll back to exactly what it was before that patch.
+    const unknownPatchDeleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/patches/does-not-exist`,
+    });
+    expect(unknownPatchDeleteResponse.statusCode).toBe(404);
+
+    const patchDeleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/patches/${calmPatch.id}`,
+    });
+    expect(patchDeleteResponse.statusCode).toBe(200);
+    const runAfterPatchDelete = patchDeleteResponse.json<RunRecord>();
+    expect(runAfterPatchDelete.patches.some((entry) => entry.id === calmPatch.id)).toBe(false);
+    const revertedRecordId = runAfterPatchDelete.branches
+      .find((branch) => branch.id === run.branches[1]!.id)!
+      .manifest.selections.find((selection) => selection.regionId === run.spec!.regions[0]!.id)!.recordId;
+    expect(revertedRecordId).toBe(calmPatch.revertTo.selectionSwaps[0]!.recordId);
+    expect(revertedRecordId).toBe(firstPatch.delta.selectionSwaps[0]!.recordId);
+
+    const repeatPatchDeleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/patches/${calmPatch.id}`,
+    });
+    expect(repeatPatchDeleteResponse.statusCode).toBe(404);
+
     const championResponse = await app.inject({
       method: 'POST',
       url: `/runs/${run.id}/champion`,
@@ -205,6 +315,30 @@ describe('offline-first orchestrator', () => {
     });
     const championRun = championResponse.json<RunRecord>();
     expect(championRun.championBranchId).toBe(run.branches[0]!.id);
-    expect(championRun.branches.filter((branch) => branch.status === 'archived')).toHaveLength(3);
+    expect(championRun.branches.filter((branch) => branch.status === 'archived')).toHaveLength(2);
+
+    const championDeleteResponse = await app.inject({
+      method: 'DELETE',
+      url: `/runs/${run.id}/branches/${run.branches[0]!.id}`,
+    });
+    expect(championDeleteResponse.statusCode).toBe(409);
+    expect(championDeleteResponse.json()).toMatchObject({ error: expect.stringContaining('champion') });
+  });
+
+  it('deletes an entire run — branches and all persisted data — on workspace deletion', async () => {
+    const run = await createRun();
+    const runDir = path.join(dataDir, 'runs', run.id);
+    expect(await readdir(runDir)).not.toHaveLength(0);
+
+    const deleteResponse = await app.inject({ method: 'DELETE', url: `/runs/${run.id}` });
+    expect(deleteResponse.statusCode).toBe(204);
+
+    const refetchResponse = await app.inject({ method: 'GET', url: `/runs/${run.id}` });
+    expect(refetchResponse.statusCode).toBe(404);
+    await expect(readdir(runDir)).rejects.toMatchObject({ code: 'ENOENT' });
+
+    // Deleting an already-gone (or never-existing) run is not an error.
+    const repeatResponse = await app.inject({ method: 'DELETE', url: `/runs/${run.id}` });
+    expect(repeatResponse.statusCode).toBe(404);
   });
 });

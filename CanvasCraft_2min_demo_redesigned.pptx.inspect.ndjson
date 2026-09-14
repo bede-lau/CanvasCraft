@@ -1,0 +1,155 @@
+{"kind":"deck","id":"pr/7npoe3","name":"Deck"}
+{"kind":"layout","layoutId":"01cc6898-55c1-41bb-9563-18c7ca01dc43","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"a6d9d514-0ef8-4d0c-97e3-58694476f5a0","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/9tfqgn","slide":1,"title":"01 / PROBLEM","textShapes":13}
+{"kind":"textbox","id":"sh/dwf2lsvy","slide":1,"name":"slide-word","text":"01 / PROBLEM","textPreview":"01 / PROBLEM","textChars":12,"textLines":1,"bbox":[64,48,300,22]}
+{"kind":"textbox","id":"sh/qt4jqdwn","slide":1,"name":"slide-title","text":"A sketch is not a decision.","textPreview":"A sketch is not a decision.","textChars":27,"textLines":1,"bbox":[64,86,1100,64]}
+{"kind":"textbox","id":"sh/budkjix8","slide":1,"name":"problem-caption","text":"It captures the pieces. The experience stays unresolved.","textPreview":"It captures the pieces. The experience stays unresolved.","textChars":56,"textLines":1,"bbox":[64,154,680,34]}
+{"kind":"shape","id":"sh/254jmdwb","slide":1,"name":"wire-outline","bbox":[180,208,438,302]}
+{"kind":"textbox","id":"sh/36dkfyxw","slide":1,"name":"wire-caption","text":"rough intent","textPreview":"rough intent","textChars":12,"textLines":1,"bbox":[190,520,210,22]}
+{"kind":"shape","id":"sh/83ql07el","slide":1,"name":"problem-split","bbox":[670,218,1,306]}
+{"kind":"shape","id":"sh/d4zehw76","slide":1,"name":"problem-dot-0","bbox":[842,240,14,14]}
+{"kind":"textbox","id":"sh/c3qdob6l","slide":1,"name":"problem-name-0","text":"STATE","textPreview":"STATE","textChars":5,"textLines":1,"bbox":[870,232,210,22]}
+{"kind":"textbox","id":"sh/b2hwf6p0","slide":1,"name":"problem-detail-0","text":"What happens next?","textPreview":"What happens next?","textChars":18,"textLines":1,"bbox":[870,260,270,24]}
+{"kind":"shape","id":"sh/p0fedw7a","slide":1,"name":"problem-dot-1","bbox":[842,356,14,14]}
+{"kind":"textbox","id":"sh/4f6dkr6p","slide":1,"name":"problem-name-1","text":"FLOW","textPreview":"FLOW","textChars":4,"textLines":1,"bbox":[870,348,210,22]}
+{"kind":"textbox","id":"sh/3exwbmp4","slide":1,"name":"problem-detail-1","text":"What comes first?","textPreview":"What comes first?","textChars":17,"textLines":1,"bbox":[870,376,270,24]}
+{"kind":"shape","id":"sh/9wjep07e","slide":1,"name":"problem-dot-2","bbox":[842,472,14,14]}
+{"kind":"textbox","id":"sh/8baxwv6t","slide":1,"name":"problem-name-2","text":"FEEL","textPreview":"FEEL","textChars":4,"textLines":1,"bbox":[870,464,210,22]}
+{"kind":"textbox","id":"sh/8fixsze5","slide":1,"name":"problem-detail-2","text":"Which direction wins?","textPreview":"Which direction wins?","textChars":21,"textLines":1,"bbox":[870,492,270,24]}
+{"kind":"textbox","id":"sh/tgryl4vq","slide":1,"name":"problem-signal","text":"ONE DIRECTION IS A GUESS.","textPreview":"ONE DIRECTION IS A GUESS.","textChars":25,"textLines":1,"bbox":[724,586,430,24]}
+{"kind":"shape","id":"sh/6d0fqpwz","slide":1,"name":"footer-rule","bbox":[64,668,1152,1]}
+{"kind":"textbox","id":"sh/7e9gjudk","slide":1,"name":"footer-mark","text":"CANVASCRAFT","textPreview":"CANVASCRAFT","textChars":11,"textLines":1,"bbox":[64,680,150,18]}
+{"kind":"textbox","id":"sh/kbyxofet","slide":1,"name":"footer-page","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1162,680,54,18]}
+{"kind":"image","id":"im/x47alofy","slide":1,"name":"","alt":"CanvasCraft mark","bbox":[68,258,118,118]}
+{"kind":"image","id":"im/w3y9cjyd","slide":1,"name":"","alt":"rough wireframe example","bbox":[194,220,410,278]}
+{"kind":"image","id":"im/ofe98jyh","slide":1,"name":"","alt":"STATE","bbox":[724,230,82,70]}
+{"kind":"image","id":"im/t4ji1sji","slide":1,"name":"","alt":"FLOW","bbox":[724,346,82,70]}
+{"kind":"image","id":"im/50jixsj6","slide":1,"name":"","alt":"FEEL","bbox":[724,462,82,70]}
+{"kind":"notes","id":"nt/9tfqgn","slide":1,"text":"[Sources]\nProduct claim: CanvasCraft README.md and docs/architecture.md.\nCanvasCraft mark: apps/web/public/brand/canvascraft-mark-512.png.\nComponent thumbnails: packages/registry/data/thumbnails/ (project-owned)."}
+{"kind":"slide","id":"sl/65r0ak","slide":2,"title":"02 / SOLUTION","textShapes":13}
+{"kind":"textbox","id":"sh/7ud8jah8","slide":2,"name":"slide-word","text":"02 / SOLUTION","textPreview":"02 / SOLUTION","textChars":13,"textLines":1,"bbox":[64,48,300,22]}
+{"kind":"textbox","id":"sh/svmpcvid","slide":2,"name":"slide-title","text":"Interpret once. Explore three times.","textPreview":"Interpret once. Explore three times.","textChars":36,"textLines":1,"bbox":[64,86,1100,64]}
+{"kind":"textbox","id":"sh/twvql0zy","slide":2,"name":"solution-caption","text":"One shared product contract. Three live visual directions.","textPreview":"One shared product contract. Three live visual directions.","textChars":58,"textLines":1,"bbox":[64,154,760,30]}
+{"kind":"shape","id":"sh/i5k76l0b","slide":2,"name":"solution-arrow-1-line","bbox":[196,294,135,2]}
+{"kind":"shape","id":"sh/j6t8fq1w","slide":2,"name":"solution-arrow-1-head","bbox":[329,286,16,16]}
+{"kind":"shape","id":"sh/k7mp8vih","slide":2,"name":"solution-arrow-2-line","bbox":[420,294,135,2]}
+{"kind":"shape","id":"sh/58vqh0j2","slide":2,"name":"solution-arrow-2-head","bbox":[553,286,16,16]}
+{"kind":"shape","id":"sh/a1k72l0f","slide":2,"name":"solution-arrow-3-line","bbox":[644,294,135,2]}
+{"kind":"shape","id":"sh/v2tob610","slide":2,"name":"solution-arrow-3-head","bbox":[777,286,16,16]}
+{"kind":"shape","id":"sh/rilk32lo","slide":2,"name":"solution-canvas-ring","bbox":[94,226,100,100]}
+{"kind":"textbox","id":"sh/dkn25c3u","slide":2,"name":"solution-canvas-label","text":"CANVAS","textPreview":"CANVAS","textChars":6,"textLines":1,"bbox":[84,340,120,22]}
+{"kind":"shape","id":"sh/cju1w729","slide":2,"name":"solution-ai-ring","bbox":[318,226,100,100]}
+{"kind":"textbox","id":"sh/elwjyhkf","slide":2,"name":"solution-ai-label","text":"INTERPRET","textPreview":"INTERPRET","textChars":9,"textLines":1,"bbox":[308,340,120,22]}
+{"kind":"shape","id":"sh/1on29c36","slide":2,"name":"solution-match-ring","bbox":[542,226,100,100]}
+{"kind":"textbox","id":"sh/fq1kvilw","slide":2,"name":"solution-match-label","text":"MATCH","textPreview":"MATCH","textChars":5,"textLines":1,"bbox":[532,340,120,22]}
+{"kind":"shape","id":"sh/upsjmd4b","slide":2,"name":"solution-launch-ring","bbox":[766,226,100,100]}
+{"kind":"textbox","id":"sh/jm943q54","slide":2,"name":"solution-launch-label","text":"LAUNCH","textPreview":"LAUNCH","textChars":6,"textLines":1,"bbox":[756,340,120,22]}
+{"kind":"textbox","id":"sh/k7i5wvmp","slide":2,"name":"solution-three","text":"3 LIVE DIRECTIONS","textPreview":"3 LIVE DIRECTIONS","textChars":17,"textLines":1,"bbox":[908,260,250,26]}
+{"kind":"shape","id":"sh/l8rm50na","slide":2,"name":"solution-status-a","bbox":[908,306,12,12]}
+{"kind":"shape","id":"sh/ahgnql4n","slide":2,"name":"solution-status-b","bbox":[932,306,12,12]}
+{"kind":"shape","id":"sh/bip4zq58","slide":2,"name":"solution-status-c","bbox":[956,306,12,12]}
+{"kind":"shape","id":"sh/wji5sbmt","slide":2,"name":"solution-branch-a-back","bbox":[246,448,214,150]}
+{"kind":"shape","id":"sh/xkrm1gne","slide":2,"name":"solution-branch-a-bar","bbox":[246,448,214,7]}
+{"kind":"textbox","id":"sh/nep4v65w","slide":2,"name":"solution-branch-a-label","text":"CALM","textPreview":"CALM","textChars":4,"textLines":1,"bbox":[258,568,190,20]}
+{"kind":"shape","id":"sh/p8vq147e","slide":2,"name":"solution-branch-b-back","bbox":[532,448,214,150]}
+{"kind":"shape","id":"sh/47mpsz69","slide":2,"name":"solution-branch-b-bar","bbox":[532,448,214,7]}
+{"kind":"textbox","id":"sh/2547q9o3","slide":2,"name":"solution-branch-b-label","text":"BOLD","textPreview":"BOLD","textChars":4,"textLines":1,"bbox":[544,568,190,20]}
+{"kind":"shape","id":"sh/h4vqx47i","slide":2,"name":"solution-branch-c-back","bbox":[818,448,214,150]}
+{"kind":"shape","id":"sh/g3mpoz6x","slide":2,"name":"solution-branch-c-bar","bbox":[818,448,214,7]}
+{"kind":"textbox","id":"sh/u1k7mpor","slide":2,"name":"solution-branch-c-label","text":"EDITORIAL","textPreview":"EDITORIAL","textChars":9,"textLines":1,"bbox":[830,568,190,20]}
+{"kind":"shape","id":"sh/tgbqtk7m","slide":2,"name":"solution-tree","bbox":[640,360,2,72]}
+{"kind":"shape","id":"sh/8f2pkf61","slide":2,"name":"solution-tree-left","bbox":[350,430,580,2]}
+{"kind":"shape","id":"sh/8jux0j6x","slide":2,"name":"solution-tree-a","bbox":[351,420,2,22]}
+{"kind":"shape","id":"sh/t43yto7i","slide":2,"name":"solution-tree-b","bbox":[638,420,2,22]}
+{"kind":"shape","id":"sh/6hcfytor","slide":2,"name":"solution-tree-c","bbox":[927,420,2,22]}
+{"kind":"shape","id":"sh/7ilgrypc","slide":2,"name":"footer-rule","bbox":[64,668,1152,1]}
+{"kind":"textbox","id":"sh/g7eh4369","slide":2,"name":"footer-mark","text":"CANVASCRAFT","textPreview":"CANVASCRAFT","textChars":11,"textLines":1,"bbox":[64,680,150,18]}
+{"kind":"textbox","id":"sh/h8nyx87e","slide":2,"name":"footer-page","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1162,680,54,18]}
+{"kind":"image","id":"im/lk3qloru","slide":2,"name":"","alt":"CANVAS logo","bbox":[112,244,64,64]}
+{"kind":"image","id":"im/8nu9g3q5","slide":2,"name":"","alt":"INTERPRET logo","bbox":[336,244,64,64]}
+{"kind":"image","id":"im/nml8ny90","slide":2,"name":"","alt":"MATCH logo","bbox":[560,244,64,64]}
+{"kind":"image","id":"im/5wzih4vu","slide":2,"name":"","alt":"LAUNCH logo","bbox":[784,244,64,64]}
+{"kind":"image","id":"im/9ofy9kfm","slide":2,"name":"","alt":"CALM","bbox":[258,466,190,94]}
+{"kind":"image","id":"im/0vmxsvu5","slide":2,"name":"","alt":"BOLD","bbox":[544,466,190,94]}
+{"kind":"image","id":"im/8z6xwfu1","slide":2,"name":"","alt":"EDITORIAL","bbox":[830,466,190,94]}
+{"kind":"notes","id":"nt/65r0ak","slide":2,"text":"[Sources]\nSolution claim: CanvasCraft README.md and docs/architecture.md.\nOpenAI mark: Wikimedia Commons, OpenAI 2025 symbol.\nNosana mark: official nosana.com brand mark.\nDaytona mark: official daytona.io brand mark.\nBranch visuals: packages/registry/data/thumbnails/ (project-owned)."}
+{"kind":"slide","id":"sl/8v236d","slide":3,"title":"03 / VALUE","textShapes":12}
+{"kind":"textbox","id":"sh/n6twj6h8","slide":3,"name":"slide-word","text":"03 / VALUE","textPreview":"03 / VALUE","textChars":10,"textLines":1,"bbox":[64,48,300,22]}
+{"kind":"textbox","id":"sh/872xcbit","slide":3,"name":"slide-title","text":"Same product. Better decision.","textPreview":"Same product. Better decision.","textChars":30,"textLines":1,"bbox":[64,86,1100,64]}
+{"kind":"textbox","id":"sh/98belgze","slide":3,"name":"value-caption","text":"Compare the experience before the sprint commits to one aesthetic.","textPreview":"Compare the experience before the sprint commits to one aesthetic.","textChars":66,"textLines":1,"bbox":[64,154,930,30]}
+{"kind":"textbox","id":"sh/zi9wfm1c","slide":3,"name":"value-spec-label","text":"ONE SHARED\nSCREEN SPEC","textPreview":"ONE SHARED | SCREEN SPEC","textChars":22,"textLines":2,"bbox":[74,398,140,54]}
+{"kind":"shape","id":"sh/0jix8rix","slide":3,"name":"value-arrow-line","bbox":[218,336,110,2]}
+{"kind":"shape","id":"sh/1kbehwji","slide":3,"name":"value-arrow-head","bbox":[326,328,16,16]}
+{"kind":"shape","id":"sh/id4fil0b","slide":3,"name":"value-direction-a-back","bbox":[384,246,224,252]}
+{"kind":"shape","id":"sh/jedgrqhg","slide":3,"name":"value-direction-a-bar","bbox":[384,246,224,7]}
+{"kind":"textbox","id":"sh/mlsv2xcz","slide":3,"name":"value-direction-a-label","text":"CALM TRUST","textPreview":"CALM TRUST","textChars":10,"textLines":1,"bbox":[396,468,200,20]}
+{"kind":"shape","id":"sh/9ojexcbq","slide":3,"name":"value-direction-b-back","bbox":[664,246,224,252]}
+{"kind":"shape","id":"sh/8nad47u5","slide":3,"name":"value-direction-b-bar","bbox":[664,246,224,7]}
+{"kind":"textbox","id":"sh/u9sv6hcb","slide":3,"name":"value-direction-b-label","text":"PLAYFUL","textPreview":"PLAYFUL","textChars":7,"textLines":1,"bbox":[676,468,200,20]}
+{"kind":"shape","id":"sh/hc3e1cbm","slide":3,"name":"value-direction-c-back","bbox":[944,246,224,252]}
+{"kind":"shape","id":"sh/wbux87u1","slide":3,"name":"value-direction-c-bar","bbox":[944,246,224,7]}
+{"kind":"textbox","id":"sh/idcfahc7","slide":3,"name":"value-direction-c-label","text":"EDITORIAL","textPreview":"EDITORIAL","textChars":9,"textLines":1,"bbox":[956,468,200,20]}
+{"kind":"shape","id":"sh/e9wz2lwf","slide":3,"name":"value-base","bbox":[330,546,838,1]}
+{"kind":"shape","id":"sh/fapgvqd0","slide":3,"name":"value-dot-a","bbox":[466,540,12,12]}
+{"kind":"shape","id":"sh/gbyh4vel","slide":3,"name":"value-dot-b","bbox":[746,540,12,12]}
+{"kind":"shape","id":"sh/1c7yx0v6","slide":3,"name":"value-dot-c","bbox":[1026,540,12,12]}
+{"kind":"textbox","id":"sh/65wzy1wj","slide":3,"name":"value-line-one","text":"COMPARE","textPreview":"COMPARE","textChars":7,"textLines":1,"bbox":[354,576,220,28]}
+{"kind":"textbox","id":"sh/r65gr6do","slide":3,"name":"value-line-two","text":"CHOOSE","textPreview":"CHOOSE","textChars":6,"textLines":1,"bbox":[634,576,220,28]}
+{"kind":"textbox","id":"sh/s7eh0be9","slide":3,"name":"value-line-three","text":"KEEP LIVE","textPreview":"KEEP LIVE","textChars":9,"textLines":1,"bbox":[914,576,220,28]}
+{"kind":"shape","id":"sh/t8nytgvu","slide":3,"name":"footer-rule","bbox":[64,668,1152,1]}
+{"kind":"textbox","id":"sh/a1gza5wn","slide":3,"name":"footer-mark","text":"CANVASCRAFT","textPreview":"CANVASCRAFT","textChars":11,"textLines":1,"bbox":[64,680,150,18]}
+{"kind":"textbox","id":"sh/b2903ad8","slide":3,"name":"footer-page","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1162,680,54,18]}
+{"kind":"image","id":"im/7ul0za5w","slide":3,"name":"","alt":"CanvasCraft shared specification","bbox":[98,285,94,94]}
+{"kind":"image","id":"im/oja9k7yd","slide":3,"name":"","alt":"CALM TRUST","bbox":[396,264,200,196]}
+{"kind":"image","id":"im/0fq9g7y1","slide":3,"name":"","alt":"PLAYFUL","bbox":[676,264,200,196]}
+{"kind":"image","id":"im/kbu9sryl","slide":3,"name":"","alt":"EDITORIAL","bbox":[956,264,200,196]}
+{"kind":"notes","id":"nt/8v236d","slide":3,"text":"[Sources]\nValue proposition claim: CanvasCraft README.md and docs/architecture.md.\nCanvasCraft mark: apps/web/public/brand/canvascraft-mark-512.png.\nBranch visuals: packages/registry/data/thumbnails/ (project-owned)."}
+{"kind":"slide","id":"sl/22piay","slide":4,"title":"04 / TECHNICAL ARCHITECTURE","textShapes":16}
+{"kind":"textbox","id":"sh/toji9cbm","slide":4,"name":"slide-word","text":"04 / TECHNICAL ARCHITECTURE","textPreview":"04 / TECHNICAL ARCHITECTURE","textChars":27,"textLines":1,"bbox":[64,48,300,22]}
+{"kind":"textbox","id":"sh/61sjyxsb","slide":4,"name":"slide-title","text":"A visible trace. A protected boundary.","textPreview":"A visible trace. A protected boundary.","textChars":38,"textLines":1,"bbox":[64,86,1100,64]}
+{"kind":"shape","id":"sh/7m1072tg","slide":4,"name":"arch-browser-boundary","bbox":[64,182,1152,1]}
+{"kind":"textbox","id":"sh/kza1wna5","slide":4,"name":"arch-browser-title","text":"BROWSER","textPreview":"BROWSER","textChars":7,"textLines":1,"bbox":[64,202,180,20]}
+{"kind":"textbox","id":"sh/5w32hwbu","slide":4,"name":"arch-browser-copy","text":"Canvas Studio","textPreview":"Canvas Studio","textChars":13,"textLines":1,"bbox":[64,318,260,26]}
+{"kind":"shape","id":"sh/1s3i5gzu","slide":4,"name":"arch-arrow-one-line","bbox":[350,282,106,2]}
+{"kind":"shape","id":"sh/g7uhwby9","slide":4,"name":"arch-arrow-one-head","bbox":[454,274,16,16]}
+{"kind":"textbox","id":"sh/f61036ho","slide":4,"name":"arch-orchestrator-title","text":"ORCHESTRATOR","textPreview":"ORCHESTRATOR","textChars":12,"textLines":1,"bbox":[500,202,200,20]}
+{"kind":"textbox","id":"sh/721gz6hc","slide":4,"name":"arch-orchestrator-copy","text":"Schemas + credentials","textPreview":"Schemas + credentials","textChars":21,"textLines":1,"bbox":[500,318,260,26]}
+{"kind":"shape","id":"sh/61szq1g7","slide":4,"name":"arch-arrow-two-line","bbox":[770,282,90,2]}
+{"kind":"shape","id":"sh/d0nid0zm","slide":4,"name":"arch-arrow-two-head","bbox":[858,274,16,16]}
+{"kind":"textbox","id":"sh/czeh4vyh","slide":4,"name":"arch-integrations-title","text":"INTEGRATIONS","textPreview":"INTEGRATIONS","textChars":12,"textLines":1,"bbox":[904,202,220,20]}
+{"kind":"textbox","id":"sh/oz21wz6h","slide":4,"name":"arch-integrations-copy","text":"AI + GPU match + sandboxes","textPreview":"AI + GPU match + sandboxes","textChars":26,"textLines":1,"bbox":[904,318,300,26]}
+{"kind":"shape","id":"sh/90b254n2","slide":4,"name":"arch-security-band","bbox":[64,388,1152,70]}
+{"kind":"textbox","id":"sh/1cb21k7q","slide":4,"name":"arch-boundary-word","text":"NO KEYS IN THE BROWSER","textPreview":"NO KEYS IN THE BROWSER","textChars":22,"textLines":1,"bbox":[262,404,360,28]}
+{"kind":"textbox","id":"sh/369kba9s","slide":4,"name":"arch-boundary-copy","text":"Only the orchestrator talks to OpenAI, Nosana, and Daytona.","textPreview":"Only the orchestrator talks to OpenAI, Nosana, and Daytona.","textChars":59,"textLines":1,"bbox":[626,404,540,28]}
+{"kind":"textbox","id":"sh/25032587","slide":4,"name":"arch-output-label","text":"3 LIVE PREVIEWS","textPreview":"3 LIVE PREVIEWS","textChars":15,"textLines":1,"bbox":[64,520,240,22]}
+{"kind":"shape","id":"sh/p8r2dkri","slide":4,"name":"arch-preview-a-back","bbox":[350,500,208,122]}
+{"kind":"shape","id":"sh/47il4fqd","slide":4,"name":"arch-preview-a-bar","bbox":[350,500,208,7]}
+{"kind":"textbox","id":"sh/q9036p83","slide":4,"name":"arch-preview-a-label","text":"A","textPreview":"A","textChars":1,"textLines":1,"bbox":[362,592,184,20]}
+{"kind":"shape","id":"sh/dcb2hkru","slide":4,"name":"arch-preview-b-back","bbox":[606,500,208,122]}
+{"kind":"shape","id":"sh/cb2l8zq9","slide":4,"name":"arch-preview-b-bar","bbox":[606,500,208,7]}
+{"kind":"textbox","id":"sh/exk3ap8f","slide":4,"name":"arch-preview-b-label","text":"B","textPreview":"B","textChars":1,"textLines":1,"bbox":[618,592,184,20]}
+{"kind":"shape","id":"sh/ytcv2xkn","slide":4,"name":"arch-preview-c-back","bbox":[862,500,208,122]}
+{"kind":"shape","id":"sh/julwv2l8","slide":4,"name":"arch-preview-c-bar","bbox":[862,500,208,7]}
+{"kind":"textbox","id":"sh/lg3exc3e","slide":4,"name":"arch-preview-c-label","text":"C","textPreview":"C","textChars":1,"textLines":1,"bbox":[874,592,184,20]}
+{"kind":"shape","id":"sh/6hcv6hkz","slide":4,"name":"footer-rule","bbox":[64,668,1152,1]}
+{"kind":"textbox","id":"sh/7ilwzm1k","slide":4,"name":"footer-mark","text":"CANVASCRAFT","textPreview":"CANVASCRAFT","textChars":11,"textLines":1,"bbox":[64,680,150,18]}
+{"kind":"textbox","id":"sh/8jux872p","slide":4,"name":"footer-page","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1162,680,54,18]}
+{"kind":"image","id":"im/orqpsned","slide":4,"name":"","alt":"React logo","bbox":[70,246,48,48]}
+{"kind":"image","id":"im/nqhozix8","slide":4,"name":"","alt":"Vite logo","bbox":[134,246,48,48]}
+{"kind":"image","id":"im/2p87qdwn","slide":4,"name":"","alt":"TypeScript logo","bbox":[198,246,48,48]}
+{"kind":"image","id":"im/1oz6x8f2","slide":4,"name":"","alt":"Tailwind logo","bbox":[262,246,48,48]}
+{"kind":"image","id":"im/t0j2dgva","slide":4,"name":"","alt":"Node.js logo","bbox":[500,246,48,48]}
+{"kind":"image","id":"im/it8jy1cn","slide":4,"name":"","alt":"Fastify logo","bbox":[564,246,48,48]}
+{"kind":"image","id":"im/juh076ds","slide":4,"name":"","alt":"Zod logo","bbox":[628,246,48,48]}
+{"kind":"image","id":"im/zadgb2to","slide":4,"name":"","alt":"OpenAI logo","bbox":[904,246,46,46]}
+{"kind":"image","id":"im/y94z2xs3","slide":4,"name":"","alt":"Nosana logo","bbox":[968,246,46,46]}
+{"kind":"image","id":"im/lwvydcbu","slide":4,"name":"","alt":"Daytona logo","bbox":[1032,246,46,46]}
+{"kind":"image","id":"im/0bmh47a9","slide":4,"name":"","alt":"FastAPI logo","bbox":[1096,246,46,46]}
+{"kind":"image","id":"im/90fyhcbq","slide":4,"name":"","alt":"Docker logo","bbox":[92,402,38,38]}
+{"kind":"image","id":"im/8z6h87a5","slide":4,"name":"","alt":"Python logo","bbox":[142,402,38,38]}
+{"kind":"image","id":"im/32tg3itg","slide":4,"name":"","alt":"Framer Motion logo","bbox":[192,402,38,38]}
+{"kind":"image","id":"im/k7elkf6l","slide":4,"name":"","alt":"A","bbox":[362,518,184,66]}
+{"kind":"image","id":"im/43i5wzmp","slide":4,"name":"","alt":"B","bbox":[618,518,184,66]}
+{"kind":"image","id":"im/z61kfmlg","slide":4,"name":"","alt":"C","bbox":[874,518,184,66]}
+{"kind":"notes","id":"nt/22piay","slide":4,"text":"[Sources]\nArchitecture claim: docs/architecture.md.\nOpenAI mark: Wikimedia Commons, OpenAI 2025 symbol.\nNosana mark: official nosana.com brand mark.\nDaytona mark: official daytona.io brand mark.\nDeveloper-tool marks: Simple Icons (simpleicons.org).\nPreview visuals: packages/registry/data/thumbnails/ (project-owned)."}

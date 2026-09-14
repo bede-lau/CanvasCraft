@@ -16,7 +16,7 @@ import {
  * library. See ADR 0006 for the licence position that shapes these fields.
  */
 
-/** Intent tags used for semantic retrieval, alongside Nosana's visual match. */
+/** Intent tags used for semantic retrieval, alongside vision-based visual ranking. */
 export const IntentTag = z.enum([
   'card-stack',
   'dashboard-shell',
@@ -40,6 +40,15 @@ export const IntentTag = z.enum([
   'form-group',
   'app-frame',
   'marketing-hero',
+  // Added with the archetype vocabulary: these name the compositions an
+  // archetype reaches for, which role alone cannot express — a hero and a
+  // metric shelf are both 'dashboard-shell' by role and nothing alike.
+  'bento-grid',
+  'hero-section',
+  'logo-marquee',
+  'aurora-background',
+  'glass-panel',
+  'streaming-output',
 ]);
 export type IntentTag = z.infer<typeof IntentTag>;
 
@@ -87,7 +96,7 @@ export const RegistryRecord = z.object({
   /** Registry id of the neutral pattern to use when this one is gated out. */
   fallbackId: Slug.nullable(),
 
-  /** Path to the thumbnail, relative to the registry package. Used by Nosana. */
+  /** Path to the thumbnail, relative to the registry package. Used by the visual ranker. */
   thumbnail: z.string().min(1),
   /** One sentence on when to reach for this. Shown in the Design Director. */
   usagePattern: z.string().max(400),
@@ -107,26 +116,14 @@ export const RegistryManifest = z.object({
 });
 export type RegistryManifest = z.infer<typeof RegistryManifest>;
 
-/** A pre-computed thumbnail embedding, produced by the Nosana CLIP service. */
-export const EmbeddingIndex = z.object({
-  /** Exact model id used. A mismatch invalidates every comparison. */
-  model: z.string(),
-  dimensions: z.number().int().positive(),
-  createdAt: z.string(),
-  /** Registry version the thumbnails came from. */
-  registryVersion: z.string(),
-  vectors: z.record(z.string(), z.array(z.number())),
-});
-export type EmbeddingIndex = z.infer<typeof EmbeddingIndex>;
-
 /** Where a similarity score came from. Rendered in the UI; never faked. */
-export const MatchSource = z.enum(['nosana', 'local']);
+export const MatchSource = z.enum(['openai', 'local']);
 export type MatchSource = z.infer<typeof MatchSource>;
 
 /** One ranked candidate for one screen region. */
 export const PatternMatch = z.object({
   recordId: Slug,
-  /** Cosine similarity, 0–1. */
+  /** Visual-fit score, normalized to 0–1 by the ranking source. */
   score: z.number().min(0).max(1),
   matchSource: MatchSource,
   /** Why this survived the gate, or why it is only a partial fit. */

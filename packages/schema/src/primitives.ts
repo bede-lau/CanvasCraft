@@ -105,13 +105,89 @@ export const SemanticRole = z.enum([
 ]);
 export type SemanticRole = z.infer<typeof SemanticRole>;
 
+/**
+ * Button silhouette. One of the four axes the canvas toolbar locks, so it is
+ * named here rather than inlined: the genome budget test reads its options to
+ * work out the longest suffix the compiler can append.
+ */
+export const ButtonShape = z.enum(['sharp', 'soft', 'pill']);
+export type ButtonShape = z.infer<typeof ButtonShape>;
+
 /** The three fixed semantic motion presets. Not a keyframe editor. */
 export const MotionPreset = z.enum(['calm', 'playful', 'editorial']);
 export type MotionPreset = z.infer<typeof MotionPreset>;
 
+/**
+ * What kind of webpage is being built.
+ *
+ * The archetype is the vocabulary selector: it decides which layout shell,
+ * which background treatment, which component adapters, and which motion
+ * system a branch may reach for. A dashboard and a landing page are not the
+ * same design problem, and a renderer that pretends otherwise produces the
+ * same beige admin template for both — which is exactly the failure this
+ * enum exists to end.
+ *
+ * It is chosen once in the canvas toolbar and shared by all three directions,
+ * like the Screen Spec: the comparison is *within* an archetype, never across.
+ */
+export const PageArchetype = z.enum(['marketing', 'application', 'portfolio', 'ai-native']);
+export type PageArchetype = z.infer<typeof PageArchetype>;
+
+/**
+ * How a direction moves, as opposed to how fast.
+ *
+ * `MotionPreset` is the run's shared tempo (locked by the toolbar); this is the
+ * per-direction personality layered on top, and it is the axis that stops three
+ * branches from being the same page in three palettes. Each value names a
+ * concrete mechanism the runtime implements, not a mood:
+ *
+ * - `reveal`    sections fade and rise as they enter the viewport
+ * - `cascade`   siblings arrive in a visible staggered sequence
+ * - `spring`    entrances overshoot and settle; interactions are springy
+ * - `parallax`  layers move at different rates against the scroll
+ * - `cut`       no travel; state changes are instant and typographic
+ */
+export const MotionLanguage = z.enum(['reveal', 'cascade', 'spring', 'parallax', 'cut']);
+export type MotionLanguage = z.infer<typeof MotionLanguage>;
+
+/**
+ * How a branch's panels are made of light.
+ *
+ * Depth is a design argument, not decoration: a glass panel over a gradient
+ * says "this floats above a living surface", a solid one says "this is a
+ * document". Both are legitimate; a hairline-only renderer can say neither.
+ */
+export const SurfaceTreatment = z.enum(['solid', 'glass', 'gradient', 'outline']);
+export type SurfaceTreatment = z.infer<typeof SurfaceTreatment>;
+
+/**
+ * What sits behind everything.
+ *
+ * `flat` is the honest default. The rest are the treatments that make a page
+ * read as designed rather than generated, and each is implemented so that
+ * reduced motion freezes it rather than removing it.
+ */
+export const BackdropTreatment = z.enum(['flat', 'wash', 'aurora', 'grain', 'spotlight']);
+export type BackdropTreatment = z.infer<typeof BackdropTreatment>;
+
 /** How much movement a pattern introduces. Used for gating and for audition. */
 export const MotionIntensity = z.enum(['none', 'subtle', 'moderate', 'expressive']);
 export type MotionIntensity = z.infer<typeof MotionIntensity>;
+
+/**
+ * The Design Genome length budget.
+ *
+ * The compiler appends the locked toolbar axes to whatever genome a direction
+ * arrives with — archetype, button shape, and motion preset × intensity.
+ * Capping the AI draft and the finished manifest at the same number meant a
+ * draft that spent its whole budget could never fit afterwards, so every
+ * AI-authored direction failed manifest validation and the run silently fell
+ * back to the deterministic set. The manifest cap therefore has to stay
+ * comfortably above the draft cap, and the compiler test measures the real
+ * worst-case suffix rather than trusting this comment.
+ */
+export const AI_GENOME_MAX_LENGTH = 140;
+export const GENOME_MAX_LENGTH = 240;
 
 export const RiskLevel = z.enum(['low', 'medium', 'high']);
 export type RiskLevel = z.infer<typeof RiskLevel>;

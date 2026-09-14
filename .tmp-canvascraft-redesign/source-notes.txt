@@ -1,0 +1,20 @@
+CanvasCraft 2-minute visual redesign
+
+Claims
+- CanvasCraft turns a rough wireframe into three live, comparable frontend directions that share a Screen Spec.
+- An OpenAI-compatible model compiles intent into a schema-validated Screen Spec and variant manifests.
+- Nosana powers visual pattern matching through a CLIP service, with a visibly labelled local fallback.
+- Daytona launches the three live frontend branches in parallel.
+- Browser credentials are isolated behind the orchestrator.
+
+Primary internal sources
+- C:\Users\bedel\OneDrive\Desktop\CanvasCraft\README.md
+- C:\Users\bedel\OneDrive\Desktop\CanvasCraft\docs\architecture.md
+- C:\Users\bedel\OneDrive\Desktop\CanvasCraft\apps\web\public\brand\
+- C:\Users\bedel\OneDrive\Desktop\CanvasCraft\packages\registry\data\thumbnails\
+
+External logo sources
+- OpenAI symbol: Wikimedia Commons, OpenAI 2025 symbol.
+- Nosana: official nosana.com brand mark.
+- Daytona: official daytona.io brand mark.
+- React, Vite, TypeScript, Tailwind CSS, Fastify, FastAPI, Docker, Zod, Node.js, Python, and Framer: Simple Icons (simpleicons.org).

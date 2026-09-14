@@ -121,7 +121,7 @@ function addGrid(slide, opacity = 1) {
   for (let x = 0; x <= 1280; x += 48) {
     addRect(slide, `grid-v-${x}`, x, 0, 1, 720, opacity < 1 ? "#10141C" : "#161A22");
   }
-  for (let y = 0; y <= 720; y += 48) {
+  for (let y = 0; y < 720; y += 48) {
     addRect(slide, `grid-h-${y}`, 0, y, 1280, 1, opacity < 1 ? "#10141C" : "#161A22");
   }
 }
@@ -142,7 +142,7 @@ function addLogoChip(slide, name, asset, title, left, top, width, height, accent
   addRect(slide, `${name}-accent`, left, top, 4, height, accent);
   addLogo(slide, `${name}-logo`, asset, left + 18, top + 15, 38, 38, `${title} logo`);
   addText(slide, `${name}-title`, title, left + 66, top + 19, width - 80, 24, {
-    fontSize: 18,
+    fontSize: 16,
     bold: true,
   });
 }
@@ -212,7 +212,7 @@ async function buildDeck() {
     HERO,
     "openai-symbol.svg",
     "nosana.svg",
-    "daytona.svg",
+    "daytona-light.png",
     "react.svg",
     "vite.svg",
     "typescript.svg",
@@ -273,7 +273,7 @@ async function buildDeck() {
       color: C.mist,
     });
 
-    addRect(slide, "problem-hero-shadow", 626, 76, 582, 530, C.black, {
+    addRect(slide, "problem-hero-shadow", 626, 156, 582, 408, C.black, {
       line: C.edge,
       lineWidth: 1,
       borderRadius: 8,
@@ -283,13 +283,13 @@ async function buildDeck() {
       "problem-hero",
       HERO,
       642,
-      92,
+      172,
       550,
-      498,
+      360,
       "CanvasCraft product artwork",
-      { fit: "cover", geometry: "roundRect", borderRadius: 6 },
+      { fit: "contain", geometry: "roundRect", borderRadius: 6 },
     );
-    addText(slide, "problem-hero-label", "A wireframe only captures the beginning.", 658, 610, 500, 24, {
+    addText(slide, "problem-hero-label", "A wireframe only captures the beginning.", 658, 582, 500, 24, {
       fontSize: 16,
       color: C.mist,
     });
@@ -342,11 +342,11 @@ async function buildDeck() {
       borderRadius: 8,
     });
     addLogo(slide, "solution-ai-logo", logo("openai-symbol.svg"), 366, 224, 52, 52, "OpenAI logo");
-    addText(slide, "solution-ai-title", "Interpret intent", 366, 305, 140, 24, {
+    addText(slide, "solution-ai-title", "Interpret", 366, 305, 140, 24, {
       fontSize: 21,
       bold: true,
     });
-    addText(slide, "solution-ai-copy", "One shared Screen Spec", 366, 333, 140, 20, {
+    addText(slide, "solution-ai-copy", "Shared Screen Spec", 366, 333, 140, 20, {
       fontSize: 14,
       color: C.mist,
     });
@@ -357,11 +357,11 @@ async function buildDeck() {
       borderRadius: 8,
     });
     addLogo(slide, "solution-nosana-logo", logo("nosana.svg"), 637, 226, 116, 38, "Nosana logo");
-    addText(slide, "solution-nosana-title", "Ground choices", 637, 305, 140, 24, {
+    addText(slide, "solution-nosana-title", "Match", 637, 305, 140, 24, {
       fontSize: 21,
       bold: true,
     });
-    addText(slide, "solution-nosana-copy", "Visual match + licence gate", 637, 333, 140, 20, {
+    addText(slide, "solution-nosana-copy", "Visuals + licence gate", 637, 333, 140, 20, {
       fontSize: 14,
       color: C.mist,
     });
@@ -371,12 +371,17 @@ async function buildDeck() {
       lineWidth: 1,
       borderRadius: 8,
     });
-    addLogo(slide, "solution-daytona-logo", logo("daytona.svg"), 908, 228, 120, 28, "Daytona logo");
-    addText(slide, "solution-daytona-title", "Run three branches", 908, 305, 148, 24, {
+    addLogo(slide, "solution-daytona-logo", logo("daytona-light.png"), 908, 218, 54, 54, "Daytona logo");
+    addText(slide, "solution-daytona-wordmark", "DAYTONA", 974, 238, 74, 20, {
+      fontSize: 13,
+      bold: true,
+      color: C.chalk,
+    });
+    addText(slide, "solution-daytona-title", "Launch", 908, 305, 148, 24, {
       fontSize: 21,
       bold: true,
     });
-    addText(slide, "solution-daytona-copy", "Live sandbox previews", 908, 333, 148, 20, {
+    addText(slide, "solution-daytona-copy", "Three live previews", 908, 333, 148, 20, {
       fontSize: 14,
       color: C.mist,
     });
@@ -408,7 +413,7 @@ async function buildDeck() {
       "[Sources]",
       "- OpenAI mark: https://upload.wikimedia.org/wikipedia/commons/6/66/OpenAI_logo_2025_%28symbol%29.svg",
       "- Nosana mark: https://nosana.com/_astro/nosanaLogoDark.D176lt8U_ZVySwW.svg",
-      "- Daytona mark: https://framerusercontent.com/images/1POXYvdCDtiBLbQGEcarnytrtQ.svg",
+      "- Daytona mark: https://framerusercontent.com/images/6WPclDLAHHQgPFeA2DRTW1OXVSU.png",
     ]);
   }
 
@@ -438,8 +443,8 @@ async function buildDeck() {
       bold: true,
       color: C.lamp,
     });
-    addText(slide, "value-lock-title", "Shared\nScreen Spec", 100, 327, 188, 98, {
-      fontSize: 35,
+    addText(slide, "value-lock-title", "Shared\nScreen Spec", 100, 327, 210, 88, {
+      fontSize: 30,
       bold: true,
     });
     addText(slide, "value-lock-copy", "Same product meaning.\nSame interaction model.\nSame responsive states.", 100, 444, 190, 88, {
@@ -501,11 +506,11 @@ async function buildDeck() {
       lineWidth: 1,
       borderRadius: 8,
     });
-    addText(slide, "architecture-client-title", "Canvas Studio", 96, 210, 135, 24, {
+    addText(slide, "architecture-client-title", "Canvas", 96, 210, 135, 24, {
       fontSize: 21,
       bold: true,
     });
-    addText(slide, "architecture-client-copy", "Capture intent", 96, 240, 120, 18, {
+    addText(slide, "architecture-client-copy", "Studio", 96, 240, 120, 18, {
       fontSize: 14,
       color: C.mist,
     });
@@ -513,7 +518,7 @@ async function buildDeck() {
     addLogo(slide, "architecture-vite", logo("vite.svg"), 139, 278, 32, 32, "Vite logo");
     addLogo(slide, "architecture-ts", logo("typescript.svg"), 182, 278, 32, 32, "TypeScript logo");
     addLogo(slide, "architecture-tailwind", logo("tailwindcss.svg"), 96, 317, 32, 22, "Tailwind CSS logo");
-    addText(slide, "architecture-client-stack", "React · Vite · TS · Tailwind", 135, 318, 108, 30, {
+    addText(slide, "architecture-client-stack", "React · Vite · TS", 135, 318, 108, 30, {
       fontSize: 10,
       color: C.mist,
     });
@@ -527,7 +532,7 @@ async function buildDeck() {
       fontSize: 21,
       bold: true,
     });
-    addText(slide, "architecture-orch-copy", "Schemas · credentials · SSE", 336, 240, 170, 18, {
+    addText(slide, "architecture-orch-copy", "Keys + SSE", 336, 240, 170, 18, {
       fontSize: 14,
       color: C.mist,
     });
@@ -535,7 +540,7 @@ async function buildDeck() {
     addLogo(slide, "architecture-node", logo("node.svg"), 394, 277, 34, 34, "Node.js logo");
     addLogo(slide, "architecture-zod", logo("zod.svg"), 438, 277, 34, 34, "Zod logo");
     addLogo(slide, "architecture-openai", logo("openai-symbol.svg"), 482, 277, 30, 30, "OpenAI logo");
-    addText(slide, "architecture-orch-stack", "Fastify · Node · Zod · OpenAI-compatible", 336, 318, 170, 24, {
+    addText(slide, "architecture-orch-stack", "Fastify · Node · Zod", 336, 318, 170, 24, {
       fontSize: 10,
       color: C.mist,
     });
@@ -546,17 +551,17 @@ async function buildDeck() {
       borderRadius: 8,
     });
     addLogo(slide, "architecture-nosana-wordmark", logo("nosana.svg"), 608, 213, 122, 28, "Nosana logo");
-    addText(slide, "architecture-nosana-title", "Visual matching", 608, 248, 140, 24, {
+    addText(slide, "architecture-nosana-title", "Match", 608, 248, 140, 24, {
       fontSize: 20,
       bold: true,
     });
-    addText(slide, "architecture-nosana-copy", "CLIP rank + local gate", 608, 278, 150, 18, {
+    addText(slide, "architecture-nosana-copy", "CLIP + licence gate", 608, 278, 150, 18, {
       fontSize: 14,
       color: C.mist,
     });
     addLogo(slide, "architecture-fastapi", logo("fastapi.svg"), 608, 312, 29, 29, "FastAPI logo");
     addLogo(slide, "architecture-python", logo("python.svg"), 646, 312, 29, 29, "Python logo");
-    addText(slide, "architecture-nosana-stack", "FastAPI · Python · CLIP", 682, 316, 90, 22, {
+    addText(slide, "architecture-nosana-stack", "FastAPI · Python", 682, 316, 90, 22, {
       fontSize: 10,
       color: C.mist,
     });
@@ -566,12 +571,17 @@ async function buildDeck() {
       lineWidth: 1,
       borderRadius: 8,
     });
-    addLogo(slide, "architecture-daytona-wordmark", logo("daytona.svg"), 876, 213, 126, 26, "Daytona logo");
-    addText(slide, "architecture-daytona-title", "Parallel branches", 876, 248, 154, 24, {
+    addLogo(slide, "architecture-daytona-logo", logo("daytona-light.png"), 876, 208, 42, 42, "Daytona logo");
+    addText(slide, "architecture-daytona-wordmark", "DAYTONA", 928, 220, 105, 18, {
+      fontSize: 13,
+      bold: true,
+      color: C.chalk,
+    });
+    addText(slide, "architecture-daytona-title", "Launch", 876, 258, 154, 24, {
       fontSize: 20,
       bold: true,
     });
-    addText(slide, "architecture-daytona-copy", "Snapshot → sandbox → preview", 876, 278, 160, 18, {
+    addText(slide, "architecture-daytona-copy", "Three live sandboxes", 876, 286, 160, 18, {
       fontSize: 14,
       color: C.mist,
     });
@@ -624,7 +634,7 @@ async function buildDeck() {
     const chips = [
       ["react", "React", 72, 610, 154, C.blue],
       ["vite", "Vite", 240, 610, 136, C.coral],
-      ["typescript", "TypeScript", 390, 610, 166, C.blue],
+      ["typescript", "TS", 390, 610, 166, C.blue],
       ["tailwind", "Tailwind", 570, 610, 164, C.mint],
       ["fastify", "Fastify", 748, 610, 156, C.coral],
       ["docker", "Docker", 918, 610, 150, C.blue],
@@ -648,7 +658,7 @@ async function buildDeck() {
       "[Sources]",
       "- OpenAI mark: https://upload.wikimedia.org/wikipedia/commons/6/66/OpenAI_logo_2025_%28symbol%29.svg",
       "- Nosana mark: https://nosana.com/_astro/nosanaLogoDark.D176lt8U_ZVySwW.svg",
-      "- Daytona mark: https://framerusercontent.com/images/1POXYvdCDtiBLbQGEcarnytrtQ.svg",
+      "- Daytona mark: https://framerusercontent.com/images/6WPclDLAHHQgPFeA2DRTW1OXVSU.png",
       "- React, Vite, TypeScript, Tailwind CSS, Fastify, FastAPI, Docker, Zod, Node.js, Python, and Framer marks: https://github.com/simple-icons/simple-icons",
     ]);
   }

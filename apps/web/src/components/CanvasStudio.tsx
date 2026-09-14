@@ -6,7 +6,9 @@ import {
   ImagePlus,
   MousePointer2,
   Pencil,
+  Plus,
   Redo2,
+  SlidersHorizontal,
   StickyNote,
   Trash2,
   Undo2,
@@ -21,34 +23,278 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type CSSProperties,
 } from 'react';
-import { Arrow, Image as KonvaImage, Layer, Line, Rect, Stage, Text, Transformer } from 'react-konva';
+import { Arrow, Image as KonvaImage, Label, Layer, Line, Rect, Stage, Tag, Text, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import {
+  CanvasDesignPreferences,
   CanvasDoc,
   CanvasElement,
   CanvasNote,
+  findCanvasGuardrails,
   findCanvasIntegrityIssues,
   summariseCanvasReadiness,
   type InteractionKind,
   type StampKind,
+  type StateKind,
 } from '@canvascraft/schema';
-import type Konva from 'konva';
+import Konva from 'konva';
+import { STAMPS, KIND_META } from '../lib/stampKinds';
 
-const STAMPS: Array<{ kind: StampKind; label: string; width: number; height: number }> = [
-  { kind: 'navbar', label: 'Navbar', width: 520, height: 64 },
-  { kind: 'hero', label: 'Hero', width: 440, height: 120 },
-  { kind: 'card', label: 'Card', width: 280, height: 150 },
-  { kind: 'button', label: 'Button', width: 150, height: 48 },
-  { kind: 'input', label: 'Input', width: 260, height: 48 },
-  { kind: 'table', label: 'Table', width: 430, height: 210 },
-  { kind: 'tab', label: 'Tabs', width: 310, height: 48 },
-  { kind: 'media', label: 'Media', width: 300, height: 190 },
-  { kind: 'modal', label: 'Modal', width: 360, height: 220 },
-  { kind: 'sidebar', label: 'Sidebar', width: 190, height: 440 },
-];
+function hexToRgba(hex: string, alpha: number): string {
+  const value = hex.replace('#', '');
+  const r = parseInt(value.slice(0, 2), 16);
+  const g = parseInt(value.slice(2, 4), 16);
+  const b = parseInt(value.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+type CanvasTheme = 'light' | 'dark';
+
+/**
+ * Konva paints to a `<canvas>`, not the DOM — CSS custom properties never
+ * reach it. This is the canvas-side mirror of the app's `--cc-*` tokens
+ * (apps/web/src/styles.css) so the drawing board actually follows the
+ * light/dark toggle instead of always rendering the old fixed dark theme
+ * regardless of it.
+ */
+const CANVAS_PALETTE: Record<CanvasTheme, {
+  artboard: string;
+  grid: string;
+  elementFill: string;
+  elementFillSelected: string;
+  elementStroke: string;
+  accent: string;
+  accentStrong: string;
+  labelText: string;
+  drawInk: string;
+  eraseGhost: string;
+  chipBg: string;
+  chipText: string;
+}> = {
+  dark: {
+    artboard: '#0d1015',
+    grid: '#252b36',
+    elementFill: '#171b22',
+    elementFillSelected: '#2a2116',
+    elementStroke: '#596173',
+    accent: '#f0b860',
+    accentStrong: '#ffd487',
+    labelText: '#e8ebf2',
+    drawInk: '#e8ebf2',
+    eraseGhost: 'rgba(232, 235, 242, 0.4)',
+    chipBg: '#15130f',
+    chipText: '#ffd487',
+  },
+  light: {
+    artboard: '#ffffff',
+    grid: '#e7e2d8',
+    elementFill: '#f7f5f1',
+    elementFillSelected: '#fdf0d9',
+    elementStroke: '#c7c0b2',
+    // Matches --cc-lamp's light value (apps/web/src/styles.css) — #9a6b18
+    // read 3.96:1 on a similar surface, under the 4.5:1 text floor.
+    accent: '#875c0d',
+    accentStrong: '#6e4c0e',
+    labelText: '#211f1b',
+    drawInk: '#211f1b',
+    eraseGhost: 'rgba(33, 31, 27, 0.35)',
+    chipBg: '#fdf0d9',
+    chipText: '#6e4c0e',
+  },
+};
+
+/** Buttons, inputs, and tabs are what the "Buttons" shape control reshapes. */
+const SHAPE_TUNABLE_KINDS = new Set<StampKind>(['button', 'input', 'tab']);
+
+function cornerRadiusFor(
+  kind: StampKind,
+  shape: CanvasDesignPreferences['buttonShape'],
+  height: number,
+): number {
+  if (!SHAPE_TUNABLE_KINDS.has(kind)) return 12;
+  if (shape === 'sharp') return 2;
+  if (shape === 'pill') return height / 2;
+  return 10;
+}
+
+/**
+ * Konva paints labels straight onto the canvas with nothing to clip an
+ * overflowing string, so a long label just spills past its shape. These
+ * helpers keep text inside its box: an element label shrinks to fit its
+ * fixed control, and a note grows its box down to the text first, only
+ * shrinking the font once the box hits its ceiling.
+ */
+let textMeasurer: Konva.Text | null = null;
+function measureTextHeight(
+  text: string,
+  width: number,
+  fontSize: number,
+  fontStyle: string,
+  lineHeight: number,
+  fontFamily: string,
+): number {
+  if (!textMeasurer) textMeasurer = new Konva.Text();
+  textMeasurer.text(text || ' ');
+  textMeasurer.width(Math.max(1, width));
+  textMeasurer.fontSize(fontSize);
+  textMeasurer.fontStyle(fontStyle);
+  textMeasurer.fontFamily(fontFamily);
+  textMeasurer.lineHeight(lineHeight);
+  textMeasurer.wrap('word');
+  return textMeasurer.height();
+}
+
+const labelFitCache = new Map<string, number>();
+/** Largest size in `[min, max]` at which `text` word-wraps within `width × height`. */
+function fitLabelFontSize(
+  text: string,
+  width: number,
+  height: number,
+  max: number,
+  min: number,
+  fontStyle: string,
+  fontFamily: string,
+): number {
+  if (!text || width <= 0 || height <= 0) return max;
+  const key = `${fontFamily}|${fontStyle}|${max}|${min}|${Math.round(width)}|${Math.round(height)}|${text}`;
+  const cached = labelFitCache.get(key);
+  if (cached !== undefined) return cached;
+  let result = min;
+  for (let size = Math.round(max); size >= min; size -= 1) {
+    if (measureTextHeight(text, width, size, fontStyle, 1.2, fontFamily) <= height) {
+      result = size;
+      break;
+    }
+  }
+  if (labelFitCache.size > 600) labelFitCache.clear();
+  labelFitCache.set(key, result);
+  return result;
+}
+
+const NOTE_PAD = 10;
+const NOTE_BASE_FONT = 13;
+const NOTE_MIN_FONT = 9;
+const NOTE_MAX_HEIGHT = 240;
+const noteFitCache = new Map<string, { fontSize: number; height: number }>();
+/**
+ * A note box grows down to fit its text at a comfortable size; once it would
+ * pass `NOTE_MAX_HEIGHT` the font shrinks instead. The stored bounds height is
+ * a floor, so a deliberately tall note stays tall.
+ */
+function fitNote(
+  text: string,
+  boxWidth: number,
+  minHeight: number,
+  fontFamily: string,
+): { fontSize: number; height: number } {
+  const innerWidth = Math.max(20, boxWidth - NOTE_PAD * 2);
+  const key = `${fontFamily}|${Math.round(innerWidth)}|${Math.round(minHeight)}|${text}`;
+  const cached = noteFitCache.get(key);
+  if (cached) return cached;
+  const grownHeight = measureTextHeight(text, innerWidth, NOTE_BASE_FONT, 'normal', 1.3, fontFamily);
+  let fit: { fontSize: number; height: number };
+  if (grownHeight + NOTE_PAD * 2 <= NOTE_MAX_HEIGHT) {
+    fit = { fontSize: NOTE_BASE_FONT, height: Math.max(minHeight, Math.round(grownHeight + NOTE_PAD * 2)) };
+  } else {
+    let fontSize = NOTE_MIN_FONT;
+    for (let candidate = NOTE_BASE_FONT - 1; candidate > NOTE_MIN_FONT; candidate -= 1) {
+      if (measureTextHeight(text, innerWidth, candidate, 'normal', 1.3, fontFamily) + NOTE_PAD * 2 <= NOTE_MAX_HEIGHT) {
+        fontSize = candidate;
+        break;
+      }
+    }
+    fit = { fontSize, height: Math.max(minHeight, NOTE_MAX_HEIGHT) };
+  }
+  if (noteFitCache.size > 400) noteFitCache.clear();
+  noteFitCache.set(key, fit);
+  return fit;
+}
 
 type Tool = 'select' | 'draw' | 'erase' | 'arrow' | 'note';
+
+const DISPLAY_FONT_OPTIONS: Array<{ value: CanvasDesignPreferences['displayFont']; label: string }> = [
+  { value: 'grotesk', label: 'Grotesk' },
+  { value: 'serif', label: 'Editorial serif' },
+  { value: 'rounded', label: 'Rounded' },
+  { value: 'mono', label: 'Monospace' },
+];
+
+const BODY_FONT_OPTIONS: Array<{ value: CanvasDesignPreferences['bodyFont']; label: string }> = [
+  { value: 'clean', label: 'Clean sans' },
+  { value: 'humanist', label: 'Humanist' },
+  { value: 'serif', label: 'Serif' },
+  { value: 'mono', label: 'Monospace' },
+];
+
+/**
+ * CSS stacks so each Heading/Body option renders in the family it names,
+ * instead of every choice reading in one UI font. Mirrors the compiler's
+ * DISPLAY_FONT_STACKS / BODY_FONT_STACKS (apps/orchestrator/src/compiler.ts) —
+ * the generated directions use those exact families. Only the three
+ * @fontsource-variable faces (web/src/main.tsx) are bundled; the rest resolve
+ * to platform fonts.
+ */
+const DISPLAY_FONT_PREVIEW: Record<CanvasDesignPreferences['displayFont'], string> = {
+  grotesk: '"Bricolage Grotesque Variable", "Avenir Next", Inter, system-ui, sans-serif',
+  serif: 'Georgia, "Times New Roman", serif',
+  rounded: '"Arial Rounded MT Bold", "Trebuchet MS", ui-rounded, system-ui, sans-serif',
+  mono: '"Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace',
+};
+
+const BODY_FONT_PREVIEW: Record<CanvasDesignPreferences['bodyFont'], string> = {
+  clean: '"Geist Variable", Inter, system-ui, sans-serif',
+  humanist: '"Segoe UI", "Avenir Next", Candara, system-ui, sans-serif',
+  serif: 'Georgia, "Times New Roman", serif',
+  mono: '"Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace',
+};
+
+/**
+ * The most consequential control on the toolbar.
+ *
+ * It selects the layout shell, the background treatment, the component
+ * vocabulary, and the motion system every generated direction draws from — the
+ * three directions then diverge *within* it. Labelled by what the user is
+ * building rather than by the enum value, because "ai-native" is a schema term
+ * and "AI product" is a thing someone is making.
+ */
+const ARCHETYPE_OPTIONS: Array<{
+  value: CanvasDesignPreferences['archetype'];
+  label: string;
+  hint: string;
+}> = [
+  { value: 'marketing', label: 'Landing page', hint: 'Oversized type, gradient ground, scroll reveals' },
+  { value: 'application', label: 'App / dashboard', hint: 'Bento panels, real depth, dense data' },
+  { value: 'portfolio', label: 'Portfolio', hint: 'Large media, parallax, grain' },
+  { value: 'ai-native', label: 'AI product', hint: 'Aurora ground, streaming primitives, glass' },
+];
+
+const MOTION_INTENSITIES: CanvasDesignPreferences['motionIntensity'][] = [
+  'none',
+  'subtle',
+  'moderate',
+  'expressive',
+];
+
+/**
+ * State variants a stamp can be scoped to.
+ *
+ * Leaving this unset is the norm and means "present in every state"; picking one
+ * marks the stamp as belonging only to that variant, which is how a modal or an
+ * empty state gets drawn without appearing in the default screen. `default` and
+ * `narrow` are omitted because every screen always has them.
+ */
+const STATE_VARIANTS: Array<{ value: StateKind; label: string }> = [
+  { value: 'modal', label: 'Modal only' },
+  { value: 'drawer', label: 'Drawer only' },
+  { value: 'filtered', label: 'Filtered only' },
+  { value: 'selected', label: 'Selected only' },
+  { value: 'empty', label: 'Empty only' },
+  { value: 'loading', label: 'Loading only' },
+  { value: 'success', label: 'Success only' },
+  { value: 'error', label: 'Error only' },
+];
 
 const INTERACTIONS: Array<{ value: InteractionKind; label: string }> = [
   { value: 'navigate-tab', label: 'Navigate tab' },
@@ -71,6 +317,16 @@ function canvasClone(doc: CanvasDoc): CanvasDoc {
   return structuredClone(doc);
 }
 
+/**
+ * The artboard background rect.
+ *
+ * Named because a pointer event inside the visible artboard lands on this rect,
+ * not on the Stage — so a bare `target === stage` test treats every click on the
+ * board itself as a click on an element, which is why placing a note only worked
+ * in the margin outside the board.
+ */
+const ARTBOARD_SURFACE = 'artboard-surface';
+
 function BaseImage({ doc }: { doc: CanvasDoc }) {
   const [image] = useImage(doc.baseImage?.src ?? '');
   if (!doc.baseImage || !image) return null;
@@ -92,14 +348,17 @@ export function CanvasStudio({
   onChange,
   selectedId,
   onSelect,
+  theme = 'dark',
   compact = false,
 }: {
   value: CanvasDoc;
   onChange: (doc: CanvasDoc) => void;
   selectedId: string | null;
   onSelect: (id: string | null) => void;
+  theme?: CanvasTheme;
   compact?: boolean;
 }) {
+  const palette = CANVAS_PALETTE[theme];
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<Konva.Stage>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
@@ -107,11 +366,19 @@ export function CanvasStudio({
   const [tool, setTool] = useState<Tool>('select');
   const [scale, setScale] = useState(0.75);
   const [position, setPosition] = useState({ x: 18, y: 18 });
+  // Kind badges are DOM overlays placed from element/stage coordinates that
+  // only React state carries. During a drag Konva moves the shape on the frame
+  // but that state updates a beat later, so the badges trail the sketch. These
+  // hold the in-flight positions so the overlay tracks the drag in real time.
+  const [liveDrags, setLiveDrags] = useState<Record<string, { x: number; y: number }>>({});
   const [strokeDraft, setStrokeDraft] = useState<number[] | null>(null);
   const [arrowStart, setArrowStart] = useState<string | null>(null);
   const [history, setHistory] = useState<CanvasDoc[]>([]);
   const [future, setFuture] = useState<CanvasDoc[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const stampMenuRef = useRef<HTMLDivElement>(null);
+  const [stampMenuOpen, setStampMenuOpen] = useState(false);
+  const designPreferences = CanvasDesignPreferences.parse(value.designPreferences ?? {});
 
   useEffect(() => {
     const element = containerRef.current;
@@ -179,6 +446,16 @@ export function CanvasStudio({
     setTool('select');
   };
 
+  const updateDesignPreferences = (patch: Partial<CanvasDesignPreferences>) => {
+    commit({
+      ...value,
+      designPreferences: {
+        ...designPreferences,
+        ...patch,
+      },
+    });
+  };
+
   const deleteSelected = useCallback(() => {
     if (!selectedId) return;
     commit({
@@ -220,6 +497,24 @@ export function CanvasStudio({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [compact, deleteSelected, redo, undo]);
 
+  useEffect(() => {
+    if (!stampMenuOpen) return;
+    const closeOnOutsidePress = (event: PointerEvent) => {
+      if (event.target instanceof Node && !stampMenuRef.current?.contains(event.target)) {
+        setStampMenuOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setStampMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', closeOnOutsidePress);
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePress);
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [stampMenuOpen]);
+
   const onStagePointerDown = (event: Konva.KonvaEventObject<PointerEvent>) => {
     const stage = event.target.getStage();
     if (!stage) return;
@@ -230,7 +525,9 @@ export function CanvasStudio({
       setStrokeDraft([pointer.x, pointer.y]);
       return;
     }
-    if (tool === 'note' && event.target === stage) {
+    const onBackground = event.target === stage || event.target.name() === ARTBOARD_SURFACE;
+
+    if (tool === 'note' && onBackground) {
       const note = CanvasNote.parse({
         id: uid('note'),
         text: 'Describe intent…',
@@ -242,7 +539,7 @@ export function CanvasStudio({
       setTool('select');
       return;
     }
-    if (event.target === stage) {
+    if (onBackground) {
       onSelect(null);
       setArrowStart(null);
     }
@@ -265,7 +562,11 @@ export function CanvasStudio({
           {
             id: uid('stroke'),
             points: strokeDraft,
-            color: tool === 'erase' ? '#0d1015' : '#e8ebf2',
+            // Erase strokes composite with destination-out (see the Line
+            // below), so their stored color never actually paints anything —
+            // only draw strokes need real ink, and it has to be dark-on-light
+            // or light-on-dark to stay visible against the current artboard.
+            color: tool === 'erase' ? palette.artboard : palette.drawInk,
             width: tool === 'erase' ? 18 : 3,
             mode: tool === 'erase' ? 'erase' : 'draw',
           },
@@ -371,6 +672,11 @@ export function CanvasStudio({
   const selectedArrow = value.arrows.find((arrow) => arrow.id === selectedId);
   const issues = useMemo(() => findCanvasIntegrityIssues(value), [value]);
   const readiness = useMemo(() => summariseCanvasReadiness(value), [value]);
+  const guardrails = useMemo(() => findCanvasGuardrails(value), [value]);
+  const guardrailElementIds = useMemo(
+    () => new Set(guardrails.flatMap((guardrail) => guardrail.elementIds)),
+    [guardrails],
+  );
   const stageHeight = compact ? 420 : Math.max(500, Math.min(720, window.innerHeight - 250));
   const fitScale = Math.min((viewportWidth - 36) / value.size.width, (stageHeight - 36) / value.size.height);
 
@@ -404,28 +710,159 @@ export function CanvasStudio({
           </div>
 
           <div className="toolbar-divider" />
-          <div className="stamp-menu">
-            <label htmlFor="stamp-select">Add stamp</label>
-            <div className="select-wrap">
+          <div className="stamp-menu" ref={stampMenuRef}>
+            <span>Add stamp</span>
+            <button
+              type="button"
+              className="stamp-trigger"
+              aria-expanded={stampMenuOpen}
+              aria-haspopup="menu"
+              aria-controls="stamp-picker-menu"
+              onClick={() => setStampMenuOpen((open) => !open)}
+            >
+              <Plus size={15} aria-hidden="true" />
+              <span>Choose element</span>
+              <ChevronDown size={14} aria-hidden="true" />
+            </button>
+            {stampMenuOpen ? (
+              <div id="stamp-picker-menu" className="stamp-popover" role="menu" aria-label="Add an element stamp">
+                {STAMPS.map((stamp) => {
+                  const Icon = stamp.icon;
+                  return (
+                    <button
+                      key={stamp.kind}
+                      type="button"
+                      role="menuitem"
+                      className="stamp-option"
+                      onClick={() => {
+                        addStamp(stamp);
+                        setStampMenuOpen(false);
+                      }}
+                    >
+                      <span className="stamp-option__swatch" style={{ background: stamp.color }} aria-hidden="true">
+                        <Icon size={13} strokeWidth={2.25} />
+                      </span>
+                      <span>{stamp.label}</span>
+                      <small>{stamp.width} × {stamp.height}</small>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="design-controls" aria-label="Generated design system">
+            <div className="design-control design-select design-select--archetype">
+              <label htmlFor="page-archetype">Page</label>
               <select
-                id="stamp-select"
-                value=""
-                onChange={(event) => {
-                  const stamp = STAMPS.find((entry) => entry.kind === event.target.value);
-                  if (stamp) addStamp(stamp);
-                }}
+                id="page-archetype"
+                value={designPreferences.archetype}
+                title={
+                  ARCHETYPE_OPTIONS.find((option) => option.value === designPreferences.archetype)?.hint
+                }
+                onChange={(event) =>
+                  updateDesignPreferences({ archetype: event.target.value as CanvasDesignPreferences['archetype'] })
+                }
               >
-                <option value="" disabled>
-                  Choose element
-                </option>
-                {STAMPS.map((stamp) => (
-                  <option key={stamp.kind} value={stamp.kind}>
-                    {stamp.label}
+                {ARCHETYPE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="design-control design-select">
+              <label htmlFor="display-font">Heading</label>
+              <select
+                id="display-font"
+                value={designPreferences.displayFont}
+                style={{ fontFamily: DISPLAY_FONT_PREVIEW[designPreferences.displayFont] }}
+                onChange={(event) =>
+                  updateDesignPreferences({ displayFont: event.target.value as CanvasDesignPreferences['displayFont'] })
+                }
+              >
+                {DISPLAY_FONT_OPTIONS.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    style={{ fontFamily: DISPLAY_FONT_PREVIEW[option.value] }}
+                  >
+                    {option.label}
                   </option>
                 ))}
               </select>
-              <ChevronDown size={14} aria-hidden="true" />
             </div>
+            <div className="design-control design-select">
+              <label htmlFor="body-font">Body</label>
+              <select
+                id="body-font"
+                value={designPreferences.bodyFont}
+                style={{ fontFamily: BODY_FONT_PREVIEW[designPreferences.bodyFont] }}
+                onChange={(event) =>
+                  updateDesignPreferences({ bodyFont: event.target.value as CanvasDesignPreferences['bodyFont'] })
+                }
+              >
+                {BODY_FONT_OPTIONS.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    style={{ fontFamily: BODY_FONT_PREVIEW[option.value] }}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="design-control shape-control">
+              <span>Buttons</span>
+              <div role="group" aria-label="Button shape">
+                {(['sharp', 'soft', 'pill'] as const).map((shape) => (
+                  <button
+                    key={shape}
+                    type="button"
+                    className={`shape-option ${designPreferences.buttonShape === shape ? 'is-active' : ''}`}
+                    aria-label={`${shape.charAt(0).toUpperCase() + shape.slice(1)} button shape`}
+                    aria-pressed={designPreferences.buttonShape === shape}
+                    title={`${shape.charAt(0).toUpperCase() + shape.slice(1)} buttons`}
+                    onClick={() => updateDesignPreferences({ buttonShape: shape })}
+                  >
+                    <span className={`shape-swatch is-${shape}`} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="design-control design-select">
+              <label htmlFor="motion-preset">Motion</label>
+              <select
+                id="motion-preset"
+                value={designPreferences.motionPreset}
+                onChange={(event) =>
+                  updateDesignPreferences({ motionPreset: event.target.value as CanvasDesignPreferences['motionPreset'] })
+                }
+              >
+                <option value="calm">Calm</option>
+                <option value="playful">Playful</option>
+                <option value="editorial">Editorial</option>
+              </select>
+            </div>
+            <label className="design-control intensity-control" htmlFor="motion-intensity">
+              <span>
+                <SlidersHorizontal size={12} aria-hidden="true" />
+                {designPreferences.motionIntensity}
+              </span>
+              <input
+                id="motion-intensity"
+                type="range"
+                min="0"
+                max={MOTION_INTENSITIES.length - 1}
+                step="1"
+                value={MOTION_INTENSITIES.indexOf(designPreferences.motionIntensity)}
+                aria-label="Motion intensity"
+                onChange={(event) =>
+                  updateDesignPreferences({
+                    motionIntensity: MOTION_INTENSITIES[Number(event.target.value)] ?? 'moderate',
+                  })
+                }
+              />
+            </label>
           </div>
 
           <div className="toolbar-spacer" />
@@ -502,6 +939,9 @@ export function CanvasStudio({
           x={compact ? 18 : position.x}
           y={compact ? 18 : position.y}
           draggable={!compact && tool === 'select' && selectedId === null}
+          onDragMove={(event) => {
+            if (event.target === stageRef.current) setPosition({ x: event.target.x(), y: event.target.y() });
+          }}
           onDragEnd={(event) => {
             if (event.target === stageRef.current) setPosition({ x: event.target.x(), y: event.target.y() });
           }}
@@ -510,13 +950,23 @@ export function CanvasStudio({
           onPointerUp={onStagePointerUp}
         >
           <Layer>
-            <Rect x={0} y={0} width={value.size.width} height={value.size.height} fill="#0d1015" cornerRadius={12} shadowBlur={30} shadowColor="#000" />
+            <Rect
+              name={ARTBOARD_SURFACE}
+              x={0}
+              y={0}
+              width={value.size.width}
+              height={value.size.height}
+              fill={palette.artboard}
+              cornerRadius={12}
+              shadowBlur={theme === 'light' ? 18 : 30}
+              shadowColor={theme === 'light' ? '#00000026' : '#000'}
+            />
             <BaseImage doc={value} />
             {Array.from({ length: 22 }, (_, index) => (
-              <Line key={`v-${index}`} points={[index * 52, 0, index * 52, value.size.height]} stroke="#252b36" strokeWidth={1} opacity={0.42} listening={false} />
+              <Line key={`v-${index}`} points={[index * 52, 0, index * 52, value.size.height]} stroke={palette.grid} strokeWidth={1} opacity={0.6} listening={false} />
             ))}
             {Array.from({ length: 14 }, (_, index) => (
-              <Line key={`h-${index}`} points={[0, index * 52, value.size.width, index * 52]} stroke="#252b36" strokeWidth={1} opacity={0.42} listening={false} />
+              <Line key={`h-${index}`} points={[0, index * 52, value.size.width, index * 52]} stroke={palette.grid} strokeWidth={1} opacity={0.6} listening={false} />
             ))}
             {value.strokes.map((stroke) => (
               <Line
@@ -533,42 +983,38 @@ export function CanvasStudio({
             {strokeDraft ? (
               <Line
                 points={strokeDraft}
-                stroke={tool === 'erase' ? '#0d1015' : '#f0b860'}
+                stroke={tool === 'erase' ? palette.eraseGhost : palette.accent}
                 strokeWidth={tool === 'erase' ? 18 : 3}
                 lineCap="round"
                 lineJoin="round"
                 listening={false}
               />
             ) : null}
-            {value.arrows.map((arrow) => (
-              <Fragment key={arrow.id}>
-                <Arrow
-                  points={arrow.points.flatMap((point) => [point.x, point.y])}
-                  stroke={selectedId === arrow.id ? '#ffd487' : '#f0b860'}
-                  fill={selectedId === arrow.id ? '#ffd487' : '#f0b860'}
-                  strokeWidth={selectedId === arrow.id ? 3 : 2}
-                  pointerLength={9}
-                  pointerWidth={9}
-                  hitStrokeWidth={18}
-                  opacity={0.9}
-                  onClick={() => tool === 'select' && onSelect(arrow.id)}
-                  onTap={() => tool === 'select' && onSelect(arrow.id)}
-                />
-                <Text
-                  x={((arrow.points[0]?.x ?? 0) + (arrow.points.at(-1)?.x ?? 0)) / 2}
-                  y={((arrow.points[0]?.y ?? 0) + (arrow.points.at(-1)?.y ?? 0)) / 2 - 20}
-                  width={150}
-                  text={arrow.label || arrow.interaction.replaceAll('-', ' ')}
-                  fontFamily="Geist Mono Variable"
-                  fontSize={11}
-                  fill="#f0b860"
-                  padding={4}
-                  listening={false}
-                />
-              </Fragment>
-            ))}
             {value.elements.map((element) => {
               const selected = element.id === selectedId;
+              const meta = KIND_META[element.kind];
+              const radius = cornerRadiusFor(element.kind, designPreferences.buttonShape, element.bounds.height);
+              const labelText = element.label || meta.label;
+              const labelStyle = element.kind === 'hero' ? 'bold' : 'normal';
+              const labelFontFamily =
+                element.kind === 'navbar' || element.kind === 'hero'
+                  ? DISPLAY_FONT_PREVIEW[designPreferences.displayFont]
+                  : BODY_FONT_PREVIEW[designPreferences.bodyFont];
+              const compactLabel = element.bounds.height <= 56;
+              const labelWidth = Math.max(20, element.bounds.width - 28);
+              const labelHeight = Math.max(14, element.bounds.height - (compactLabel ? 16 : 26));
+              const labelFontSize = fitLabelFontSize(
+                labelText,
+                labelWidth,
+                labelHeight,
+                element.kind === 'hero' ? 24 : 15,
+                element.kind === 'hero' ? 14 : 10,
+                labelStyle,
+                labelFontFamily,
+              );
+              const liveElementPos = liveDrags[element.id];
+              const elementX = liveElementPos ? liveElementPos.x : element.bounds.x;
+              const elementY = liveElementPos ? liveElementPos.y : element.bounds.y;
               return (
                 <Fragment key={element.id}>
                   <Rect
@@ -578,83 +1024,201 @@ export function CanvasStudio({
                     width={element.bounds.width}
                     height={element.bounds.height}
                     rotation={element.rotation}
-                    fill={selected ? '#252a34' : '#171b22'}
-                    stroke={arrowStart === element.id ? '#f0b860' : selected ? '#f0b860' : '#596173'}
-                    strokeWidth={selected ? 2 : 1}
-                    cornerRadius={element.kind === 'button' || element.kind === 'input' ? 8 : 12}
-                    shadowBlur={selected ? 14 : 0}
-                    shadowColor="#f0b860"
+                    fill={selected ? palette.elementFillSelected : palette.elementFill}
+                    stroke={
+                      arrowStart === element.id || selected
+                        ? palette.accent
+                        : hexToRgba(meta.color, theme === 'light' ? 0.55 : 0.6)
+                    }
+                    strokeWidth={selected ? 2.5 : 1.4}
+                    cornerRadius={radius}
+                    shadowBlur={selected ? 16 : 0}
+                    shadowColor={palette.accent}
+                    shadowOpacity={selected ? (theme === 'light' ? 0.35 : 0.55) : 0}
                     draggable={tool === 'select'}
                     onClick={() => handleElementClick(element.id)}
                     onTap={() => handleElementClick(element.id)}
-                    onDragEnd={(event) => updateElementBounds(element.id, event.target)}
-                    onTransformEnd={(event) => updateElementBounds(element.id, event.target)}
+                    onDragMove={(event) => {
+                      const node = event.target;
+                      setLiveDrags((current) => ({ ...current, [element.id]: { x: node.x(), y: node.y() } }));
+                    }}
+                    onTransform={(event) => {
+                      const node = event.target;
+                      setLiveDrags((current) => ({ ...current, [element.id]: { x: node.x(), y: node.y() } }));
+                    }}
+                    onDragEnd={(event) => {
+                      updateElementBounds(element.id, event.target);
+                      setLiveDrags((current) => {
+                        const { [element.id]: _done, ...rest } = current;
+                        return rest;
+                      });
+                    }}
+                    onTransformEnd={(event) => {
+                      updateElementBounds(element.id, event.target);
+                      setLiveDrags((current) => {
+                        const { [element.id]: _done, ...rest } = current;
+                        return rest;
+                      });
+                    }}
                   />
                   <Text
-                    x={element.bounds.x + 14}
-                    y={element.bounds.y + 13}
-                    width={Math.max(20, element.bounds.width - 28)}
-                    text={element.label || element.kind}
-                    fontFamily="Geist Variable"
-                    fontSize={element.kind === 'hero' ? 24 : 15}
-                    fontStyle={element.kind === 'hero' ? 'bold' : 'normal'}
-                    fill="#e8ebf2"
-                    listening={false}
-                  />
-                  <Text
-                    x={element.bounds.x + 14}
-                    y={element.bounds.y + element.bounds.height - 25}
-                    width={element.bounds.width - 28}
-                    text={element.kind.toUpperCase()}
-                    fontFamily="Geist Mono Variable"
-                    fontSize={10}
-                    fill="#8b93a7"
+                    x={elementX + 14}
+                    y={elementY + (compactLabel ? 8 : 13)}
+                    width={labelWidth}
+                    height={labelHeight}
+                    text={labelText}
+                    fontFamily={labelFontFamily}
+                    fontSize={labelFontSize}
+                    fontStyle={labelStyle}
+                    lineHeight={1.2}
+                    verticalAlign={compactLabel ? 'middle' : 'top'}
+                    wrap="word"
+                    ellipsis
+                    fill={palette.labelText}
                     listening={false}
                   />
                 </Fragment>
               );
             })}
-            {value.notes.map((note) => (
-              <Fragment key={note.id}>
-                <Rect
-                  id={note.id}
-                  x={note.bounds.x}
-                  y={note.bounds.y}
-                  width={note.bounds.width}
-                  height={note.bounds.height}
-                  fill={note.tone === 'amber' ? '#c99a4e' : note.tone === 'mint' ? '#6ea97f' : '#8f82a8'}
-                  opacity={selectedId === note.id ? 1 : 0.92}
-                  cornerRadius={6}
-                  draggable={tool === 'select'}
-                  onClick={() => onSelect(note.id)}
-                  onDragEnd={(event) =>
-                    commit({
-                      ...value,
-                      notes: value.notes.map((entry) =>
-                        entry.id === note.id
-                          ? { ...entry, bounds: { ...entry.bounds, x: event.target.x(), y: event.target.y() } }
-                          : entry,
-                      ),
-                    })
-                  }
+            {/*
+              Connectors draw after the elements they join, not before.
+              Underneath, an arrow was covered by the two element rects for most
+              of its centre-to-centre length, so a click meant to select it
+              landed on an element and the inspector never reached the arrow.
+            */}
+            {value.arrows.map((arrow) => (
+              <Fragment key={arrow.id}>
+                <Arrow
+                  points={arrow.points.flatMap((point) => [point.x, point.y])}
+                  stroke={selectedId === arrow.id ? palette.accentStrong : palette.accent}
+                  fill={selectedId === arrow.id ? palette.accentStrong : palette.accent}
+                  strokeWidth={selectedId === arrow.id ? 3 : 2}
+                  pointerLength={9}
+                  pointerWidth={9}
+                  hitStrokeWidth={18}
+                  opacity={0.9}
+                  onClick={() => tool === 'select' && onSelect(arrow.id)}
+                  onTap={() => tool === 'select' && onSelect(arrow.id)}
                 />
-                <Text
-                  x={note.bounds.x + 12}
-                  y={note.bounds.y + 12}
-                  width={note.bounds.width - 24}
-                  height={note.bounds.height - 24}
-                  text={note.text}
-                  fontFamily="Geist Variable"
-                  fontSize={14}
-                  lineHeight={1.25}
-                  fill="#14120e"
+                {/*
+                  Label+Tag give the caption an opaque backing, so it stays
+                  readable over the grid, another shape, or a connector line
+                  regardless of theme — bare Text here used to just be
+                  amber-on-whatever's-underneath, which on a white light-mode
+                  artboard was often amber-on-white at ~2:1.
+                */}
+                <Label
+                  x={((arrow.points[0]?.x ?? 0) + (arrow.points.at(-1)?.x ?? 0)) / 2 - 75}
+                  y={((arrow.points[0]?.y ?? 0) + (arrow.points.at(-1)?.y ?? 0)) / 2 - 28}
                   listening={false}
-                />
+                >
+                  <Tag fill={palette.chipBg} stroke={palette.accent} strokeWidth={1} cornerRadius={4} />
+                  <Text
+                    width={150}
+                    align="center"
+                    text={arrow.label || arrow.interaction.replaceAll('-', ' ')}
+                    fontFamily="Geist Mono Variable"
+                    fontSize={11}
+                    fill={palette.chipText}
+                    padding={4}
+                  />
+                </Label>
               </Fragment>
             ))}
-            {!compact ? <Transformer ref={transformerRef} rotateEnabled anchorSize={8} borderStroke="#f0b860" anchorFill="#f0b860" /> : null}
+            {value.notes.map((note) => {
+              const noteFontFamily = BODY_FONT_PREVIEW[designPreferences.bodyFont];
+              const noteFit = fitNote(note.text, note.bounds.width, note.bounds.height, noteFontFamily);
+              const liveNotePos = liveDrags[note.id];
+              const noteX = liveNotePos ? liveNotePos.x : note.bounds.x;
+              const noteY = liveNotePos ? liveNotePos.y : note.bounds.y;
+              return (
+                <Fragment key={note.id}>
+                  <Rect
+                    id={note.id}
+                    x={note.bounds.x}
+                    y={note.bounds.y}
+                    width={note.bounds.width}
+                    height={noteFit.height}
+                    fill={note.tone === 'amber' ? '#c99a4e' : note.tone === 'mint' ? '#6ea97f' : '#8f82a8'}
+                    opacity={selectedId === note.id ? 1 : 0.92}
+                    cornerRadius={6}
+                    draggable={tool === 'select'}
+                    onClick={() => onSelect(note.id)}
+                    onDragMove={(event) => {
+                      const node = event.target;
+                      setLiveDrags((current) => ({ ...current, [note.id]: { x: node.x(), y: node.y() } }));
+                    }}
+                    onDragEnd={(event) => {
+                      commit({
+                        ...value,
+                        notes: value.notes.map((entry) =>
+                          entry.id === note.id
+                            ? { ...entry, bounds: { ...entry.bounds, x: event.target.x(), y: event.target.y() } }
+                            : entry,
+                        ),
+                      });
+                      setLiveDrags((current) => {
+                        const { [note.id]: _done, ...rest } = current;
+                        return rest;
+                      });
+                    }}
+                  />
+                  <Text
+                    x={noteX + NOTE_PAD}
+                    y={noteY + NOTE_PAD}
+                    width={note.bounds.width - NOTE_PAD * 2}
+                    height={noteFit.height - NOTE_PAD * 2}
+                    text={note.text}
+                    fontFamily={noteFontFamily}
+                    fontSize={noteFit.fontSize}
+                    lineHeight={1.3}
+                    verticalAlign="middle"
+                    wrap="word"
+                    ellipsis
+                    fill="#14120e"
+                    listening={false}
+                  />
+                </Fragment>
+              );
+            })}
+            {!compact ? (
+              <Transformer
+                ref={transformerRef}
+                rotateEnabled
+                anchorSize={8}
+                borderStroke={palette.accent}
+                borderStrokeWidth={2}
+                anchorStroke={palette.accent}
+                anchorFill={palette.chipBg}
+                anchorCornerRadius={4}
+              />
+            ) : null}
           </Layer>
         </Stage>
+
+        {!compact ? (
+          <div className="kind-badge-layer" aria-hidden="true">
+            {value.elements.map((element) => {
+              const meta = KIND_META[element.kind];
+              const Icon = meta.icon;
+              const flagged = guardrailElementIds.has(element.id);
+              const live = liveDrags[element.id];
+              const badgeX = live ? live.x : element.bounds.x;
+              const badgeY = live ? live.y : element.bounds.y;
+              const style: CSSProperties = {
+                left: position.x + badgeX * scale,
+                top: position.y + badgeY * scale,
+                background: meta.color,
+              };
+              return (
+                <div key={element.id} className="kind-badge" style={style} title={meta.label}>
+                  <Icon size={12} strokeWidth={2.25} />
+                  {flagged ? <span className="kind-badge__flag" /> : null}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
 
         {tool === 'arrow' ? (
           <div className="canvas-tip" role="status">
@@ -732,32 +1296,61 @@ export function CanvasStudio({
               </label>
             </>
           ) : (
-            <label>
-              <span>{selectedElement ? 'Element label' : 'Note text'}</span>
-              <input
-                value={selectedElement?.label ?? selectedNote?.text ?? ''}
-                maxLength={selectedElement ? 200 : 2000}
-                onChange={(event) => {
-                  if (selectedElement) {
-                    onChange({
-                      ...value,
-                      elements: value.elements.map((entry) =>
-                        entry.id === selectedElement.id ? { ...entry, label: event.target.value } : entry,
-                      ),
-                      updatedAt: new Date().toISOString(),
-                    });
-                  } else if (selectedNote) {
-                    onChange({
-                      ...value,
-                      notes: value.notes.map((entry) =>
-                        entry.id === selectedNote.id ? { ...entry, text: event.target.value } : entry,
-                      ),
-                      updatedAt: new Date().toISOString(),
-                    });
-                  }
-                }}
-              />
-            </label>
+            <>
+              <label>
+                <span>{selectedElement ? 'Element label' : 'Note text'}</span>
+                <input
+                  value={selectedElement?.label ?? selectedNote?.text ?? ''}
+                  maxLength={selectedElement ? 200 : 2000}
+                  onChange={(event) => {
+                    if (selectedElement) {
+                      onChange({
+                        ...value,
+                        elements: value.elements.map((entry) =>
+                          entry.id === selectedElement.id ? { ...entry, label: event.target.value } : entry,
+                        ),
+                        updatedAt: new Date().toISOString(),
+                      });
+                    } else if (selectedNote) {
+                      onChange({
+                        ...value,
+                        notes: value.notes.map((entry) =>
+                          entry.id === selectedNote.id ? { ...entry, text: event.target.value } : entry,
+                        ),
+                        updatedAt: new Date().toISOString(),
+                      });
+                    }
+                  }}
+                />
+              </label>
+              {selectedElement ? (
+                <label>
+                  <span>Appears in</span>
+                  <select
+                    value={selectedElement.intendedState ?? ''}
+                    onChange={(event) => {
+                      const state = event.target.value;
+                      onChange({
+                        ...value,
+                        elements: value.elements.map((entry) => {
+                          if (entry.id !== selectedElement.id) return entry;
+                          // Dropping the key, rather than storing an empty
+                          // string, is what "present in every state" means.
+                          const { intendedState: _previous, ...rest } = entry;
+                          return state ? { ...rest, intendedState: state as StateKind } : rest;
+                        }),
+                        updatedAt: new Date().toISOString(),
+                      });
+                    }}
+                  >
+                    <option value="">Every state</option>
+                    {STATE_VARIANTS.map((state) => (
+                      <option key={state.value} value={state.value}>{state.label}</option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+            </>
           )}
         </div>
       ) : null}

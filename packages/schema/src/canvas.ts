@@ -1,5 +1,14 @@
 import { z } from 'zod';
-import { Bounds, InteractionKind, StampKind, StateKind } from './primitives.js';
+import {
+  Bounds,
+  ButtonShape,
+  InteractionKind,
+  MotionIntensity,
+  MotionPreset,
+  PageArchetype,
+  StampKind,
+  StateKind,
+} from './primitives.js';
 
 /**
  * The Canvas Document.
@@ -81,6 +90,27 @@ export const CanvasBaseImage = z.object({
 });
 export type CanvasBaseImage = z.infer<typeof CanvasBaseImage>;
 
+/**
+ * Curated visual preferences applied consistently to every generated direction.
+ * They deliberately steer a limited design system rather than expose arbitrary
+ * CSS values, keeping the branch comparison contract intact.
+ */
+export const CanvasDesignPreferences = z.object({
+  /**
+   * What kind of page this is. The most consequential control on the toolbar:
+   * it selects the layout shell, the background treatment, the component
+   * vocabulary, and the motion system every direction may draw from. The three
+   * directions then diverge *within* it.
+   */
+  archetype: PageArchetype.default('application'),
+  displayFont: z.enum(['grotesk', 'serif', 'rounded', 'mono']).default('grotesk'),
+  bodyFont: z.enum(['clean', 'humanist', 'serif', 'mono']).default('clean'),
+  buttonShape: ButtonShape.default('soft'),
+  motionPreset: MotionPreset.default('calm'),
+  motionIntensity: MotionIntensity.default('moderate'),
+});
+export type CanvasDesignPreferences = z.infer<typeof CanvasDesignPreferences>;
+
 export const CanvasDoc = z.object({
   version: z.literal(1),
   id: z.string().min(1),
@@ -92,6 +122,14 @@ export const CanvasDoc = z.object({
   arrows: z.array(CanvasArrow).default([]),
   notes: z.array(CanvasNote).default([]),
   strokes: z.array(CanvasStroke).default([]),
+  designPreferences: CanvasDesignPreferences.default({
+    archetype: 'application',
+    displayFont: 'grotesk',
+    bodyFont: 'clean',
+    buttonShape: 'soft',
+    motionPreset: 'calm',
+    motionIntensity: 'moderate',
+  }),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -133,6 +171,112 @@ export function findCanvasIntegrityIssues(doc: CanvasDoc): string[] {
   }
 
   return issues;
+}
+
+/**
+ * Kinds that render as one small, atomic control. Compiling a screen never
+ * gives a stamp a slot *inside* another stamp — every stamp becomes its own
+ * flat region (see `compileScreenSpec`'s `children: []`) — so drawing a
+ * structural region on top of a leaf control does not nest it, it just
+ * detaches it into an independent region at generation time.
+ */
+const LEAF_KINDS = new Set<StampKind>(['button', 'input', 'tab']);
+
+/** Kinds that represent a whole region, not a single control. */
+const STRUCTURAL_KINDS = new Set<StampKind>(['navbar', 'hero', 'table', 'sidebar', 'modal']);
+
+/** Kinds a screen normally has exactly one of. */
+const SINGLETON_KINDS = new Set<StampKind>(['navbar', 'hero']);
+
+function boundsArea(bounds: Bounds): number {
+  return bounds.width * bounds.height;
+}
+
+function boundsIntersection(a: Bounds, b: Bounds): Bounds | null {
+  const x1 = Math.max(a.x, b.x);
+  const y1 = Math.max(a.y, b.y);
+  const x2 = Math.min(a.x + a.width, b.x + b.width);
+  const y2 = Math.min(a.y + a.height, b.y + b.height);
+  if (x2 <= x1 || y2 <= y1) return null;
+  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+}
+
+/** What fraction of `inner` sits inside `outer`, 0–1. */
+function containmentRatio(inner: Bounds, outer: Bounds): number {
+  const overlap = boundsIntersection(inner, outer);
+  if (!overlap) return 0;
+  return boundsArea(overlap) / boundsArea(inner);
+}
+
+/** A drawing-time nudge: never blocks generation, only explains a risk. */
+export interface CanvasGuardrail {
+  id: string;
+  elementIds: string[];
+  kind: 'containment' | 'duplicate-landmark' | 'nested-modal';
+  message: string;
+}
+
+/**
+ * Soft, geometry-only guardrails over stamp placement.
+ *
+ * These are deliberately not validation errors — nothing here stops
+ * generation, because a sketch is allowed to be wrong on purpose. They exist
+ * so the two ways a drawn nesting silently fails to reach the generated page
+ * (flattening, and two singleton landmarks competing for one slot) are
+ * visible while the user is still drawing, not after the branches come back
+ * looking nothing like the sketch.
+ */
+export function findCanvasGuardrails(doc: CanvasDoc): CanvasGuardrail[] {
+  const warnings: CanvasGuardrail[] = [];
+  const elements = doc.elements;
+
+  for (const inner of elements) {
+    for (const outer of elements) {
+      if (inner.id === outer.id) continue;
+      if (containmentRatio(inner.bounds, outer.bounds) < 0.85) continue;
+
+      if (inner.kind === 'modal' && outer.kind === 'modal') {
+        warnings.push({
+          id: `nested-modal-${inner.id}-${outer.id}`,
+          elementIds: [inner.id, outer.id],
+          kind: 'nested-modal',
+          message: `"${inner.label || 'Modal'}" sits inside "${outer.label || 'Modal'}" — two overlays can't both be on top. Give one its own state (Appears in → Modal only) or move them apart.`,
+        });
+        continue;
+      }
+
+      if (STRUCTURAL_KINDS.has(inner.kind) && LEAF_KINDS.has(outer.kind)) {
+        warnings.push({
+          id: `containment-${inner.id}-${outer.id}`,
+          elementIds: [inner.id, outer.id],
+          kind: 'containment',
+          message: `"${inner.label || inner.kind}" is drawn inside "${outer.label || outer.kind}" — a ${outer.kind} renders as one small control, so it won't hold a ${inner.kind}. It'll come back as its own separate region instead of nested.`,
+        });
+      }
+    }
+  }
+
+  for (const kind of SINGLETON_KINDS) {
+    const candidates = elements.filter((element) => element.kind === kind && !element.intendedState);
+    for (let i = 0; i < candidates.length; i += 1) {
+      for (let j = i + 1; j < candidates.length; j += 1) {
+        const a = candidates[i]!;
+        const b = candidates[j]!;
+        const overlap = boundsIntersection(a.bounds, b.bounds);
+        if (!overlap) continue;
+        const ratio = boundsArea(overlap) / Math.min(boundsArea(a.bounds), boundsArea(b.bounds));
+        if (ratio < 0.3) continue;
+        warnings.push({
+          id: `duplicate-${kind}-${a.id}-${b.id}`,
+          elementIds: [a.id, b.id],
+          kind: 'duplicate-landmark',
+          message: `Two ${kind}s overlap and neither is scoped to a state — only one will win. Scope one under "Appears in" if that's intentional.`,
+        });
+      }
+    }
+  }
+
+  return warnings;
 }
 
 /**

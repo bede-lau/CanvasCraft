@@ -1,9 +1,27 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   CanvasCraft branch renderer.
+
+   Every value here comes from a CSS custom property the manifest produced (see
+   runtime/tokens.ts). Nothing below hard-codes a colour, a duration, or a
+   radius, which is what makes a Trait Remix or an applied recommendation a
+   repaint rather than a rebuild.
+
+   The previous version of this file was deliberately minimal: hairlines, a 6%
+   shadow, no gradients, no depth, no display treatment. That was a defensible
+   position for a review tool and an indefensible one for the pages the tool
+   generates, which is the pivot recorded in DESIGN.md. What follows is written
+   to a modern bar — real elevation, glass and gradient surfaces, a display type
+   scale, section rhythm, and hover states with intent — while keeping every
+   accessibility guarantee the old file made.
+   ========================================================================== */
+
 :root {
   color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -32,7 +50,19 @@ button {
   letter-spacing: 0;
 }
 
+/* Lucide renders `size` as an SVG width attribute, so passing a CSS variable
+   through it silently produced 24px icons everywhere — which is what pushed the
+   search glyph on top of its own placeholder. Sizing the glyph in CSS is the
+   only place a custom property actually resolves. */
+.cc-preview svg[class*="lucide"] {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex: 0 0 auto;
+  stroke-width: var(--icon-stroke);
+}
+
 .cc-preview {
+  position: relative;
   min-height: 100vh;
   color: var(--text);
   background: var(--bg);
@@ -42,228 +72,614 @@ button {
   line-height: var(--leading-body);
 }
 
+/* --------------------------------------------------------------------------
+   Backdrop
+   -------------------------------------------------------------------------- */
+
+.cc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cc-backdrop__paint {
+  position: absolute;
+  inset: -10%;
+  background: var(--backdrop);
+  background-attachment: fixed;
+  transition: background var(--dur-morph) var(--ease-standard);
+}
+
+/* The second field. Counter-rotates against the paint layer's drift, which is
+   what stops an aurora reading as one gradient sliding around: two fields at
+   different rates never repeat the same arrangement. */
+.cc-backdrop__drift {
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+  opacity: 0.5;
+  background:
+    conic-gradient(
+      from calc(var(--aurora-x, 22%) * 3) at 50% 50%,
+      transparent 0deg,
+      color-mix(in srgb, var(--accent) 26%, transparent) 70deg,
+      transparent 150deg,
+      color-mix(in srgb, var(--positive) 18%, transparent) 240deg,
+      transparent 330deg
+    );
+  filter: blur(70px);
+  mix-blend-mode: screen;
+}
+
+[data-scheme="light"] .cc-backdrop__drift {
+  opacity: 0.34;
+  mix-blend-mode: multiply;
+}
+
+/* A repeating fractal-noise tile. Cheap, resolution independent, and the one
+   thing that reliably stops a large flat area reading as a screenshot. */
+.cc-backdrop__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Keeps body copy legible over whatever the ground is doing. Without it a
+   `wash` or `aurora` backdrop can drift under a paragraph and take its measured
+   contrast with it. */
+.cc-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg) 30%, transparent) 0%,
+      color-mix(in srgb, var(--bg) 62%, transparent) 55%,
+      color-mix(in srgb, var(--bg) 86%, transparent) 100%
+    );
+}
+
+[data-backdrop="flat"] .cc-backdrop__veil {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Page and layout shells
+   -------------------------------------------------------------------------- */
+
 .cc-page {
-  width: min(100%, 1440px);
+  position: relative;
+  z-index: 1;
+  width: min(100%, var(--page-max, 1440px));
   min-height: 100vh;
   margin: 0 auto;
-  padding: var(--space-4);
+  --page-gutter-inline: var(--space-6);
+  padding: var(--space-6) var(--page-gutter-inline) var(--space-12);
 }
 
 .cc-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 0.85fr);
+  gap: var(--section-gap);
+  align-items: start;
+}
+
+.cc-area {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-6);
+}
+
+/*
+ * A site header conventionally spans the full viewport edge to edge — a bar,
+ * not a card floating inset from the sides. Every other area stays inside
+ * `.cc-page`'s centred, gutter-padded column; the header area alone breaks
+ * out to 100vw (the standard full-bleed technique: a 100vw box pulled back by
+ * half the viewport minus half its own width), and its content re-aligns to
+ * the same column via `--page-gutter-inline` below rather than by inheriting
+ * `.cc-page`'s padding.
+ */
+.cc-area--header {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+/*
+ * A drawn primary + secondary action pair (e.g. "Start free trial" / "See
+ * pricing") each compile to their own top-level region, so by default they
+ * stack as two full-width grid rows with a section-sized gap between them —
+ * a lone button reading as its own "section". When every region sharing an
+ * area is utility-weight (buttons/controls, never a hero or a card), lay
+ * the area out as a tight inline row instead, matching how `.cc-hero__actions`
+ * already presents an action pair inside the hero itself.
+ */
+.cc-area:has(> .cc-region[data-weight="utility"]):not(:has(> .cc-region:not([data-weight="utility"]))) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* --- stacked: a landing page. One thing at a time, full width, big gaps. --- */
+
+[data-shell="stacked"] .cc-layout {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "header" "hero" "primary" "secondary" "aside" "footer";
+}
+
+/* --- bento: a tool. A 12-column grid where weight decides span. --- */
+
+[data-shell="bento"] .cc-layout {
+  grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 0.7fr);
   grid-template-areas:
     "header header"
     "hero hero"
     "primary aside"
     "secondary aside"
     "footer footer";
-  gap: var(--space-4);
-  align-items: start;
+  gap: var(--space-6);
 }
+
+[data-shell="bento"] .cc-area--primary,
+[data-shell="bento"] .cc-area--secondary {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+[data-shell="bento"] .cc-area--primary > .cc-region,
+[data-shell="bento"] .cc-area--secondary > .cc-region {
+  grid-column: span min(12, var(--span, 12));
+}
+
+/* --- editorial: a portfolio. Asymmetric, wide media, generous vertical air. --- */
+
+[data-shell="editorial"] .cc-layout {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "header" "hero" "primary" "secondary" "aside" "footer";
+  gap: calc(var(--section-gap) * 1.4);
+}
+
+[data-shell="editorial"] .cc-region[data-weight="minor"],
+[data-shell="editorial"] .cc-region[data-weight="utility"] {
+  max-width: var(--measure, 62ch);
+  margin-inline: auto;
+}
+
+/* --- conversation: an AI product. Narrow measure, centred, breathing room. --- */
+
+[data-shell="conversation"] .cc-layout {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "header" "hero" "primary" "secondary" "aside" "footer";
+}
+
+[data-shell="conversation"] .cc-area--primary,
+[data-shell="conversation"] .cc-area--secondary {
+  width: min(100%, calc(var(--page-max) - var(--space-12)));
+  margin-inline: auto;
+}
+
+.cc-area--header { grid-area: header; }
+.cc-area--hero { grid-area: hero; }
+.cc-area--primary { grid-area: primary; }
+.cc-area--secondary { grid-area: secondary; }
+.cc-area--aside,
+.cc-area--sidebar { grid-area: aside; }
+.cc-area--footer { grid-area: footer; }
 
 .cc-region {
   position: relative;
   min-width: 0;
-  scroll-margin: var(--space-6);
+  scroll-margin: var(--space-8);
   border-radius: var(--radius-outer);
 }
 
 .cc-region::after {
   position: absolute;
-  inset: -4px;
+  inset: -6px;
   z-index: 20;
   border: 2px solid transparent;
-  border-radius: calc(var(--radius-outer) + 4px);
+  border-radius: calc(var(--radius-outer) + 6px);
   pointer-events: none;
   content: "";
   transition:
-    border-color var(--duration-fast) var(--easing),
-    box-shadow var(--duration-fast) var(--easing);
+    border-color var(--dur-state) var(--ease-emphasized),
+    box-shadow var(--dur-state) var(--ease-emphasized);
 }
 
 .cc-region--highlighted::after {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
-}
-
-.cc-area {
-  display: grid;
-  min-width: 0;
-  gap: var(--space-4);
-}
-
-.cc-area--header {
-  grid-area: header;
-}
-
-.cc-area--hero {
-  grid-area: hero;
-}
-
-.cc-area--primary {
-  grid-area: primary;
-}
-
-.cc-area--secondary {
-  grid-area: secondary;
-}
-
-.cc-area--aside,
-.cc-area--sidebar {
-  grid-area: aside;
-}
-
-.cc-area--footer {
-  grid-area: footer;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .cc-region__children {
   display: grid;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
+/* --------------------------------------------------------------------------
+   Surfaces
+   -------------------------------------------------------------------------- */
+
 .cc-surface {
+  position: relative;
   min-width: 0;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
-  background: var(--surface);
+  background: var(--surface-fill);
+  background-clip: padding-box;
 }
 
 .cc-surface--raised {
-  background: var(--surface-raised);
-  box-shadow: var(--shadow);
+  background: var(--surface-fill-raised);
+  box-shadow: var(--shadow), var(--shadow-edge);
 }
 
+/* Glass only means anything over something worth blurring, and only where the
+   browser supports it: without the query the panel is a flat translucent wash
+   that reads as a rendering bug. */
+@supports (backdrop-filter: blur(1px)) {
+  [data-surface="glass"] .cc-surface {
+    backdrop-filter: blur(var(--surface-blur)) saturate(var(--surface-saturate));
+    -webkit-backdrop-filter: blur(var(--surface-blur)) saturate(var(--surface-saturate));
+    border-color: color-mix(in srgb, var(--text) 12%, transparent);
+  }
+
+  [data-surface="glass"][data-scheme="dark"] .cc-surface {
+    border-color: color-mix(in srgb, #ffffff 12%, transparent);
+  }
+}
+
+[data-surface="outline"] .cc-surface {
+  border-color: var(--border);
+  border-width: max(1px, var(--border-width));
+}
+
+/* --------------------------------------------------------------------------
+   Type
+   -------------------------------------------------------------------------- */
+
+.cc-eyebrow {
+  margin: 0 0 var(--space-2);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-n2);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cc-sectionHead {
+  margin-bottom: var(--space-4);
+}
+
+.cc-heading {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  text-wrap: balance;
+}
+
+/* The one element allowed to be theatrical. `clamp` keeps it from breaking the
+   preview iframe at narrow widths without giving up the scale at wide ones. */
+.cc-heading--display {
+  max-width: 18ch;
+  font-size: clamp(2.4rem, 7.4vw, var(--text-8));
+}
+
+.cc-heading--page {
+  max-width: 20ch;
+  font-size: clamp(2rem, 5.5vw, var(--text-6));
+}
+
+.cc-heading--section {
+  max-width: 26ch;
+  font-size: var(--text-3);
+}
+
+/* --------------------------------------------------------------------------
+   App bar
+   -------------------------------------------------------------------------- */
+
 .cc-appbar {
+  position: relative;
   display: flex;
-  min-height: 64px;
+  min-height: 68px;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-4);
+  gap: var(--space-4);
+  /* Full-bleed width comes from `.cc-area--header`; this re-aligns the bar's
+     own content with `.cc-page`'s centred column instead of inheriting a
+     page-width-independent padding. */
+  padding-block: var(--space-2);
+  padding-inline: max(
+    var(--page-gutter-inline, var(--space-6)),
+    calc((100vw - var(--page-max, 1440px)) / 2 + var(--page-gutter-inline, var(--space-6)))
+  );
+}
+
+/* A header bar reads as a bar, not a floating card: flush corners and no
+   side/top border, just a bottom hairline. `.cc-appbar.cc-surface` matches
+   `[data-surface="outline"] .cc-surface`'s specificity so this still wins
+   under the outline treatment, which otherwise restores all four sides. */
+.cc-appbar.cc-surface {
+  border-width: 0 0 var(--border-width) 0;
+  border-radius: 0;
+}
+
+/* A plain passthrough at desktop width — its nav/cta children keep laying
+   out as direct flex items of .cc-appbar (see .cc-appbar__nav's own
+   margin-left: auto). Only the narrow rules below give this wrapper an
+   actual box, once it needs to become a dropdown panel. */
+.cc-appbar__menu {
+  display: contents;
+}
+
+.cc-appbar__menu-toggle {
+  display: none;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  margin-left: auto;
+  border: var(--border-width) solid var(--border);
+  border-radius: max(6px, var(--radius-chip));
+  background: transparent;
+  color: var(--text);
+  place-items: center;
+}
+
+/* The glyph is wrapped so the rotation has a box of its own to turn in: rotating
+   the lucide SVG directly fights the width/height this stylesheet sets on it. */
+.cc-appbar__menu-glyph {
+  display: grid;
+  place-items: center;
 }
 
 .cc-appbar__mark {
-  width: 18px;
-  height: 18px;
+  display: grid;
+  width: 34px;
+  height: 34px;
   flex: 0 0 auto;
-  border: 5px solid var(--accent);
-  border-radius: max(2px, var(--radius-chip));
+  border-radius: max(6px, var(--radius-chip));
+  color: var(--accent-contrast);
+  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--text)));
+  font-family: var(--font-display);
+  font-size: var(--text-n1);
+  font-weight: 700;
+  place-items: center;
 }
 
 .cc-appbar__title {
   color: var(--text);
   font-family: var(--font-display);
-  font-size: var(--text-2);
+  font-size: var(--text-1);
   font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
 }
 
 .cc-appbar__nav {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
   margin-left: auto;
   color: var(--text-muted);
   font-size: var(--text-n1);
 }
 
 .cc-appbar__link {
+  position: relative;
+  padding-bottom: 2px;
   white-space: nowrap;
 }
 
+.cc-appbar__link.is-current {
+  color: var(--text);
+}
+
+.cc-appbar__link.is-current::after {
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.cc-appbar__cta,
+.cc-appbar__avatar {
+  margin-left: var(--space-2);
+}
+
+.cc-appbar__avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  border: var(--border-width) solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  font-size: var(--text-n1);
+  font-weight: 600;
+  place-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
 .cc-hero {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-6) var(--space-2) var(--space-4);
+  gap: var(--space-6);
+  padding: var(--space-8) 0 var(--space-6);
 }
 
-.cc-heading {
-  max-width: 24ch;
-  margin: 0;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--tracking-display);
-  text-wrap: balance;
+.cc-hero--full {
+  min-height: min(78vh, 720px);
+  align-content: center;
+  padding-block: var(--space-12);
+  /* The grid's own --section-gap still runs after this region too, stacking
+     on top of the min-height + padding already spent making it full-bleed —
+     that's what turned the gap before the next section into 2-3x the
+     intended rhythm. Cancel it here so the hero's generous min-height is the
+     only source of breathing room before what follows. */
+  margin-bottom: calc(-1 * var(--section-gap));
 }
 
-.cc-heading--page {
-  font-size: clamp(2rem, 7vw, var(--text-5));
-  line-height: 1.02;
-}
-
-.cc-heading--section {
-  margin-bottom: var(--space-3);
-  font-size: var(--text-2);
-  line-height: 1.18;
+.cc-hero__body {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
 }
 
 .cc-hero__lead {
-  max-width: 62ch;
+  max-width: var(--measure, 62ch);
   margin: 0;
   color: var(--text-muted);
-  font-size: var(--text-1);
+  font-size: clamp(var(--text-0), 2.2vw, var(--text-2));
 }
+
+.cc-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.cc-hero__proof {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: var(--space-4);
+  padding: var(--space-4) 0 0;
+  margin: 0;
+  border-top: var(--border-width) solid var(--hairline);
+  list-style: none;
+}
+
+.cc-hero__proof li {
+  display: grid;
+  gap: 2px;
+}
+
+.cc-hero__proof strong {
+  font-family: var(--font-display);
+  font-size: var(--text-2);
+  font-weight: var(--weight-display);
+}
+
+.cc-hero__proof span {
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+/* --------------------------------------------------------------------------
+   Metrics
+   -------------------------------------------------------------------------- */
 
 .cc-metrics {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: var(--space-4);
 }
 
 .cc-metric {
   display: grid;
-  min-height: 112px;
+  min-height: 132px;
   align-content: space-between;
   gap: var(--space-2);
-  padding: var(--space-3);
+  padding: var(--space-4);
+  overflow: hidden;
 }
 
-.cc-metric__label,
-.cc-card__title,
-.cc-list__title {
-  color: var(--text);
-  font-weight: 650;
+/* A hairline of accent along the top edge. One line, and the tile stops reading
+   as an empty rectangle with text in it. */
+.cc-metric::before {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  content: "";
 }
 
 .cc-metric__label {
   color: var(--text-muted);
   font-size: var(--text-n1);
+  font-weight: 600;
 }
 
 .cc-metric__value {
   font-family: var(--font-display);
-  font-size: var(--text-3);
+  font-size: var(--text-5);
   font-weight: var(--weight-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-display);
   line-height: 1;
 }
 
+.cc-metric__delta {
+  color: var(--positive);
+  font-size: var(--text-n1);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------------- */
+
 .cc-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: var(--space-4);
 }
 
 .cc-card {
   position: relative;
-  min-height: 156px;
+  display: grid;
+  min-height: 172px;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-4);
   overflow: hidden;
-  padding: var(--space-3);
   transition:
-    border-color var(--duration-fast) var(--easing),
-    transform var(--duration-fast) var(--easing);
+    transform var(--dur-hover) var(--ease-emphasized),
+    box-shadow var(--dur-hover) var(--ease-emphasized),
+    border-color var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-card:hover {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-hover), var(--shadow-edge);
+  transform: translateY(calc(var(--lift) * -1));
 }
 
 .cc-card--selected {
   border-color: var(--accent);
 }
 
+.cc-card__index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-n2);
+  letter-spacing: 0.1em;
+}
+
 .cc-card__hit {
-  display: block;
+  display: flex;
   width: 100%;
   min-height: var(--min-target);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
   padding: 0;
   border: 0;
   color: inherit;
@@ -272,11 +688,34 @@ button {
   cursor: pointer;
 }
 
+.cc-card__title,
+.cc-list__title {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-1);
+  font-weight: 650;
+  line-height: var(--leading-display);
+}
+
+.cc-card__go {
+  color: var(--text-muted);
+  transition:
+    transform var(--dur-secondary) var(--ease-emphasized-decelerate) var(--delay-secondary),
+    color var(--dur-secondary) var(--ease-emphasized-decelerate) var(--delay-secondary);
+}
+
+.cc-card:hover .cc-card__go {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
 .cc-card__meta,
 .cc-swapCard__meta {
   display: grid;
   gap: var(--space-1);
-  margin: var(--space-2) 0 0;
+  margin: auto 0 0;
+  padding-top: var(--space-3);
+  border-top: var(--border-width) solid var(--hairline);
   color: var(--text-muted);
   font-size: var(--text-n1);
 }
@@ -295,6 +734,15 @@ button {
   margin: 0;
 }
 
+.cc-card__meta dd {
+  color: var(--text);
+  font-weight: 550;
+}
+
+/* --------------------------------------------------------------------------
+   Lists and tables
+   -------------------------------------------------------------------------- */
+
 .cc-list {
   display: grid;
   gap: var(--space-2);
@@ -307,21 +755,38 @@ button {
   display: grid;
   width: 100%;
   min-height: var(--min-target);
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border: var(--border-width) solid var(--border);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-inner);
   color: var(--text);
-  background: var(--surface);
+  background: var(--surface-fill);
   text-align: left;
   cursor: pointer;
+  transition:
+    border-color var(--dur-hover) var(--ease-emphasized),
+    background-color var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-list__row:hover {
+  border-color: var(--accent-line);
 }
 
 .cc-list__row--selected {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  background: var(--accent-soft);
+}
+
+.cc-list__index {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-n2);
+}
+
+.cc-list__title {
+  font-size: var(--text-0);
 }
 
 .cc-list__meta {
@@ -332,12 +797,17 @@ button {
   white-space: nowrap;
 }
 
+.cc-list__go {
+  color: var(--text-muted);
+}
+
 .cc-tableWrap {
   max-width: 100%;
   overflow-x: auto;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
-  background: var(--surface);
+  background: var(--surface-fill);
+  box-shadow: var(--shadow-edge);
 }
 
 .cc-table {
@@ -348,20 +818,97 @@ button {
 
 .cc-table th,
 .cc-table td {
-  padding: var(--space-2) var(--space-3);
-  border-bottom: var(--border-width) solid var(--border);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--hairline);
   text-align: left;
   white-space: nowrap;
 }
 
+/* A long table is unreadable the moment its header scrolls away. */
 .cc-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   color: var(--text-muted);
+  background: var(--surface-raised);
+  font-size: var(--text-n2);
   font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cc-table tbody tr {
+  transition: background-color var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .cc-table tbody tr:last-child td {
   border-bottom: 0;
 }
+
+/* --------------------------------------------------------------------------
+   Media
+   -------------------------------------------------------------------------- */
+
+.cc-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-6);
+}
+
+.cc-media__item {
+  margin: 0;
+}
+
+.cc-media__frame {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 3;
+  align-items: end;
+  padding: var(--space-3);
+  overflow: hidden;
+  border: var(--border-width) solid var(--hairline);
+  border-radius: var(--radius-inner);
+  background:
+    radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 62%),
+    linear-gradient(155deg, var(--surface-raised), color-mix(in srgb, var(--bg) 70%, var(--surface)));
+  box-shadow: var(--shadow);
+  transition: transform var(--dur-container) var(--ease-emphasized-decelerate);
+}
+
+.cc-media__item:hover .cc-media__frame {
+  transform: scale(1.015);
+}
+
+.cc-media__index {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-n2);
+}
+
+.cc-media__caption {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--space-3);
+}
+
+.cc-media__title {
+  font-family: var(--font-display);
+  font-size: var(--text-1);
+  font-weight: 650;
+}
+
+.cc-media__detail {
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+/* --------------------------------------------------------------------------
+   Controls
+   -------------------------------------------------------------------------- */
 
 .cc-search {
   position: relative;
@@ -380,7 +927,9 @@ button {
 
 .cc-search__input {
   padding-right: calc(var(--min-target) + var(--space-1));
-  padding-left: calc(var(--icon-size) + var(--space-4));
+  /* Clears the glyph plus a gap on both sides of it, at whatever size the
+     branch's icon token resolves to. */
+  padding-left: calc(var(--icon-size) + var(--space-3) * 2);
 }
 
 .cc-search__clear {
@@ -405,6 +954,13 @@ button {
   color: var(--text);
   background: var(--surface);
   outline: 0;
+  transition:
+    border-color var(--dur-hover) var(--ease-emphasized),
+    box-shadow var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-input:hover {
+  border-color: var(--accent-line);
 }
 
 [data-input-style="filled"] .cc-input {
@@ -440,52 +996,98 @@ button {
   border: var(--border-width) solid transparent;
   cursor: pointer;
   transition:
-    color var(--duration-fast) var(--easing),
-    border-color var(--duration-fast) var(--easing),
-    background-color var(--duration-fast) var(--easing),
-    transform var(--duration-fast) var(--easing);
+    color var(--dur-hover) var(--ease-emphasized),
+    border-color var(--dur-hover) var(--ease-emphasized),
+    background-color var(--dur-hover) var(--ease-emphasized),
+    box-shadow var(--dur-hover) var(--ease-emphasized);
 }
 
 .cc-chip {
+  position: relative;
   padding: var(--space-1) var(--space-3);
   border-color: var(--border);
   border-radius: var(--radius-chip);
   color: var(--text-muted);
   background: var(--surface);
+  font-size: var(--text-n1);
+  font-weight: 550;
 }
 
-.cc-chip--active {
-  border-color: var(--accent);
-  color: var(--accent-contrast);
+.cc-chip:hover {
+  border-color: var(--accent-line);
+  color: var(--text);
+}
+
+/* The selected fill is a separate painted layer so it can travel between chips
+   under a shared layout id. Deliberately not clipped by the chip: during the
+   move it is briefly outside the bounds of the chip that owns it, and
+   `overflow: hidden` here would cut the travel in half. */
+.cc-chip__fill {
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
   background: var(--accent);
 }
 
+.cc-chip__label {
+  position: relative;
+  z-index: 1;
+}
+
+/* No background of its own — .cc-chip__fill paints it. The colour swap waits
+   out the fill's travel so the label is never accent-on-surface mid-move,
+   which is the one frame where this pattern loses its contrast. */
+.cc-chip--active {
+  border-color: transparent;
+  color: var(--accent-contrast);
+  transition: color var(--dur-state) var(--ease-emphasized) var(--delay-secondary);
+}
+
 .cc-button {
+  display: inline-flex;
   min-width: 7rem;
-  padding: var(--space-2) var(--space-4);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
   border-radius: var(--radius-button);
-  font-weight: 650;
+  font-weight: 620;
 }
 
 .cc-button--primary {
   color: var(--accent-contrast);
-  background: var(--accent);
+  background:
+    linear-gradient(
+      175deg,
+      color-mix(in srgb, #ffffff 14%, var(--accent)),
+      var(--accent) 62%,
+      color-mix(in srgb, var(--text) 12%, var(--accent))
+    );
+  box-shadow: var(--shadow);
+}
+
+.cc-button--primary:hover {
+  box-shadow: var(--shadow-hover), 0 0 0 1px var(--accent-line);
 }
 
 [data-button-fill="tonal"] .cc-button--primary {
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  background: var(--accent-soft);
+  box-shadow: none;
 }
 
 [data-button-fill="outline"] .cc-button--primary {
   border-color: var(--accent);
   color: var(--accent);
   background: transparent;
+  box-shadow: none;
 }
 
 [data-button-fill="ghost"] .cc-button--primary {
   color: var(--accent);
   background: transparent;
+  box-shadow: none;
 }
 
 .cc-button--secondary {
@@ -494,26 +1096,42 @@ button {
   background: var(--surface);
 }
 
+.cc-button--secondary:hover {
+  border-color: var(--accent-line);
+}
+
 .cc-button--quiet {
+  min-width: 0;
   color: var(--text-muted);
   background: transparent;
 }
 
-.cc-button:hover,
-.cc-chip:hover,
-.cc-icon-button:hover,
-.cc-card__hit:hover {
-  filter: brightness(0.97);
+.cc-button--quiet:hover {
+  color: var(--text);
 }
 
-.cc-button:active,
-.cc-chip:active {
-  transform: translateY(1px);
+.cc-icon-button {
+  display: grid;
+  width: var(--min-target);
+  min-width: var(--min-target);
+  padding: 0;
+  border-radius: var(--radius-button);
+  color: currentColor;
+  background: transparent;
+  place-items: center;
 }
+
+.cc-icon-button:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Forms, empty, loading
+   -------------------------------------------------------------------------- */
 
 .cc-form {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .cc-field {
@@ -535,14 +1153,16 @@ button {
 
 .cc-empty {
   display: grid;
-  min-height: 180px;
+  min-height: 200px;
   align-content: center;
   justify-items: start;
   gap: var(--space-2);
-  padding: var(--space-4);
+  padding: var(--space-6);
   border: var(--border-width) dashed var(--border);
   border-radius: var(--radius-outer);
-  background: var(--surface);
+  background:
+    radial-gradient(90% 70% at 0% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+    var(--surface-fill);
 }
 
 .cc-empty__title {
@@ -555,7 +1175,7 @@ button {
 
 .cc-empty__body,
 .cc-text__body {
-  max-width: 65ch;
+  max-width: var(--measure, 65ch);
   margin: 0;
   color: var(--text-muted);
 }
@@ -563,60 +1183,37 @@ button {
 .cc-skeleton {
   display: grid;
   gap: var(--space-2);
-  padding: var(--space-3);
-  border: var(--border-width) solid var(--border);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
-  background: var(--surface);
+  background: var(--surface-fill);
 }
 
 .cc-skeleton__line {
   display: block;
-  height: 0.8rem;
+  height: 0.85rem;
   border-radius: var(--radius-chip);
   background:
     linear-gradient(
       90deg,
       color-mix(in srgb, var(--border) 72%, var(--surface)) 20%,
-      color-mix(in srgb, var(--border) 38%, var(--surface)) 45%,
+      color-mix(in srgb, var(--accent) 22%, var(--surface)) 45%,
       color-mix(in srgb, var(--border) 72%, var(--surface)) 70%
     );
   background-size: 220% 100%;
-  animation: cc-shimmer 1.5s linear infinite;
-}
-
-.cc-media {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-3);
-}
-
-.cc-media__item {
-  margin: 0;
-}
-
-.cc-media__frame {
-  aspect-ratio: 4 / 3;
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-inner);
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--accent) 16%, var(--surface)), var(--surface-raised));
-}
-
-.cc-media__caption {
-  margin-top: var(--space-2);
-  font-weight: 650;
+  animation: cc-shimmer 1.5s var(--ease-linear) infinite;
 }
 
 .cc-block,
-.cc-text,
-.cc-note {
-  padding: var(--space-3);
+.cc-text {
+  padding: var(--space-4);
 }
 
 .cc-note {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-control);
 }
 
@@ -625,13 +1222,21 @@ button {
   background: color-mix(in srgb, var(--positive) 12%, var(--surface));
 }
 
+/* --------------------------------------------------------------------------
+   Navigation rail
+   -------------------------------------------------------------------------- */
+
 .cc-nav {
   display: grid;
   gap: var(--space-1);
 }
 
 .cc-nav__item {
+  position: relative;
+  display: flex;
   min-height: var(--min-target);
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
   border: 0;
   border-radius: var(--radius-control);
@@ -639,15 +1244,39 @@ button {
   background: transparent;
   text-align: left;
   cursor: pointer;
+  transition:
+    color var(--dur-hover) var(--ease-emphasized),
+    background-color var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-nav__rail {
+  width: 2px;
+  height: 1.1em;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color var(--dur-state) var(--ease-emphasized);
+}
+
+.cc-nav__item:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
 }
 
 .cc-nav__item--active {
   color: var(--text);
-  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  background: var(--accent-soft);
 }
 
+.cc-nav__item--active .cc-nav__rail {
+  background: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Card swap (React Bits adapter)
+   -------------------------------------------------------------------------- */
+
 .cc-swapRegion {
-  min-height: 410px;
+  min-height: 430px;
   overflow: hidden;
 }
 
@@ -655,7 +1284,7 @@ button {
   position: relative;
   width: min(100%, 420px) !important;
   max-width: 100%;
-  margin: 130px auto 0;
+  margin: 140px auto 0;
   perspective: 900px;
 }
 
@@ -668,13 +1297,13 @@ button {
   max-width: calc(100vw - var(--space-8));
   height: 280px;
   align-content: space-between;
-  padding: var(--space-4);
+  padding: var(--space-5);
   overflow: hidden;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
   color: var(--text);
-  background: var(--surface-raised);
-  box-shadow: var(--shadow);
+  background: var(--surface-fill-raised);
+  box-shadow: var(--shadow), var(--shadow-edge);
   cursor: pointer;
   outline: 0;
 }
@@ -688,10 +1317,19 @@ button {
 .cc-swapCard__title {
   max-width: 18ch;
   font-family: var(--font-display);
-  font-size: var(--text-2);
+  font-size: var(--text-3);
   font-weight: var(--weight-display);
-  line-height: 1.12;
+  line-height: var(--leading-display);
 }
+
+.cc-swapFallback {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* --------------------------------------------------------------------------
+   Overlays
+   -------------------------------------------------------------------------- */
 
 .cc-overlay {
   position: fixed;
@@ -699,21 +1337,23 @@ button {
   z-index: 100;
   display: grid;
   padding: var(--space-4);
-  background: color-mix(in srgb, #000000 48%, transparent);
+  background: var(--scrim);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   place-items: center;
 }
 
 .cc-overlay__panel {
   position: relative;
-  width: min(100%, 560px);
-  max-height: min(80vh, 760px);
-  padding: var(--space-6);
+  width: min(100%, 580px);
+  max-height: min(82vh, 780px);
+  padding: var(--space-8);
   overflow-y: auto;
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
   color: var(--text);
-  background: var(--surface);
-  box-shadow: 0 24px 80px color-mix(in srgb, #000000 35%, transparent);
+  background: var(--surface-fill-raised);
+  box-shadow: 0 32px 90px color-mix(in srgb, #000000 42%, transparent), var(--shadow-edge);
   outline: 0;
 }
 
@@ -721,7 +1361,7 @@ button {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(100%, 440px);
+  width: min(100%, 460px);
   height: 100%;
   max-height: none;
   border-radius: var(--radius-outer) 0 0 var(--radius-outer);
@@ -743,43 +1383,26 @@ button {
   margin: 0;
 }
 
-.cc-icon-button {
-  display: grid;
-  width: var(--min-target);
-  min-width: var(--min-target);
-  padding: 0;
-  border-radius: var(--radius-button);
-  color: currentColor;
-  background: transparent;
-  place-items: center;
-}
-
-.cc-icon-button svg {
-  width: var(--icon-size);
-  height: var(--icon-size);
-  stroke-width: var(--icon-stroke);
-}
-
 .cc-toast {
   position: fixed;
-  right: var(--space-4);
-  bottom: var(--space-4);
+  right: var(--space-6);
+  bottom: var(--space-6);
   z-index: 120;
   display: grid;
-  width: min(calc(100% - var(--space-8)), 430px);
+  width: min(calc(100% - var(--space-8)), 440px);
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: start;
   gap: var(--space-3);
-  padding: var(--space-3);
-  border: var(--border-width) solid var(--border);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--hairline);
   border-radius: var(--radius-outer);
   color: var(--text);
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  background: var(--surface-fill-raised);
+  box-shadow: var(--shadow), var(--shadow-edge);
 }
 
 .cc-toast > svg {
-  margin-top: var(--space-1);
+  margin-top: 2px;
 }
 
 .cc-toast--success > svg {
@@ -801,6 +1424,10 @@ button {
   font-size: var(--text-n1);
 }
 
+/* --------------------------------------------------------------------------
+   Accessibility affordances
+   -------------------------------------------------------------------------- */
+
 .cc-skip-link {
   position: fixed;
   top: var(--space-2);
@@ -811,6 +1438,10 @@ button {
   color: var(--accent-contrast);
   background: var(--accent);
   transform: translateY(-160%);
+}
+
+.cc-skip-link {
+  transition: transform var(--dur-state) var(--ease-emphasized-decelerate);
 }
 
 .cc-skip-link:focus {
@@ -844,31 +1475,87 @@ button {
   box-shadow: 0 3px 0 -1px var(--accent), var(--shadow);
 }
 
+/* --------------------------------------------------------------------------
+   Narrow
+   -------------------------------------------------------------------------- */
+
 .cc-preview--narrow .cc-page {
-  padding: var(--space-2);
+  --page-gutter-inline: var(--space-3);
+  padding: var(--space-4) var(--page-gutter-inline) var(--space-8);
 }
 
-.cc-preview--narrow .cc-layout {
+.cc-preview--narrow .cc-layout,
+.cc-preview--narrow [data-shell="bento"] .cc-layout {
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "header"
-    "hero"
-    "primary"
-    "secondary"
-    "aside"
-    "footer";
+  grid-template-areas: "header" "hero" "primary" "secondary" "aside" "footer";
+}
+
+.cc-preview--narrow .cc-area--primary > .cc-region,
+.cc-preview--narrow .cc-area--secondary > .cc-region {
+  grid-column: 1 / -1;
+}
+
+/* An inline action row is a mis-tap risk at phone width — stack full-width instead. */
+.cc-preview--narrow .cc-area:has(> .cc-region[data-weight="utility"]):not(:has(> .cc-region:not([data-weight="utility"]))) {
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .cc-preview--narrow .cc-appbar {
-  align-items: flex-start;
+  min-height: 56px;
 }
 
-.cc-preview--narrow .cc-appbar__nav {
+/* Below the narrow breakpoint the nav links and primary CTA no longer fit
+   the bar, but they must stay reachable — the old rule hid them outright
+   with no way back in, which silently dropped every generated site's
+   primary conversion action on phone-width screens. They now collapse into
+   a menu-toggle-driven dropdown instead of disappearing. */
+.cc-preview--narrow .cc-appbar__menu-toggle {
+  display: grid;
+}
+
+.cc-preview--narrow .cc-appbar__menu {
   display: none;
 }
 
-.cc-preview--narrow .cc-heading--page {
-  font-size: var(--text-4);
+.cc-preview--narrow .cc-appbar__menu.is-open {
+  position: absolute;
+  inset-inline: var(--space-3);
+  top: calc(100% + var(--space-2));
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-outer);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow), var(--shadow-edge);
+}
+
+.cc-preview--narrow .cc-appbar__menu.is-open .cc-appbar__nav {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-left: 0;
+}
+
+.cc-preview--narrow .cc-appbar__menu.is-open .cc-appbar__cta {
+  margin-left: 0;
+}
+
+.cc-preview--narrow .cc-appbar__menu.is-open .cc-appbar__cta .cc-button {
+  width: 100%;
+}
+
+.cc-preview--narrow .cc-heading--display {
+  font-size: var(--text-5);
+}
+
+.cc-preview--narrow .cc-hero--full {
+  min-height: auto;
+  padding-block: var(--space-8);
 }
 
 .cc-preview--narrow .cc-metrics {
@@ -876,7 +1563,7 @@ button {
 }
 
 .cc-preview--narrow .cc-list__row {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
 .cc-preview--narrow .cc-list__meta {
@@ -896,26 +1583,425 @@ button {
   height: 230px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .cc-page {
-    padding: var(--space-2);
+    padding: var(--space-4) var(--space-3) var(--space-8);
   }
 
   .cc-layout {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "header"
-      "hero"
-      "primary"
-      "secondary"
-      "aside"
-      "footer";
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "header" "hero" "primary" "secondary" "aside" "footer" !important;
+  }
+
+  .cc-area--primary > .cc-region,
+  .cc-area--secondary > .cc-region {
+    grid-column: 1 / -1;
   }
 
   .cc-metrics {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
   }
 }
+
+/* --------------------------------------------------------------------------
+   Bento grid
+
+   An inner grid for one region's own records, independent of the page-level
+   `[data-shell="bento"]` span system: the lead record earns the full row, the
+   rest share the remainder, so a region with five records reads as a
+   composition rather than five identical boxes.
+   -------------------------------------------------------------------------- */
+
+.cc-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.cc-bento__cell {
+  grid-column: span 2;
+  min-width: 0;
+}
+
+.cc-bento__cell--lead {
+  grid-column: span 4;
+}
+
+@media (min-width: 720px) {
+  .cc-bento__cell {
+    grid-column: span 1;
+  }
+
+  .cc-bento__cell--lead {
+    grid-column: span 4;
+  }
+}
+
+.cc-bento__item {
+  display: grid;
+  height: 100%;
+  align-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  transition: box-shadow var(--dur-hover) var(--ease-emphasized), transform var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-bento__item--selected {
+  border-color: var(--accent);
+}
+
+.cc-bento__item:hover {
+  box-shadow: var(--shadow-hover), var(--shadow-edge);
+  transform: translateY(calc(var(--lift) * -1));
+}
+
+.cc-bento__hit {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--min-target);
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cc-bento__title {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-2);
+  font-weight: var(--weight-display);
+}
+
+.cc-bento__go {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translate(-2px, 2px);
+  transition:
+    opacity var(--dur-secondary) var(--ease-emphasized-decelerate) var(--delay-secondary),
+    transform var(--dur-secondary) var(--ease-emphasized-decelerate) var(--delay-secondary);
+}
+
+.cc-bento__item:hover .cc-bento__go,
+.cc-bento__item:focus-within .cc-bento__go {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.cc-bento__meta {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+.cc-bento__meta > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.cc-bento__meta dt,
+.cc-bento__meta dd {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Display hero
+
+   The one region allowed a gradient-clipped word. Centred and wider than the
+   ordinary hero because a marketing headline is read once and believed, not
+   scanned like a page title.
+   -------------------------------------------------------------------------- */
+
+.cc-displayHero {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-4) var(--space-8);
+  text-align: center;
+  justify-items: center;
+}
+
+.cc-displayHero--full {
+  min-height: min(86vh, 760px);
+  align-content: center;
+  /* See .cc-hero--full's comment: cancel the grid's own --section-gap after
+     a full-bleed hero so it doesn't stack with the min-height that already
+     makes this region generously tall. */
+  margin-bottom: calc(-1 * var(--section-gap));
+}
+
+.cc-displayHero__body {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.cc-displayHero__headline {
+  max-width: 20ch;
+  text-align: center;
+}
+
+.cc-displayHero__accent {
+  background: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 45%, var(--positive)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.cc-displayHero__proof {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-displayHero__proof li {
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width) solid var(--hairline);
+  border-radius: var(--radius-chip);
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+/* --------------------------------------------------------------------------
+   Marquee
+
+   Duplicated content on a translating track, masked at both edges so items
+   fade in and out of view rather than clipping mid-word. Cyclical motion, so
+   it is the one pattern the reduced-motion rule must stop outright rather
+   than merely shorten — the global 0.01ms override does exactly that.
+   -------------------------------------------------------------------------- */
+
+.cc-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black var(--space-8),
+    black calc(100% - var(--space-8)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black var(--space-8),
+    black calc(100% - var(--space-8)),
+    transparent
+  );
+}
+
+.cc-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: var(--space-8);
+  animation: cc-marquee 26s var(--ease-linear) infinite;
+}
+
+.cc-marquee__item {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-n1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@keyframes cc-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    /* Exactly one copy's width: the loop join lands on identical content. */
+    transform: translateX(-50%);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Aurora panel
+
+   A local glow behind an opaque text layer. The glow is decorative and lives
+   behind `z-index: 1`, so it can drift under the copy without ever touching
+   its measured contrast.
+   -------------------------------------------------------------------------- */
+
+.cc-aurora {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-6);
+}
+
+.cc-aurora__glow {
+  position: absolute;
+  inset: -35%;
+  background: radial-gradient(
+    60% 60% at 28% 18%,
+    color-mix(in srgb, var(--accent) 32%, transparent),
+    transparent 70%
+  );
+  filter: blur(46px);
+  pointer-events: none;
+}
+
+.cc-aurora__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.cc-aurora__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--hairline);
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+.cc-aurora__meta > div {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.cc-aurora__meta dt,
+.cc-aurora__meta dd {
+  margin: 0;
+}
+
+.cc-aurora__meta dt::after {
+  content: ":";
+}
+
+/* --------------------------------------------------------------------------
+   Stream output
+
+   The reveal is a `clip-path` mask over text that is already fully in the
+   DOM, so nothing here changes what a screen reader announces or when.
+   -------------------------------------------------------------------------- */
+
+.cc-stream {
+  padding: var(--space-4);
+}
+
+.cc-stream__body {
+  margin: 0;
+  color: var(--text);
+  line-height: var(--leading-body);
+}
+
+.cc-stream__caret {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  margin-left: 2px;
+  background: var(--accent);
+  vertical-align: -0.15em;
+  animation: cc-caret 900ms steps(1) infinite;
+}
+
+@keyframes cc-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Data table extras — sticky header and a per-row trend bar
+   -------------------------------------------------------------------------- */
+
+.cc-tableWrap--sticky {
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+}
+
+.cc-tableWrap--sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+
+.cc-table tbody tr {
+  transition: background-color var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.cc-table__numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cc-table__spark {
+  width: 88px;
+  padding: 0 var(--space-3);
+}
+
+.cc-table__spark > span {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, var(--positive)));
+}
+
+/* --------------------------------------------------------------------------
+   Tabs — real tab semantics, a sliding indicator
+   -------------------------------------------------------------------------- */
+
+.cc-tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: var(--border-width) solid var(--hairline);
+}
+
+.cc-tabs__tab {
+  position: relative;
+  min-height: var(--min-target);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.cc-tabs__tab--active {
+  color: var(--text);
+  font-weight: 650;
+}
+
+.cc-tabs__indicator {
+  position: absolute;
+  right: var(--space-3);
+  bottom: -1px;
+  left: var(--space-3);
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+
+   Both the OS preference and the host's explicit override land here. Movement
+   is removed; nothing is hidden, and no treatment disappears — a frozen aurora
+   is still an aurora. The backdrop drift and every ScrollTrigger are disabled
+   in JS as well, because a scroll reveal that never fires would otherwise leave
+   its section at zero opacity.
+   -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -937,6 +2023,12 @@ button {
   transition-duration: 0.01ms !important;
 }
 
+[data-reduced-motion="true"] .cc-card:hover,
+[data-reduced-motion="true"] .cc-bento__item:hover,
+[data-reduced-motion="true"] .cc-media__item:hover .cc-media__frame {
+  transform: none;
+}
+
 @keyframes cc-shimmer {
   from {
     background-position: 200% 0;
@@ -944,5 +2036,408 @@ button {
 
   to {
     background-position: -20% 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Third-party component adapters (see src/patterns/adapters.tsx)
+   -------------------------------------------------------------------------- */
+
+.cc-think,
+.cc-tasks {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-think__step,
+.cc-task {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--hairline);
+  border-radius: var(--radius-control);
+  background: var(--surface-fill);
+}
+
+.cc-think__mark,
+.cc-task__mark {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: var(--text-muted);
+}
+
+.cc-think__mark svg,
+.cc-task__mark svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: var(--icon-stroke);
+}
+
+.cc-think__step[data-settled="true"] .cc-think__mark,
+.cc-task[data-status="done"] .cc-task__mark {
+  color: var(--positive);
+}
+
+.cc-task[data-status="running"] .cc-task__mark {
+  color: var(--accent);
+}
+
+.cc-think__spin {
+  animation: cc-adapter-spin 900ms linear infinite;
+}
+
+@keyframes cc-adapter-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cc-think__label,
+.cc-task__title {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  font-size: var(--text-0);
+}
+
+.cc-task__meta {
+  flex: 0 1 auto;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-task__status {
+  flex: 0 0 auto;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-chip);
+  color: var(--text-muted);
+  font-size: var(--text-n2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--border) 45%, transparent);
+}
+
+.cc-task[data-status="done"] .cc-task__status {
+  color: var(--positive);
+  background: color-mix(in srgb, var(--positive) 16%, transparent);
+}
+
+.cc-task[data-status="running"] .cc-task__status {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Recommendation card ----------------------------------------------------- */
+
+.cc-recs {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.cc-rec {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--surface-fill-raised);
+  box-shadow: var(--shadow);
+}
+
+.cc-rec__icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: calc(var(--icon-size) + var(--space-3));
+  height: calc(var(--icon-size) + var(--space-3));
+  border-radius: var(--radius-chip);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.cc-rec__icon svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.cc-rec__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cc-rec__title {
+  margin: 0;
+  color: var(--text);
+  font-weight: var(--weight-display);
+}
+
+.cc-rec__detail {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+.cc-rec__act {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--min-target);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-button);
+  color: var(--accent-contrast);
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent);
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-standard),
+    box-shadow var(--dur-hover) var(--ease-standard);
+}
+
+.cc-rec__act svg {
+  width: 1em;
+  height: 1em;
+}
+
+.cc-rec__act:hover:not(:disabled) {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(calc(-1 * var(--lift)));
+}
+
+.cc-rec__act:active:not(:disabled) {
+  transform: translateY(0) scale(var(--press-squash, 0.98));
+}
+
+.cc-rec__act:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cc-rec__act:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* Dialog content -------------------------------------------------------- */
+
+.cc-dlg {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.cc-dlg__title {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-3);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-display);
+}
+
+.cc-dlg__body {
+  max-width: var(--measure, 60ch);
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.cc-dlg__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* Empty state --------------------------------------------------------- */
+
+.cc-emptyx {
+  display: grid;
+  min-height: 220px;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-6);
+  border: var(--border-width) dashed var(--border);
+  border-radius: var(--radius-outer);
+  text-align: center;
+  background:
+    radial-gradient(80% 60% at 50% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%),
+    var(--surface-fill);
+}
+
+.cc-emptyx__icon {
+  display: grid;
+  place-items: center;
+  width: calc(var(--icon-size) * 2.4);
+  height: calc(var(--icon-size) * 2.4);
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.cc-emptyx__icon svg {
+  width: calc(var(--icon-size) * 1.2);
+  height: calc(var(--icon-size) * 1.2);
+}
+
+.cc-emptyx__title {
+  margin: var(--space-2) 0 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-2);
+  font-weight: var(--weight-display);
+}
+
+.cc-emptyx__body {
+  max-width: 46ch;
+  margin: 0 0 var(--space-2);
+  color: var(--text-muted);
+}
+
+/* ReUI — composer textarea -------------------------------------------------- */
+
+.cc-composer {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.cc-composer__label {
+  color: var(--text);
+  font-size: var(--text-n1);
+  font-weight: var(--weight-display);
+}
+
+.cc-composer__field {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  transition:
+    border-color var(--dur-hover) var(--ease-emphasized),
+    box-shadow var(--dur-hover) var(--ease-emphasized);
+}
+
+.cc-composer__field:hover {
+  border-color: var(--accent-line);
+}
+
+.cc-composer__field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.cc-composer__input {
+  width: 100%;
+  min-height: calc(var(--min-target) * 2);
+  padding: 0;
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  outline: 0;
+  resize: vertical;
+  font: inherit;
+  line-height: 1.55;
+}
+
+.cc-composer__input::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 80%, transparent);
+}
+
+.cc-composer__footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+.cc-composer__count {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.cc-composer__count[data-full="true"] {
+  color: var(--critical);
+}
+
+.cc-composer__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cc-composer__kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-n1);
+}
+
+.cc-composer__kbd svg,
+.cc-composer__send svg {
+  width: 1em;
+  height: 1em;
+}
+
+.cc-composer__send {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--min-target);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-button);
+  color: var(--accent-contrast);
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent);
+  cursor: pointer;
+  transition:
+    transform var(--dur-press) var(--ease-standard),
+    box-shadow var(--dur-hover) var(--ease-standard);
+}
+
+.cc-composer__send:hover:not(:disabled) {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(calc(-1 * var(--lift)));
+}
+
+.cc-composer__send:active:not(:disabled) {
+  transform: translateY(0) scale(var(--press-squash, 0.98));
+}
+
+.cc-composer__send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cc-composer__send:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-composer__field,
+  .cc-composer__send {
+    transition: none;
   }
 }

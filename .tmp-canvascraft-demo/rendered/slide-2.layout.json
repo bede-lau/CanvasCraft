@@ -2,13 +2,13 @@
   "schema": "openai.presentation.layout/v4",
   "unit": "px",
   "slide": {
-    "aid": "sl/l2zqpz",
-    "id": "l2zqpz",
+    "aid": "sl/iu60ax",
+    "id": "iu60ax",
     "slide": 2,
-    "layoutId": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+    "layoutId": "72d78271-f7bd-4cff-b532-964be5693c3e",
     "layoutName": "Title Slide",
     "layoutType": "title",
-    "masterLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+    "masterLayoutId": "ba6ee152-46bd-4509-860e-3d032eaee72c",
     "masterLayoutName": "Master",
     "backgroundColor": "#0A0B0F",
     "frame": {
@@ -45,15 +45,15 @@
   "inheritedLayers": [
     {
       "scope": "layout",
-      "id": "a094f6de-6727-45f7-bf99-c7a6635c45fb",
+      "id": "72d78271-f7bd-4cff-b532-964be5693c3e",
       "name": "Title Slide",
       "type": "title",
-      "parentLayoutId": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "parentLayoutId": "ba6ee152-46bd-4509-860e-3d032eaee72c",
       "elements": []
     },
     {
       "scope": "master",
-      "id": "54a34ffb-aeb5-4d36-934e-13c6cf699993",
+      "id": "ba6ee152-46bd-4509-860e-3d032eaee72c",
       "name": "Master",
       "type": "master",
       "elements": []
@@ -64,7 +64,7 @@
       "order": 1,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hsnapgja",
+      "aid": "sh/x8red4rq",
       "id": "1",
       "name": "grid-v-0",
       "bbox": [
@@ -81,7 +81,7 @@
       "order": 2,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/u5cre1kj",
+      "aid": "sh/a5gv2p8z",
       "id": "2",
       "name": "grid-v-48",
       "bbox": [
@@ -98,7 +98,7 @@
       "order": 3,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vqlsn614",
+      "aid": "sh/b69wbu9k",
       "id": "3",
       "name": "grid-v-96",
       "bbox": [
@@ -115,7 +115,7 @@
       "order": 4,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/83u9cr2d",
+      "aid": "sh/kvid8jq1",
       "id": "4",
       "name": "grid-v-144",
       "bbox": [
@@ -132,7 +132,7 @@
       "order": 5,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/t43alwjy",
+      "aid": "sh/lwreh4rm",
       "id": "5",
       "name": "grid-v-192",
       "bbox": [
@@ -149,7 +149,7 @@
       "order": 6,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/61crahkn",
+      "aid": "sh/yt0v698v",
       "id": "6",
       "name": "grid-v-240",
       "bbox": [
@@ -166,7 +166,7 @@
       "order": 7,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/72lsjm1s",
+      "aid": "sh/ju9wfe9g",
       "id": "7",
       "name": "grid-v-288",
       "bbox": [
@@ -183,7 +183,7 @@
       "order": 8,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/kza98r2h",
+      "aid": "sh/0zydwfax",
       "id": "8",
       "name": "grid-v-336",
       "bbox": [
@@ -200,7 +200,7 @@
       "order": 9,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/l03ahwj2",
+      "aid": "sh/107u5kri",
       "id": "9",
       "name": "grid-v-384",
       "bbox": [
@@ -217,7 +217,7 @@
       "order": 10,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/x8be1cju",
+      "aid": "sh/toful8vu",
       "id": "10",
       "name": "grid-v-432",
       "bbox": [
@@ -234,7 +234,7 @@
       "order": 11,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/c72xs72p",
+      "aid": "sh/8n6ds3u9",
       "id": "11",
       "name": "grid-v-480",
       "bbox": [
@@ -251,7 +251,7 @@
       "order": 12,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/b6twz214",
+      "aid": "sh/7mxcjido",
       "id": "12",
       "name": "grid-v-528",
       "bbox": [
@@ -268,7 +268,7 @@
       "order": 13,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/q5kfqxkj",
+      "aid": "sh/6lovqdcj",
       "id": "13",
       "name": "grid-v-576",
       "bbox": [
@@ -285,7 +285,7 @@
       "order": 14,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/p4bexsjy",
+      "aid": "sh/hczupsv6",
       "id": "14",
       "name": "grid-v-624",
       "bbox": [
@@ -302,7 +302,7 @@
       "order": 15,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/o32xo72d",
+      "aid": "sh/grqdwnul",
       "id": "15",
       "name": "grid-v-672",
       "bbox": [
@@ -319,7 +319,7 @@
       "order": 16,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/3itwv21s",
+      "aid": "sh/vqxcnid0",
       "id": "16",
       "name": "grid-v-720",
       "bbox": [
@@ -336,7 +336,7 @@
       "order": 17,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/2hkfmxk7",
+      "aid": "sh/upovudcf",
       "id": "17",
       "name": "grid-v-768",
       "bbox": [
@@ -353,7 +353,7 @@
       "order": 18,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1gretsj2",
+      "aid": "sh/5gzutsb2",
       "id": "18",
       "name": "grid-v-816",
       "bbox": [
@@ -370,7 +370,7 @@
       "order": 19,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gfixkn2h",
+      "aid": "sh/4fqd07uh",
       "id": "19",
       "name": "grid-v-864",
       "bbox": [
@@ -387,7 +387,7 @@
       "order": 20,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/sv65wre9",
+      "aid": "sh/ovi5cv65",
       "id": "20",
       "name": "grid-v-912",
       "bbox": [
@@ -404,7 +404,7 @@
       "order": 21,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/twf6pwfu",
+      "aid": "sh/pwr6l0na",
       "id": "21",
       "name": "grid-v-960",
       "bbox": [
@@ -421,7 +421,7 @@
       "order": 22,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/69onuhwj",
+      "aid": "sh/290na5oz",
       "id": "22",
       "name": "grid-v-1008",
       "bbox": [
@@ -438,7 +438,7 @@
       "order": 23,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/ruxonmxo",
+      "aid": "sh/nu9ojq5k",
       "id": "23",
       "name": "grid-v-1056",
       "bbox": [
@@ -455,7 +455,7 @@
       "order": 24,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/47m5s7ed",
+      "aid": "sh/czi5gf61",
       "id": "24",
       "name": "grid-v-1104",
       "bbox": [
@@ -472,7 +472,7 @@
       "order": 25,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/58f6lcfy",
+      "aid": "sh/x0b6pknm",
       "id": "25",
       "name": "grid-v-1152",
       "bbox": [
@@ -489,7 +489,7 @@
       "order": 26,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/i54nqhw7",
+      "aid": "sh/ax0ne5ov",
       "id": "26",
       "name": "grid-v-1200",
       "bbox": [
@@ -506,7 +506,7 @@
       "order": 27,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/j6doj2xs",
+      "aid": "sh/by9ona5g",
       "id": "27",
       "name": "grid-v-1248",
       "bbox": [
@@ -523,7 +523,7 @@
       "order": 28,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/o3qp4beh",
+      "aid": "sh/s3y54b6x",
       "id": "28",
       "name": "grid-h-0",
       "bbox": [
@@ -540,7 +540,7 @@
       "order": 29,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/p4z6xgv2",
+      "aid": "sh/d476dgni",
       "id": "29",
       "name": "grid-h-48",
       "bbox": [
@@ -557,7 +557,7 @@
       "order": 30,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zy18nax4",
+      "aid": "sh/vyd8jep0",
       "id": "30",
       "name": "grid-h-96",
       "bbox": [
@@ -574,7 +574,7 @@
       "order": 31,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/yxsru5gz",
+      "aid": "sh/ux4ra98f",
       "id": "31",
       "name": "grid-h-144",
       "bbox": [
@@ -591,7 +591,7 @@
       "order": 32,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/lk3qpkfa",
+      "aid": "sh/hkfqlo7q",
       "id": "32",
       "name": "grid-h-192",
       "bbox": [
@@ -608,7 +608,7 @@
       "order": 33,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/kju9wfyp",
+      "aid": "sh/gz69cjql",
       "id": "33",
       "name": "grid-h-240",
       "bbox": [
@@ -625,7 +625,7 @@
       "order": 34,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/7mlsraxg",
+      "aid": "sh/7ud8fepo",
       "id": "34",
       "name": "grid-h-288",
       "bbox": [
@@ -642,7 +642,7 @@
       "order": 35,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/mlcrypgv",
+      "aid": "sh/6t4r6983",
       "id": "35",
       "name": "grid-h-336",
       "bbox": [
@@ -659,7 +659,7 @@
       "order": 36,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/9o3atkfm",
+      "aid": "sh/twvqho7u",
       "id": "36",
       "name": "grid-h-384",
       "bbox": [
@@ -676,7 +676,7 @@
       "order": 37,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8nu90fy1",
+      "aid": "sh/8vm98jq9",
       "id": "37",
       "name": "grid-h-432",
       "bbox": [
@@ -693,7 +693,7 @@
       "order": 38,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/nqh8fqhw",
+      "aid": "sh/zqt8bups",
       "id": "38",
       "name": "grid-h-480",
       "bbox": [
@@ -710,7 +710,7 @@
       "order": 39,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/2p8rmlgr",
+      "aid": "sh/ypkr2p87",
       "id": "39",
       "name": "grid-h-528",
       "bbox": [
@@ -727,7 +727,7 @@
       "order": 40,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/u9cr2lon",
+      "aid": "sh/ex4v6x4r",
       "id": "40",
       "name": "grid-h-576",
       "bbox": [
@@ -744,7 +744,7 @@
       "order": 41,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/fal8bqps",
+      "aid": "sh/zyxcf2lc",
       "id": "41",
       "name": "grid-h-624",
       "bbox": [
@@ -761,7 +761,7 @@
       "order": 42,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gbu94v6d",
+      "aid": "sh/0z6d87mx",
       "id": "42",
       "name": "grid-h-672",
       "bbox": [
@@ -778,25 +778,8 @@
       "order": 43,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/1cnad07y",
+      "aid": "sh/10fuhc3i",
       "id": "43",
-      "name": "grid-h-720",
-      "bbox": [
-        0,
-        720,
-        1280,
-        1
-      ],
-      "geometry": "rect",
-      "fillColor": "#10141C",
-      "lineWidth": 0
-    },
-    {
-      "order": 44,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/2dwr65oj",
-      "id": "44",
       "name": "solution-title",
       "bbox": [
         72,
@@ -854,11 +837,11 @@
       "lineWidth": 0
     },
     {
-      "order": 45,
+      "order": 44,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/3e5sfap4",
-      "id": "45",
+      "aid": "sh/q94v2x4v",
+      "id": "44",
       "name": "solution-subtitle",
       "bbox": [
         72,
@@ -913,11 +896,11 @@
       "lineWidth": 0
     },
     {
-      "order": 46,
+      "order": 45,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/oze98v6p",
-      "id": "46",
+      "aid": "sh/radcbil0",
+      "id": "45",
       "name": "solution-arrow-1-shaft",
       "bbox": [
         252,
@@ -930,11 +913,11 @@
       "lineWidth": 0
     },
     {
-      "order": 47,
+      "order": 46,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/p0nah07a",
-      "id": "47",
+      "aid": "sh/cbmd4nml",
+      "id": "46",
       "name": "solution-arrow-1-head",
       "bbox": [
         322,
@@ -948,11 +931,11 @@
       "lineWidth": 0
     },
     {
-      "order": 48,
+      "order": 47,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/q1wra5of",
-      "id": "48",
+      "aid": "sh/dwvuds36",
+      "id": "47",
       "name": "solution-arrow-2-shaft",
       "bbox": [
         523,
@@ -965,11 +948,11 @@
       "lineWidth": 0
     },
     {
-      "order": 49,
+      "order": 48,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/b25sjap0",
-      "id": "49",
+      "aid": "sh/25kbed4j",
+      "id": "48",
       "name": "solution-arrow-2-head",
       "bbox": [
         593,
@@ -983,11 +966,11 @@
       "lineWidth": 0
     },
     {
-      "order": 50,
+      "order": 49,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/lwru94ri",
-      "id": "50",
+      "aid": "sh/36dc7i54",
+      "id": "49",
       "name": "solution-arrow-3-shaft",
       "bbox": [
         794,
@@ -1000,11 +983,11 @@
       "lineWidth": 0
     },
     {
-      "order": 51,
+      "order": 50,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0vyt0zqx",
-      "id": "51",
+      "aid": "sh/l0jydgnm",
+      "id": "50",
       "name": "solution-arrow-3-head",
       "bbox": [
         864,
@@ -1018,11 +1001,11 @@
       "lineWidth": 0
     },
     {
-      "order": 52,
+      "order": 51,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zupc7u9c",
-      "id": "52",
+      "aid": "sh/kzaxkb61",
+      "id": "51",
       "name": "solution-canvas-node",
       "bbox": [
         72,
@@ -1036,11 +1019,11 @@
       "lineWidth": 1
     },
     {
-      "order": 53,
+      "order": 52,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/h8b6dov6",
-      "id": "53",
+      "aid": "im/07u9w3i5",
+      "id": "52",
       "bbox": [
         96,
         223,
@@ -1051,17 +1034,17 @@
       "contentType": "image/png",
       "imageFit": "contain",
       "asset": {
-        "assetId": "c69eba58-3378-43c8-a30b-351aa9500106",
+        "assetId": "1f9496ad-69f8-4293-8cd9-add025c8621c",
         "contentType": "image/png",
         "byteLength": 146790
       }
     },
     {
-      "order": 54,
+      "order": 53,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/90rudore",
-      "id": "54",
+      "aid": "sh/yxsfi1ov",
+      "id": "53",
       "name": "solution-canvas-title",
       "bbox": [
         96,
@@ -1119,11 +1102,11 @@
       "lineWidth": 0
     },
     {
-      "order": 55,
+      "order": 54,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8zid4jqt",
-      "id": "55",
+      "aid": "sh/xwzy9gnq",
+      "id": "54",
       "name": "solution-canvas-copy",
       "bbox": [
         96,
@@ -1178,11 +1161,11 @@
       "lineWidth": 0
     },
     {
-      "order": 56,
+      "order": 55,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/ny9cbe98",
-      "id": "56",
+      "aid": "sh/wvqxgb65",
+      "id": "55",
       "name": "solution-ai-node",
       "bbox": [
         342,
@@ -1196,11 +1179,11 @@
       "lineWidth": 1
     },
     {
-      "order": 57,
+      "order": 56,
       "kind": "image",
       "scope": "slide",
-      "aid": "im/tkb69ovu",
-      "id": "57",
+      "aid": "im/obe90nih",
+      "id": "56",
       "bbox": [
         366,
         224,
@@ -1211,17 +1194,17 @@
       "contentType": "image/svg+xml",
       "imageFit": "contain",
       "asset": {
-        "assetId": "75cbaf48-7259-4daf-a00a-d94d272ac597",
+        "assetId": "56065261-e538-4053-afec-455dd06ec5cb",
         "contentType": "image/svg+xml",
-        "byteLength": 1894
+        "byteLength": 1909
       }
     },
     {
-      "order": 58,
+      "order": 57,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/xobuho7a",
-      "id": "58",
+      "aid": "sh/at8fe1oz",
+      "id": "57",
       "name": "solution-ai-title",
       "bbox": [
         366,
@@ -1230,8 +1213,8 @@
         24
       ],
       "geometry": "rect",
-      "text": "Interpret intent",
-      "textPreview": "Interpret intent",
+      "text": "Interpret",
+      "textPreview": "Interpret",
       "resolvedFontSize": 21,
       "resolvedTextStyle": {
         "fontSize": 21,
@@ -1247,22 +1230,18 @@
         }
       },
       "textLayout": {
-        "lineCount": 2,
+        "lineCount": 1,
         "lines": [
           {
             "index": 1,
             "text": "Interpret"
-          },
-          {
-            "index": 2,
-            "text": "intent"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Interpret intent",
+          "text": "Interpret",
           "resolvedTextStyle": {
             "fontSize": 21,
             "color": "#E8EBF2",
@@ -1271,7 +1250,7 @@
           "runs": [
             {
               "index": 1,
-              "text": "Interpret intent",
+              "text": "Interpret",
               "fontSize": 21,
               "color": "#E8EBF2",
               "bold": true
@@ -1283,11 +1262,11 @@
       "lineWidth": 0
     },
     {
-      "order": 59,
+      "order": 58,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/w32d8jq5",
-      "id": "59",
+      "aid": "sh/9sze5wne",
+      "id": "58",
       "name": "solution-ai-copy",
       "bbox": [
         366,
@@ -1296,344 +1275,8 @@
         20
       ],
       "geometry": "rect",
-      "text": "One shared Screen Spec",
-      "textPreview": "One shared Screen Spec",
-      "resolvedFontSize": 14,
-      "resolvedTextStyle": {
-        "fontSize": 14,
-        "typeface": "+mn-lt",
-        "color": "#8B93A7",
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "One shared Screen"
-          },
-          {
-            "index": 2,
-            "text": "Spec"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "One shared Screen Spec",
-          "resolvedTextStyle": {
-            "fontSize": 14,
-            "color": "#8B93A7"
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "One shared Screen Spec",
-              "fontSize": 14,
-              "color": "#8B93A7"
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 60,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/gja50r2d",
-      "id": "60",
-      "name": "solution-nosana-node",
-      "bbox": [
-        613,
-        200,
-        180,
-        164
-      ],
-      "geometry": "roundRect",
-      "fillColor": "#14161C",
-      "lineColor": "#2A2F3B",
-      "lineWidth": 1
-    },
-    {
-      "order": 61,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/2hw325cz",
-      "id": "61",
-      "bbox": [
-        637,
-        226,
-        116,
-        38
-      ],
-      "alt": "Nosana logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "efe59718-32d0-499b-b458-12b194b140e7",
-        "contentType": "image/svg+xml",
-        "byteLength": 4192
-      }
-    },
-    {
-      "order": 62,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/uhsnyhk7",
-      "id": "62",
-      "name": "solution-nosana-title",
-      "bbox": [
-        637,
-        305,
-        140,
-        24
-      ],
-      "geometry": "rect",
-      "text": "Ground choices",
-      "textPreview": "Ground choices",
-      "resolvedFontSize": 21,
-      "resolvedTextStyle": {
-        "fontSize": 21,
-        "typeface": "+mn-lt",
-        "color": "#E8EBF2",
-        "bold": true,
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Ground"
-          },
-          {
-            "index": 2,
-            "text": "choices"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Ground choices",
-          "resolvedTextStyle": {
-            "fontSize": 21,
-            "color": "#E8EBF2",
-            "bold": true
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Ground choices",
-              "fontSize": 21,
-              "color": "#E8EBF2",
-              "bold": true
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 63,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/fi1orm1s",
-      "id": "63",
-      "name": "solution-nosana-copy",
-      "bbox": [
-        637,
-        333,
-        140,
-        20
-      ],
-      "geometry": "rect",
-      "text": "Visual match + licence gate",
-      "textPreview": "Visual match + licence gate",
-      "resolvedFontSize": 14,
-      "resolvedTextStyle": {
-        "fontSize": 14,
-        "typeface": "+mn-lt",
-        "color": "#8B93A7",
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Visual match +"
-          },
-          {
-            "index": 2,
-            "text": "licence gate"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Visual match + licence gate",
-          "resolvedTextStyle": {
-            "fontSize": 14,
-            "color": "#8B93A7"
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Visual match + licence gate",
-              "fontSize": 14,
-              "color": "#8B93A7"
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 64,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/o7u54b29",
-      "id": "64",
-      "name": "solution-daytona-node",
-      "bbox": [
-        884,
-        200,
-        180,
-        164
-      ],
-      "geometry": "roundRect",
-      "fillColor": "#14161C",
-      "lineColor": "#2A2F3B",
-      "lineWidth": 1
-    },
-    {
-      "order": 65,
-      "kind": "image",
-      "scope": "slide",
-      "aid": "im/alg365cb",
-      "id": "65",
-      "bbox": [
-        908,
-        228,
-        120,
-        28
-      ],
-      "alt": "Daytona logo",
-      "contentType": "image/svg+xml",
-      "imageFit": "contain",
-      "asset": {
-        "assetId": "05ee3da9-9845-4eeb-8a5d-416c954def35",
-        "contentType": "image/svg+xml",
-        "byteLength": 5274
-      }
-    },
-    {
-      "order": 66,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/2lcn21kj",
-      "id": "66",
-      "name": "solution-daytona-title",
-      "bbox": [
-        908,
-        305,
-        148,
-        24
-      ],
-      "geometry": "rect",
-      "text": "Run three branches",
-      "textPreview": "Run three branches",
-      "resolvedFontSize": 21,
-      "resolvedTextStyle": {
-        "fontSize": 21,
-        "typeface": "+mn-lt",
-        "color": "#E8EBF2",
-        "bold": true,
-        "alignment": "left",
-        "insets": {
-          "top": 4.8,
-          "right": 9.6,
-          "bottom": 4.8,
-          "left": 9.6
-        }
-      },
-      "textLayout": {
-        "lineCount": 2,
-        "lines": [
-          {
-            "index": 1,
-            "text": "Run three"
-          },
-          {
-            "index": 2,
-            "text": "branches"
-          }
-        ]
-      },
-      "paragraphs": [
-        {
-          "index": 1,
-          "text": "Run three branches",
-          "resolvedTextStyle": {
-            "fontSize": 21,
-            "color": "#E8EBF2",
-            "bold": true
-          },
-          "runs": [
-            {
-              "index": 1,
-              "text": "Run three branches",
-              "fontSize": 21,
-              "color": "#E8EBF2",
-              "bold": true
-            }
-          ],
-          "marginLeft": 0
-        }
-      ],
-      "lineWidth": 0
-    },
-    {
-      "order": 67,
-      "kind": "shape",
-      "scope": "slide",
-      "aid": "sh/3mlov614",
-      "id": "67",
-      "name": "solution-daytona-copy",
-      "bbox": [
-        908,
-        333,
-        148,
-        20
-      ],
-      "geometry": "rect",
-      "text": "Live sandbox previews",
-      "textPreview": "Live sandbox previews",
+      "text": "Shared Screen Spec",
+      "textPreview": "Shared Screen Spec",
       "resolvedFontSize": 14,
       "resolvedTextStyle": {
         "fontSize": 14,
@@ -1652,14 +1295,14 @@
         "lines": [
           {
             "index": 1,
-            "text": "Live sandbox previews"
+            "text": "Shared Screen Spec"
           }
         ]
       },
       "paragraphs": [
         {
           "index": 1,
-          "text": "Live sandbox previews",
+          "text": "Shared Screen Spec",
           "resolvedTextStyle": {
             "fontSize": 14,
             "color": "#8B93A7"
@@ -1667,7 +1310,389 @@
           "runs": [
             {
               "index": 1,
-              "text": "Live sandbox previews",
+              "text": "Shared Screen Spec",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 59,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/orqxcr6t",
+      "id": "59",
+      "name": "solution-nosana-node",
+      "bbox": [
+        613,
+        200,
+        180,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 60,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/76xg7qd8",
+      "id": "60",
+      "bbox": [
+        637,
+        226,
+        116,
+        38
+      ],
+      "alt": "Nosana logo",
+      "contentType": "image/svg+xml",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "cf41d7e1-c95b-4843-9e62-baea1a8ac0d1",
+        "contentType": "image/svg+xml",
+        "byteLength": 4192
+      }
+    },
+    {
+      "order": 61,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1c3ylwfa",
+      "id": "61",
+      "name": "solution-nosana-title",
+      "bbox": [
+        637,
+        305,
+        140,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Match",
+      "textPreview": "Match",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Match"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Match",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Match",
+              "fontSize": 21,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 62,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e9sfq1wj",
+      "id": "62",
+      "name": "solution-nosana-copy",
+      "bbox": [
+        637,
+        333,
+        140,
+        20
+      ],
+      "geometry": "rect",
+      "text": "Visuals + licence gate",
+      "textPreview": "Visuals + licence gate",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Visuals + licence gate"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Visuals + licence gate",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Visuals + licence gate",
+              "fontSize": 14,
+              "color": "#8B93A7"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 63,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/falgj6x4",
+      "id": "63",
+      "name": "solution-daytona-node",
+      "bbox": [
+        884,
+        200,
+        180,
+        164
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#14161C",
+      "lineColor": "#2A2F3B",
+      "lineWidth": 1
+    },
+    {
+      "order": 64,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/z2dw36dw",
+      "id": "64",
+      "bbox": [
+        908,
+        218,
+        54,
+        54
+      ],
+      "alt": "Daytona logo",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "081ceeb9-cc03-4d44-9e4e-2800ddc8a8eb",
+        "contentType": "image/png",
+        "byteLength": 1247
+      }
+    },
+    {
+      "order": 65,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d8jyhwfe",
+      "id": "65",
+      "name": "solution-daytona-wordmark",
+      "bbox": [
+        974,
+        238,
+        74,
+        20
+      ],
+      "geometry": "rect",
+      "text": "DAYTONA",
+      "textPreview": "DAYTONA",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "DAYTONA"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "DAYTONA",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "DAYTONA",
+              "fontSize": 13,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 66,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qlsfmhwn",
+      "id": "66",
+      "name": "solution-daytona-title",
+      "bbox": [
+        908,
+        305,
+        148,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Launch",
+      "textPreview": "Launch",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#E8EBF2",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Launch"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Launch",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#E8EBF2",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Launch",
+              "fontSize": 21,
+              "color": "#E8EBF2",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 67,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r61gfmx8",
+      "id": "67",
+      "name": "solution-daytona-copy",
+      "bbox": [
+        908,
+        333,
+        148,
+        20
+      ],
+      "geometry": "rect",
+      "text": "Three live previews",
+      "textPreview": "Three live previews",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#8B93A7",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Three live previews"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Three live previews",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#8B93A7"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Three live previews",
               "fontSize": 14,
               "color": "#8B93A7"
             }
@@ -1681,7 +1706,7 @@
       "order": 68,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/kbq5s725",
+      "aid": "sh/c3ex0bex",
       "id": "68",
       "name": "solution-output-label",
       "bbox": [
@@ -1743,7 +1768,7 @@
       "order": 69,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/5czmlcjq",
+      "aid": "sh/x4nytgvi",
       "id": "69",
       "name": "solution-branch-a-frame",
       "bbox": [
@@ -1761,7 +1786,7 @@
       "order": 70,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/n6p8ral8",
+      "aid": "sh/7a9sfe1w",
       "id": "70",
       "name": "solution-branch-a-topline",
       "bbox": [
@@ -1778,7 +1803,7 @@
       "order": 71,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/m5gry54n",
+      "aid": "sh/690r69kb",
       "id": "71",
       "name": "solution-branch-a-nav",
       "bbox": [
@@ -1795,7 +1820,7 @@
       "order": 72,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/987qtk3e",
+      "aid": "sh/tcrahoj2",
       "id": "72",
       "name": "solution-branch-a-hero",
       "bbox": [
@@ -1812,7 +1837,7 @@
       "order": 73,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/87y90fmt",
+      "aid": "sh/sbi98j2h",
       "id": "73",
       "name": "solution-branch-a-line1",
       "bbox": [
@@ -1829,7 +1854,7 @@
       "order": 74,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/z258nalc",
+      "aid": "sh/fetsjy1s",
       "id": "74",
       "name": "solution-branch-a-line2",
       "bbox": [
@@ -1846,7 +1871,7 @@
       "order": 75,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/y1w7u54r",
+      "aid": "sh/ud0ratkn",
       "id": "75",
       "name": "solution-branch-a-body",
       "bbox": [
@@ -1863,7 +1888,7 @@
       "order": 76,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/l47qpk32",
+      "aid": "sh/hgbalojy",
       "id": "76",
       "name": "solution-branch-a-body-a",
       "bbox": [
@@ -1880,7 +1905,7 @@
       "order": 77,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/03epwfmh",
+      "aid": "sh/gf29cj2d",
       "id": "77",
       "name": "solution-branch-a-body-b",
       "bbox": [
@@ -1897,7 +1922,7 @@
       "order": 78,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/be58jql0",
+      "aid": "sh/bip87ulo",
       "id": "78",
       "name": "solution-branch-a-body-c",
       "bbox": [
@@ -1914,7 +1939,7 @@
       "order": 79,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/qdw7ql4f",
+      "aid": "sh/ahgrypk3",
       "id": "79",
       "name": "solution-branch-a-title",
       "bbox": [
@@ -1976,7 +2001,7 @@
       "order": 80,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/2h0r65cb",
+      "aid": "sh/ehcrm94r",
       "id": "80",
       "name": "solution-branch-a-detail",
       "bbox": [
@@ -2035,7 +2060,7 @@
       "order": 81,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/3i98fqtw",
+      "aid": "sh/zil8velc",
       "id": "81",
       "name": "solution-branch-b-frame",
       "bbox": [
@@ -2053,7 +2078,7 @@
       "order": 82,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/4ji98vuh",
+      "aid": "sh/0ju9ojmx",
       "id": "82",
       "name": "solution-branch-b-topline",
       "bbox": [
@@ -2070,7 +2095,7 @@
       "order": 83,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/pkrqh0b2",
+      "aid": "sh/lk3qxo3i",
       "id": "83",
       "name": "solution-branch-b-nav",
       "bbox": [
@@ -2087,7 +2112,7 @@
       "order": 84,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/utg72lcf",
+      "aid": "sh/mlcrqt43",
       "id": "84",
       "name": "solution-branch-b-hero",
       "bbox": [
@@ -2104,7 +2129,7 @@
       "order": 85,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/vup8bqt0",
+      "aid": "sh/nml8zelo",
       "id": "85",
       "name": "solution-branch-b-line1",
       "bbox": [
@@ -2121,7 +2146,7 @@
       "order": 86,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/gvy94vu5",
+      "aid": "sh/8nu9sjm9",
       "id": "86",
       "name": "solution-branch-b-line2",
       "bbox": [
@@ -2138,7 +2163,7 @@
       "order": 87,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/hg7qd0bq",
+      "aid": "sh/9o3q1o3e",
       "id": "87",
       "name": "solution-branch-b-body",
       "bbox": [
@@ -2155,7 +2180,7 @@
       "order": 88,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/epkrepcj",
+      "aid": "sh/2p87up4z",
       "id": "88",
       "name": "solution-branch-b-body-a",
       "bbox": [
@@ -2172,7 +2197,7 @@
       "order": 89,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zqt8nat4",
+      "aid": "sh/3q18nul4",
       "id": "89",
       "name": "solution-branch-b-body-b",
       "bbox": [
@@ -2189,7 +2214,7 @@
       "order": 90,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/9wf2t8zi",
+      "aid": "sh/5wr29wry",
       "id": "90",
       "name": "solution-branch-b-body-c",
       "bbox": [
@@ -2206,7 +2231,7 @@
       "order": 91,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/8v6l03ix",
+      "aid": "sh/4vi1grad",
       "id": "91",
       "name": "solution-branch-b-title",
       "bbox": [
@@ -2268,7 +2293,7 @@
       "order": 92,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/nuxkryhc",
+      "aid": "sh/ju9k7m98",
       "id": "92",
       "name": "solution-branch-b-detail",
       "bbox": [
@@ -2327,7 +2352,7 @@
       "order": 93,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/mt4jyd0r",
+      "aid": "sh/itgjehsn",
       "id": "93",
       "name": "solution-branch-c-frame",
       "bbox": [
@@ -2345,7 +2370,7 @@
       "order": 94,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/lsv2p8zm",
+      "aid": "sh/tkr2dwra",
       "id": "94",
       "name": "solution-branch-c-topline",
       "bbox": [
@@ -2362,7 +2387,7 @@
       "order": 95,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/0rm1w3i1",
+      "aid": "sh/sjilkrap",
       "id": "95",
       "name": "solution-branch-c-nav",
       "bbox": [
@@ -2379,7 +2404,7 @@
       "order": 96,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/zqdknyhg",
+      "aid": "sh/ri9kbm94",
       "id": "96",
       "name": "solution-branch-c-hero",
       "bbox": [
@@ -2396,7 +2421,7 @@
       "order": 97,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/yp4jut0v",
+      "aid": "sh/6h03i1sj",
       "id": "97",
       "name": "solution-branch-c-line1",
       "bbox": [
@@ -2413,7 +2438,7 @@
       "order": 98,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/5oz21szq",
+      "aid": "sh/9o721crq",
       "id": "98",
       "name": "solution-branch-c-line2",
       "bbox": [
@@ -2430,7 +2455,7 @@
       "order": 99,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/knql8ni5",
+      "aid": "sh/8ny187a5",
       "id": "99",
       "name": "solution-branch-c-body",
       "bbox": [
@@ -2447,7 +2472,7 @@
       "order": 100,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/dgre1kzm",
+      "aid": "sh/dcbu5sfy",
       "id": "100",
       "name": "solution-branch-c-body-a",
       "bbox": [
@@ -2464,7 +2489,7 @@
       "order": 101,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/sfid8fi1",
+      "aid": "sh/sb2tw7ed",
       "id": "101",
       "name": "solution-branch-c-body-b",
       "bbox": [
@@ -2481,7 +2506,7 @@
       "order": 102,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/re9wzahg",
+      "aid": "sh/rqtc32xs",
       "id": "102",
       "name": "solution-branch-c-body-c",
       "bbox": [
@@ -2498,7 +2523,7 @@
       "order": 103,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/qd0v6p0v",
+      "aid": "sh/qpkbuxw7",
       "id": "103",
       "name": "solution-branch-c-title",
       "bbox": [
@@ -2560,7 +2585,7 @@
       "order": 104,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/5crexkza",
+      "aid": "sh/1gvu9cfu",
       "id": "104",
       "name": "solution-branch-c-detail",
       "bbox": [
@@ -2619,7 +2644,7 @@
       "order": 105,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/4bid4fip",
+      "aid": "sh/0f2t07e9",
       "id": "105",
       "name": "solution-three",
       "bbox": [
@@ -2683,7 +2708,7 @@
       "order": 106,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/3a9wvah4",
+      "aid": "sh/fetc72xo",
       "id": "106",
       "name": "solution-three-label",
       "bbox": [
@@ -2772,7 +2797,7 @@
       "order": 107,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/i9gv250z",
+      "aid": "sh/edkbyxw3",
       "id": "107",
       "name": "footer-rule",
       "bbox": [
@@ -2789,7 +2814,7 @@
       "order": 108,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/h87ut0ze",
+      "aid": "sh/hkrax8fq",
       "id": "108",
       "name": "footer-brand",
       "bbox": [
@@ -2851,7 +2876,7 @@
       "order": 109,
       "kind": "shape",
       "scope": "slide",
-      "aid": "sh/g7yd0vit",
+      "aid": "sh/gjitone5",
       "id": "109",
       "name": "footer-text",
       "bbox": [

@@ -8,7 +8,7 @@
 CanvasCraft draws on four third-party UI sources with materially different
 licences, and the PRD forbids calling any of it a "training dataset" or
 ingesting whole libraries. It also caps the catalogue at 8–12 patterns for
-hackathon reliability.
+product reliability.
 
 Licence positions, per the PRD's own register:
 

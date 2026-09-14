@@ -3,7 +3,7 @@
 > **Read this first when resuming work.** This is the single honest progress
 > record. Update it with the implementation and fresh verification evidence.
 
-- **Last updated:** 2026-08-29
+- **Last updated:** 2026-08-30
 - **Spec:** `CanvasCraft_PRD.md` (authoritative)
 - **Architecture:** `docs/architecture.md`
 - **Design contract:** `DESIGN.md`
@@ -16,7 +16,7 @@
 | 1 | pnpm workspace monorepo; `branch-template` deliberately sits outside it | 0001 |
 | 2 | AI generation uses a server-side OpenAI-compatible client and strict schemas | 0002 |
 | 3 | Canvas Studio uses react-konva custom shapes | 0003 |
-| 4 | Nosana provides visual matching; transparent local matching is the fallback | 0004 |
+| 4 | OpenAI vision ranks registry-approved candidates; transparent local matching is the fallback | 0004 |
 | 5 | Daytona runs a pre-baked branch-template snapshot | 0005 |
 | 6 | The registry is curated, licence-gated, and never exports third-party source | 0006 |
 | 7 | The host is a dark studio with a complete light theme | 0007 |
@@ -42,7 +42,7 @@ Legend: `DONE` · `WIP` · `TODO` · `BLOCKED`
 |---|---|---|
 | Curated pattern catalogue and licence gate | DONE | 12 reviewed metadata records; no third-party source is bundled |
 | Local pattern query and transparent fallback | DONE | Semantic/role ranking always identifies itself as local |
-| Thumbnail and local-index build commands | DONE | Current vectors are a clearly labelled demo semantic index, not production CLIP embeddings |
+| Thumbnail and local ranking | DONE | Reviewed metadata drives a clearly labelled deterministic fallback |
 | Canvas Studio | DONE | Stamps, image base layer, drawing, erasing, notes, labelled arrows, pan/zoom, undo/redo, selection, PNG export |
 | Canvas integrity and readiness checks | DONE | Blocks generation until the structured canvas is valid |
 
@@ -56,7 +56,7 @@ Legend: `DONE` · `WIP` · `TODO` · `BLOCKED`
 | Exactly three valid directions | DONE | Shared spec hash, exact one-pattern-per-region validation, and materially distinct direction validation |
 | Director mutations | DONE | Recommendation apply/revert, trait remix, scoped compatible-pattern patch, champion selection |
 | Live AI interpretation and direction adapter | DONE | Server-side OpenAI Responses uses strict Screen Spec and three-Variant Manifest schemas, with one bounded structural repair and deterministic fallback |
-| Live Nosana visual ranking adapter | DONE | The orchestrator sends rendered region and registry thumbnails to `/match`; failures remain visibly local |
+| OpenAI visual ranking adapter | DONE | The orchestrator sends batched comparison sheets to the configured low-cost vision ranker; failures remain visibly local |
 | Generated branch materialisation and validator | DONE | Every branch receives only generated Screen Spec and Variant Manifest modules; unsafe paths and network/server code are rejected |
 | Live Daytona lifecycle | DONE | Creates private sandboxes, uploads generated modules, serves a fixed preview port, syncs mutations, and stops/archives non-champions |
 
@@ -76,27 +76,27 @@ Legend: `DONE` · `WIP` · `TODO` · `BLOCKED`
 |---|---|---|
 | Schema and registry tests | DONE | Fresh contract and registry suites pass |
 | Web and orchestrator tests | DONE | Fresh suites pass, including AI-direction materialisation and branch guardrails |
-| Python service syntax validation | DONE | `services/nosana-clip/main.py` compiles |
+| OpenAI visual-ranking unit tests | DONE | Complete responses map to `openai`; incomplete responses retain local rankings |
 | Browser workflow and responsive smoke test | DONE | August 29, 2026: generated a credentialed AI run through the isolated Vite proxy, verified event-driven trace labels, state lock, interaction audition, scoped calmer-pattern swap, desktop layout, and mobile viewport |
 | Credentialed OpenAI run | DONE | August 29, 2026: a local live run completed AI interpretation and three validated directions |
-| Credentialed Nosana visual matching | BLOCKED | Requires a deployed Nosana service endpoint; local registry matching remains explicit |
+| Credentialed OpenAI visual ranking | TODO | Requires a configured `OPENAI_API_KEY`; no live ranker request was made during source validation |
 | Credentialed Daytona launch | BLOCKED | Requires the registered Daytona snapshot name; local manifests remain explicit |
 
 ## Completion state
 
 The app is implemented end to end. It is immediately usable in the local,
 offline-first mode and keeps every degraded result visibly labelled. When the
-required provider configuration is present, the same pipeline invokes the AI,
-Nosana, and Daytona adapters instead of their deterministic local fallbacks.
+required provider configuration is present, the same pipeline invokes the
+OpenAI and Daytona adapters instead of their deterministic local fallbacks.
 
 Do not represent a local match, a simulated preview, or a stopped manifest as a
-live sponsor call or live sandbox.
+live model-ranked result or live sandbox.
 
 ## External setup still required
 
 The code can be fully exercised offline. The remaining credentialed production
 paths require:
 
-1. A deployed Nosana CLIP service URL and, if configured, its API key.
+1. An `OPENAI_API_KEY` for live canvas interpretation and visual ranking.
 2. A registered `DAYTONA_SNAPSHOT` for the supplied Daytona account.
-3. Docker Hub access only when rebuilding and publishing the snapshot or Nosana image.
+3. Docker access only when rebuilding and publishing the Daytona snapshot.

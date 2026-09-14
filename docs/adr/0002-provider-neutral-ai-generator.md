@@ -5,8 +5,8 @@
 
 ## Context
 
-The PRD is explicit that the AI layer is *not* a sponsor integration and must be
-provider-neutral, while still doing three hard things reliably: reading a
+The product keeps the AI provider boundary configurable while still requiring
+three hard things reliably: reading a
 wireframe image, emitting schema-valid structured output, and making design
 judgements that survive being shown to a designer.
 

@@ -12,11 +12,15 @@
   --cc-chalk: #e8ebf2;
   --cc-lamp: #f0b860;
   --cc-lamp-dim: #7a5c2e;
+  /* Text colour that sits ON a --cc-lamp fill (primary/champion buttons).
+     Dark-theme --cc-lamp is bright #f0b860, so near-black ink reads 10.5:1. */
+  --cc-lamp-ink: #1a1206;
   --cc-live: #6ea97f;
   --cc-warn: #c99a4e;
   --cc-fail: #c4736b;
   --cc-overlay: rgba(4, 5, 8, 0.76);
   --cc-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+  --cc-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.28);
   --header-height: 56px;
 }
 
@@ -27,15 +31,30 @@
   --cc-slate: #ffffff;
   --cc-edge: #d5d0c7;
   --cc-edge-strong: #bbb3a7;
-  --cc-mist: #6c665d;
+  /* #6c665d read only 4.81:1 on --cc-graphite and 5.2:1 on --cc-void — over the
+     AA floor but with no headroom for the many 10-12px muted labels that use
+     this token. #635d53 clears 5.5:1 on graphite, 6.0:1 on void, 6.5:1 on
+     white — comfortable AA at every size, tuned to coss.com/ui's ~5.6:1
+     secondary-text darkness while staying in CanvasCraft's warm greyscale. */
+  --cc-mist: #635d53;
   --cc-chalk: #211f1b;
-  --cc-lamp: #9a6b18;
+  /* #9a6b18 read 4.30:1 on --cc-void and 3.96:1 on --cc-graphite — both under
+     the 4.5:1 AA floor for the ~15 places this token is used as text color,
+     not just a border/fill. This shade clears 4.5:1 against every light
+     surface token (void/graphite/slate) while staying recognizably amber. */
+  --cc-lamp: #875c0d;
   --cc-lamp-dim: #c9a65e;
+  /* Ink on a --cc-lamp fill. Light --cc-lamp is dark #875c0d, so the old
+     near-black button label read 3.21:1 — an AA fail on the two most
+     prominent CTAs ("Generate directions", "Use this template"). Warm
+     off-white lifts that to 5.5:1. */
+  --cc-lamp-ink: #fdf6ea;
   --cc-live: #3f7650;
   --cc-warn: #94681f;
   --cc-fail: #a44e48;
   --cc-overlay: rgba(33, 31, 27, 0.48);
   --cc-shadow: 0 12px 30px rgba(38, 32, 24, 0.1);
+  --cc-shadow-sm: 0 2px 10px rgba(38, 32, 24, 0.08);
 }
 
 * {
@@ -129,14 +148,33 @@ code,
 .quiet-button,
 .primary-button,
 .secondary-button,
-.champion-button {
+.champion-button,
+.danger-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 36px;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 8px;
   background: transparent;
+}
+
+/* One motion vocabulary for every control — borrowed from the product's own
+   "calm" director tempo (cubic-bezier(0.22, 0.61, 0.36, 1), ~160ms) so the
+   chrome animates like the output it generates. Neutralised by the
+   prefers-reduced-motion block near the end of this file. */
+.header-button,
+.icon-button,
+.quiet-button,
+.primary-button,
+.secondary-button,
+.champion-button,
+.danger-button {
+  transition: background 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .brand {
@@ -212,12 +250,21 @@ code,
   font-size: 12px;
 }
 
-.header-button:hover,
-.quiet-button:hover,
-.secondary-button:hover,
-.icon-button:hover {
+.header-button:hover:not(:disabled),
+.quiet-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled),
+.icon-button:hover:not(:disabled) {
   border-color: var(--cc-edge-strong);
   background: var(--cc-slate);
+  box-shadow: var(--cc-shadow-sm);
+}
+
+.header-button:active:not(:disabled),
+.quiet-button:active:not(:disabled),
+.secondary-button:active:not(:disabled),
+.icon-button:active:not(:disabled) {
+  box-shadow: none;
+  transform: translateY(0.5px);
 }
 
 .icon-button {
@@ -237,15 +284,50 @@ code,
 .champion-button {
   gap: 8px;
   min-height: 40px;
-  padding: 0 16px;
+  padding: 0 18px;
   background: var(--cc-lamp);
-  color: #16120b;
+  color: var(--cc-lamp-ink);
+  font-size: 14px;
+  font-weight: 620;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--cc-lamp) 42%, transparent);
+}
+
+.primary-button:hover:not(:disabled),
+.champion-button:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--cc-lamp) 38%, transparent);
+}
+
+.primary-button:active:not(:disabled),
+.champion-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--cc-lamp) 42%, transparent);
+}
+
+.danger-button {
+  gap: 8px;
+  padding: 0 12px;
+  border-color: color-mix(in srgb, var(--cc-fail) 60%, var(--cc-edge));
+  background: color-mix(in srgb, var(--cc-fail) 7%, var(--cc-graphite));
+  color: var(--cc-fail);
+  font-size: 12px;
   font-weight: 650;
 }
 
-.primary-button:hover,
-.champion-button:hover {
-  filter: brightness(1.06);
+.danger-button:hover:not(:disabled) {
+  border-color: var(--cc-fail);
+  background: color-mix(in srgb, var(--cc-fail) 12%, var(--cc-graphite));
+}
+
+.danger-button.is-solid {
+  background: var(--cc-fail);
+  border-color: var(--cc-fail);
+  color: #fff9f8;
+}
+
+.danger-button.is-solid:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cc-fail) 88%, #ffffff);
 }
 
 .full-width {
@@ -306,6 +388,7 @@ code,
   margin: 12px 0 0;
   color: var(--cc-mist);
   font-size: 15px;
+  line-height: 1.55;
 }
 
 .studio-actions {
@@ -374,36 +457,211 @@ code,
 }
 
 .stamp-menu {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.stamp-menu label {
+.stamp-menu > span {
   color: var(--cc-mist);
   font-size: 11px;
 }
 
-.select-wrap {
-  position: relative;
+.stamp-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 164px;
+  height: 34px;
+  gap: 8px;
+  padding: 0 9px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 8px;
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+  font-size: 12px;
+  transition: border-color 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    background 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.select-wrap select {
-  min-width: 142px;
-  height: 34px;
-  appearance: none;
-  padding: 0 30px 0 10px;
+.stamp-trigger:hover {
+  border-color: var(--cc-edge-strong);
+}
+
+.stamp-trigger span {
+  flex: 1;
+  text-align: left;
+}
+
+.stamp-trigger > svg:first-child,
+.stamp-option > svg {
+  color: var(--cc-lamp);
+}
+
+.stamp-trigger > svg:last-child {
+  color: var(--cc-mist);
+}
+
+.stamp-popover {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + 8px);
+  left: 0;
+  display: grid;
+  width: 250px;
+  padding: 5px;
   border: 1px solid var(--cc-edge);
-  border-radius: 6px;
+  border-radius: 10px;
+  /* Was a hardcoded #13171e — always dark. .stamp-option text below is
+     var(--cc-chalk), which is near-black in light mode, so a fixed dark
+     panel made every "Add stamp" row unreadable in light theme. */
+  background: var(--cc-slate);
+  box-shadow: var(--cc-shadow);
+}
+
+.stamp-option {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  min-height: 34px;
+  gap: 9px;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--cc-chalk);
+  text-align: left;
+  font-size: 12px;
+  transition: background 140ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Same color-coded chip as the on-canvas kind badge (CanvasStudio's
+   KIND_META) — learning the mapping here is what makes the canvas badge
+   legible at a glance instead of just another icon to memorize. */
+.stamp-option__swatch {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.stamp-option:hover,
+.stamp-option:focus-visible {
+  /* Distinct from .stamp-popover's own --cc-slate background — was the same
+     token as the popover itself, so hover produced no visible feedback. */
+  background: var(--cc-graphite);
+}
+
+.stamp-option small {
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 9px;
+}
+
+.design-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.design-control {
+  display: grid;
+  gap: 3px;
+}
+
+.design-control > label,
+.design-control > span,
+.intensity-control > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cc-mist);
+  font-size: 9px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.design-select select {
+  min-width: 92px;
+  height: 28px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 5px;
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+  font-size: 11px;
+}
+
+/* The archetype decides the layout shell, the background, the component
+   vocabulary, and the motion system for the whole run. It is the one control
+   here that is not a token tweak, so it reads first and reads differently. */
+.design-select--archetype select {
+  min-width: 132px;
+  border-color: color-mix(in srgb, var(--cc-lamp) 45%, var(--cc-edge));
+  background: color-mix(in srgb, var(--cc-lamp) 10%, var(--cc-slate));
+  font-weight: 600;
+}
+
+.design-select--archetype > label {
+  color: var(--cc-lamp);
+}
+
+.shape-control > div {
+  display: flex;
+  height: 28px;
+  overflow: hidden;
+  border: 1px solid var(--cc-edge);
+  border-radius: 5px;
+}
+
+.shape-option {
+  display: grid;
+  width: 28px;
+  place-items: center;
+  border: 0;
+  border-right: 1px solid var(--cc-edge);
   background: var(--cc-slate);
 }
 
-.select-wrap svg {
-  position: absolute;
-  top: 10px;
-  right: 9px;
-  pointer-events: none;
-  color: var(--cc-mist);
+.shape-option:last-child {
+  border-right: 0;
+}
+
+.shape-option.is-active {
+  /* Was a hardcoded dark slate (#313b4a) — looked like a leftover dark-theme
+     chip once the toolbar itself went light. */
+  background: color-mix(in srgb, var(--cc-lamp) 22%, var(--cc-slate));
+}
+
+.shape-swatch {
+  display: block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid var(--cc-chalk);
+}
+
+.shape-swatch.is-sharp {
+  border-radius: 1px;
+}
+
+.shape-swatch.is-soft {
+  border-radius: 4px;
+}
+
+.shape-swatch.is-pill {
+  border-radius: 999px;
+}
+
+.intensity-control {
+  min-width: 92px;
+}
+
+.intensity-control input {
+  width: 100%;
+  accent-color: var(--cc-lamp);
 }
 
 .zoom-control {
@@ -437,15 +695,65 @@ code,
   position: relative;
   min-height: 420px;
   overflow: hidden;
-  background-color: #08090c;
+  /* Was hardcoded to #08090c + a #191d24 grid — always dark, so panning or
+     zooming out past the white Konva artboard showed dark letterboxing
+     around it even in light theme. This is DOM chrome around the artboard,
+     not the artboard itself (that's the Konva Rect fill in CanvasStudio,
+     themed to match via the `theme` prop). */
+  background-color: var(--cc-graphite);
   background-image:
-    linear-gradient(#191d24 1px, transparent 1px),
-    linear-gradient(90deg, #191d24 1px, transparent 1px);
+    linear-gradient(var(--cc-edge) 1px, transparent 1px),
+    linear-gradient(90deg, var(--cc-edge) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .stage-shell.is-drawing canvas {
   cursor: crosshair;
+}
+
+/*
+ * Kind recognition system (CanvasStudio's KIND_META): a colored, iconed
+ * chip anchored to each stamp's top-left corner, on top of the Konva canvas.
+ * It exists in the DOM rather than as a Konva node so it can reuse the exact
+ * lucide icons already shown in the "Add stamp" menu — same icon there and
+ * on the canvas — and so the badge keeps a fixed screen size independent of
+ * canvas zoom, like a layer marker in a design tool. It replaces the old
+ * plain-text "NAVBAR"/"CARD"/… caption once printed under every element,
+ * which is also what collided with short elements' label text (a 48px-tall
+ * input's caption sat inside the label's own line height).
+ */
+.kind-badge-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.kind-badge {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 2px solid var(--cc-slate);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+/* A small dot marking an element findCanvasGuardrails flagged — a nudge,
+   not a blocker, so it rides on the identity badge rather than replacing
+   it or touching the shape's own selection outline. */
+.kind-badge__flag {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1.5px solid var(--cc-slate);
+  background: var(--cc-warn);
 }
 
 .canvas-tip {
@@ -460,8 +768,11 @@ code,
   transform: translateX(-50%);
   border: 1px solid var(--cc-lamp-dim);
   border-radius: 6px;
-  background: #15130f;
-  color: #f0b860;
+  /* Was a hardcoded dark chip (#15130f bg, #f0b860 text) regardless of
+     theme — readable on its own, but an un-themed dark badge floating over
+     an otherwise light toolbar. */
+  background: var(--cc-graphite);
+  color: var(--cc-lamp);
   font-size: 11px;
   pointer-events: none;
 }
@@ -502,21 +813,14 @@ code,
 
 .selection-inspector label,
 .field,
-.patch-field {
-  display: grid;
-  gap: 7px;
-}
-
 .selection-inspector label span,
-.field span,
-.patch-field span {
+.field span {
   color: var(--cc-mist);
   font-size: 11px;
 }
 
 .selection-inspector input,
-.field input,
-.patch-field textarea {
+.field input {
   width: 100%;
   min-height: 38px;
   border: 1px solid var(--cc-edge);
@@ -542,6 +846,325 @@ code,
   border-radius: 4px;
   color: var(--cc-mist);
   font-size: 11px;
+}
+
+/*
+ * Soft placement guardrails (findCanvasGuardrails) — never blocks
+ * generation, so they read as an amber nudge, not the neutral tip styling
+ * above or a hard error. Text stays --cc-chalk (not --cc-warn, which is
+ * only ever used as a small dot fill and isn't tuned for text contrast).
+ */
+.canvas-guidance span.canvas-guidance-item--guardrail {
+  border-color: color-mix(in srgb, var(--cc-warn) 55%, var(--cc-edge));
+  background: color-mix(in srgb, var(--cc-warn) 12%, transparent);
+  color: var(--cc-chalk);
+}
+
+.canvas-guidance-item--guardrail svg {
+  color: var(--cc-warn);
+  flex-shrink: 0;
+}
+
+/*
+ * The board opens empty now instead of pre-loaded with one fixed sketch, so
+ * this fills that gap: it sits on top of Canvas Studio (`.studio-canvas-wrap`
+ * is its positioning parent) at the same rounded rect, matching
+ * `.canvas-studio`'s own border-radius so the seam disappears.
+ */
+.studio-canvas-wrap {
+  position: relative;
+}
+
+.template-picker {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--cc-graphite) 97%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.template-picker__intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 26px 4px;
+}
+
+.template-picker__intro h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--cc-chalk);
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.template-picker__intro h2 svg {
+  color: var(--cc-lamp);
+}
+
+.template-picker__intro .header-button {
+  flex-shrink: 0;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  gap: 18px;
+  padding: 16px 26px 26px;
+}
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cc-edge);
+  border-radius: 12px;
+  background: var(--cc-slate);
+  transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 180ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.template-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cc-lamp-dim);
+  box-shadow: var(--cc-shadow);
+}
+
+.template-thumb {
+  display: block;
+  width: 100%;
+  height: 148px;
+  border-bottom: 1px solid var(--cc-edge);
+}
+
+.template-thumb__board {
+  fill: var(--cc-void);
+}
+
+/* Modal stamps in the preview render as an overlay layer: the scrim dims the
+   drawn layout, and the dialog keeps a raised, bright-edged surface on top so
+   the overlap reads as depth, not a placement bug. Same value works in both
+   themes — a translucent black scrim is the universal "something is on top". */
+.template-thumb__scrim {
+  fill: #06070a;
+  opacity: 0.46;
+}
+
+.template-thumb__overlay-shadow {
+  fill: #000000;
+  opacity: 0.3;
+}
+
+.template-thumb__overlay {
+  opacity: 0.96;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 8;
+  paint-order: stroke;
+}
+
+.template-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+}
+
+.template-card__archetype {
+  color: var(--cc-lamp);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.template-card__body h3 {
+  margin: 0;
+  color: var(--cc-chalk);
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.template-card__body > p {
+  margin: 0;
+  color: var(--cc-mist);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Custom markers instead of list-style: disc — the default bullets sat too
+   far from the text and rendered heavy at this size. */
+.template-card__body ul {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 14px;
+  padding: 0;
+  list-style: none;
+  color: var(--cc-mist);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.template-card__body li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.template-card__body li::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cc-lamp-dim);
+}
+
+.template-card__body .primary-button {
+  justify-content: center;
+  width: 100%;
+}
+
+/* Unlike the fixed four-template grid, a workspace list is often one or two
+   cards — `auto-fit` alone would stretch a lone card the full row width, so
+   this caps each column instead of letting it run away. */
+.workspace-grid {
+  grid-template-columns: repeat(auto-fill, minmax(268px, 360px));
+}
+
+.picker-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 18px 26px 0;
+}
+
+.picker-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--cc-mist);
+  font-size: 13px;
+  font-weight: 560;
+  transition: color 160ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.picker-tab + .picker-tab {
+  margin-left: 14px;
+}
+
+.picker-tab:hover {
+  color: var(--cc-chalk);
+}
+
+.picker-tab[aria-selected="true"] {
+  color: var(--cc-chalk);
+  border-bottom-color: var(--cc-lamp);
+}
+
+.workspace-card__hit {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.workspace-card__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cc-void) 82%, transparent);
+  border: 1px solid var(--cc-edge);
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.workspace-card__badge.is-serving {
+  color: var(--cc-live);
+  border-color: color-mix(in srgb, var(--cc-live) 55%, var(--cc-edge));
+}
+
+.workspace-card__body h3 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--cc-chalk);
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-card__meta {
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 11px;
+}
+
+.workspace-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.workspace-card__open {
+  flex: 1;
+  justify-content: space-between;
+}
+
+.workspace-card__delete {
+  flex-shrink: 0;
+}
+
+.workspace-card__delete:hover {
+  border-color: color-mix(in srgb, var(--cc-fail) 60%, var(--cc-edge));
+  color: var(--cc-fail);
+}
+
+.workspace-card__confirm {
+  display: flex;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.workspace-card__confirm-yes {
+  border-color: color-mix(in srgb, var(--cc-fail) 60%, var(--cc-edge));
+  background: color-mix(in srgb, var(--cc-fail) 10%, var(--cc-graphite));
+  color: var(--cc-fail);
+}
+
+.workspace-card__confirm-yes:hover {
+  border-color: var(--cc-fail);
+  background: color-mix(in srgb, var(--cc-fail) 16%, var(--cc-graphite));
 }
 
 .generation-page {
@@ -638,10 +1261,10 @@ code,
 .generation-log li {
   position: relative;
   display: grid;
-  grid-template-columns: 30px 1fr auto;
+  grid-template-columns: 36px 1fr auto;
   align-items: center;
-  gap: 10px;
-  min-height: 76px;
+  gap: 12px;
+  min-height: 52px;
   border-bottom: 1px solid var(--cc-edge);
   color: var(--cc-mist);
 }
@@ -654,10 +1277,13 @@ code,
 .generation-log li.is-active .stage-icon {
   color: var(--cc-lamp);
   border-color: var(--cc-lamp-dim);
+  background: color-mix(in srgb, var(--cc-lamp) 12%, var(--cc-void));
 }
 
 .generation-log li.is-complete .stage-icon {
   color: var(--cc-live);
+  border-color: var(--cc-live);
+  background: color-mix(in srgb, var(--cc-live) 12%, var(--cc-void));
 }
 
 .generation-log li > div {
@@ -667,14 +1293,11 @@ code,
 
 .generation-log li strong {
   font-size: 13px;
+  font-weight: 600;
 }
 
-.generation-log li span,
 .generation-log li small {
   font-size: 10px;
-}
-
-.generation-log li small {
   color: var(--cc-live);
   font-family: "Geist Mono Variable", monospace;
 }
@@ -682,10 +1305,12 @@ code,
 .stage-icon {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--cc-edge);
   border-radius: 50%;
+  background: var(--cc-void);
+  transition: color 200ms, border-color 200ms, background 200ms;
 }
 
 .spin {
@@ -694,6 +1319,111 @@ code,
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Stage outcome: a drawn tick replaces the "done" / "degraded" text. The mark
+   strokes itself on once, the badge gives a small settle pop. Colour carries
+   the outcome the word used to — green ok, amber degraded, red failed. */
+.stage-check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: var(--cc-live);
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  animation: stage-check-pop 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stage-check[data-outcome="degraded"] {
+  color: var(--cc-warn);
+}
+
+.stage-check[data-outcome="failed"] {
+  color: #e5484d;
+}
+
+.stage-check__mark {
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation: stage-check-draw 420ms cubic-bezier(0.16, 1, 0.3, 1) 90ms forwards;
+}
+
+@keyframes stage-check-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes stage-check-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Overall progress across the trace, HeroUI ProgressBar anatomy: a labelled
+   output plus a track that a fill grows across. Determinate while stages
+   report; indeterminate sweep during the opening `pending` wait. */
+.generation-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cc-edge);
+}
+
+.generation-progress__track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cc-mist) 22%, transparent);
+  overflow: hidden;
+}
+
+.generation-progress__fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cc-live);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.generation-progress__output {
+  min-width: 3.5ch;
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.generation-progress[data-indeterminate] .generation-progress__fill {
+  width: 38%;
+  transform: none;
+  animation: generation-progress-sweep 1.15s ease-in-out infinite;
+}
+
+@keyframes generation-progress-sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-check {
+    animation: none;
+  }
+  .stage-check__mark {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .generation-progress__fill {
+    transition: none;
+  }
+  .generation-progress[data-indeterminate] .generation-progress__fill {
+    animation: none;
+  }
 }
 
 .review-page {
@@ -1014,53 +1744,6 @@ code,
   accent-color: var(--cc-lamp);
 }
 
-.state-lock {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 42px;
-  margin-bottom: 10px;
-  padding: 5px 7px;
-  overflow-x: auto;
-  border: 1px solid var(--cc-edge);
-  border-radius: 6px;
-  background: var(--cc-graphite);
-}
-
-.state-lock > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding-right: 10px;
-  border-right: 1px solid var(--cc-edge);
-  color: var(--cc-mist);
-  font-family: "Geist Mono Variable", monospace;
-  font-size: 9px;
-  white-space: nowrap;
-}
-
-.state-lock > div {
-  display: flex;
-  gap: 3px;
-}
-
-.state-lock button {
-  min-height: 30px;
-  padding: 0 9px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--cc-mist);
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.state-lock button.is-active {
-  color: var(--cc-chalk);
-  background: var(--cc-slate);
-  box-shadow: inset 0 -2px var(--cc-lamp);
-}
-
 .preview-frame {
   width: 100%;
   min-height: 500px;
@@ -1095,6 +1778,23 @@ code,
   white-space: nowrap;
 }
 
+.preview-frame-action {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--cc-mist);
+}
+
+.preview-frame-action:hover {
+  color: var(--cc-chalk);
+  background: var(--cc-slate);
+}
+
 .preview-frame-body {
   min-height: 468px;
   padding: 10px;
@@ -1106,6 +1806,155 @@ code,
   min-height: 468px;
   border: 0;
   background: var(--cc-paper);
+}
+
+/* One iframe per serving branch, stacked. The selected one shows; the rest keep
+   their document booted behind `hidden` so switching back is instant. */
+.live-branch-frame {
+  position: relative;
+  width: 100%;
+  min-height: 468px;
+}
+
+.live-branch-frame .live-branch-preview {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.live-branch-frame__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  color: var(--lbf-text, var(--cc-chalk));
+  background:
+    radial-gradient(120% 90% at 12% -10%, color-mix(in srgb, var(--lbf-accent, #6d5efc) 16%, transparent) 0%, transparent 60%),
+    var(--lbf-bg, var(--cc-paper));
+  animation: live-branch-frame-in 240ms ease both;
+}
+
+.live-branch-frame__loading[data-reduced-motion='true'] {
+  animation: none;
+}
+
+.live-branch-frame__mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--lbf-accent-contrast, #fff);
+  background: var(--lbf-accent, #6d5efc);
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--lbf-accent, #6d5efc) 60%, transparent);
+  animation: live-branch-frame-pulse var(--lbf-duration, 900ms) var(--lbf-ease, ease-in-out) infinite alternate;
+}
+
+.live-branch-frame__loading[data-reduced-motion='true'] .live-branch-frame__mark {
+  animation: none;
+}
+
+.live-branch-frame__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.live-branch-frame__hint {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lbf-muted, var(--cc-mist));
+}
+
+.live-branch-frame__bars {
+  display: grid;
+  gap: 7px;
+  width: min(220px, 60%);
+}
+
+.live-branch-frame__bars span {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lbf-text, var(--cc-chalk)) 12%, transparent);
+  overflow: hidden;
+}
+
+.live-branch-frame__bars span::after {
+  content: '';
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--lbf-accent, #6d5efc) 55%, transparent);
+  animation: live-branch-frame-sweep 1.1s var(--lbf-ease, ease-in-out) infinite;
+}
+
+.live-branch-frame__bars span:nth-child(2)::after { animation-delay: 0.12s; }
+.live-branch-frame__bars span:nth-child(3)::after { animation-delay: 0.24s; }
+
+.live-branch-frame__loading[data-reduced-motion='true'] .live-branch-frame__bars span::after {
+  animation: none;
+  width: 65%;
+}
+
+@keyframes live-branch-frame-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes live-branch-frame-pulse {
+  from { transform: scale(1); opacity: 0.85; }
+  to { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes live-branch-frame-sweep {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(320%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-branch-frame__loading,
+  .live-branch-frame__mark,
+  .live-branch-frame__bars span::after {
+    animation: none;
+  }
+}
+
+/* Fill the actual screen once the frame is the fullscreen element — the
+   fixed min-heights above are sized for the review panel, not a viewport. */
+.preview-frame.is-fullscreen,
+.preview-frame:fullscreen {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+
+.preview-frame.is-fullscreen .preview-frame-body,
+.preview-frame:fullscreen .preview-frame-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.preview-frame.is-fullscreen .live-branch-preview,
+.preview-frame:fullscreen .live-branch-preview,
+.preview-frame.is-fullscreen .live-branch-frame,
+.preview-frame:fullscreen .live-branch-frame,
+.preview-frame.is-fullscreen .branch-preview,
+.preview-frame:fullscreen .branch-preview {
+  height: 100%;
+  min-height: 0;
 }
 
 .branch-strip {
@@ -1122,17 +1971,24 @@ code,
   gap: 9px;
   min-width: 0;
   min-height: 58px;
-  padding: 7px 9px;
+  padding: 8px 10px;
   border: 1px solid var(--cc-edge);
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--cc-graphite);
   text-align: left;
+  transition: transform 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 150ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    background 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .branch-card:hover,
 .branch-card.is-selected {
   border-color: var(--cc-lamp-dim);
   background: var(--cc-slate);
+}
+
+.branch-card:hover:not(.is-retired):not(.is-selected) {
+  transform: translateY(-1px);
 }
 
 .branch-card.is-retired {
@@ -1165,7 +2021,7 @@ code,
 .branch-title strong {
   overflow: hidden;
   font-family: "Bricolage Grotesque Variable", sans-serif;
-  font-size: 12px;
+  font-size: 12.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1175,13 +2031,13 @@ code,
   align-items: center;
   gap: 4px;
   color: var(--cc-live);
-  font-size: 8px;
+  font-size: 9px;
 }
 
 .branch-card code {
   overflow: hidden;
   color: var(--cc-mist);
-  font-size: 8px;
+  font-size: 9px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1215,7 +2071,28 @@ code,
   overflow-y: auto;
 }
 
-.director-summary,
+/* The Director tab is chat-led: the stacked inspector cards take only what
+   they need (scrolling among themselves past a point) and the chat claims the
+   rest of the panel, so its history is never squeezed into a token strip. */
+.director-content.is-director {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.director-content.is-director > .panel-heading {
+  flex: none;
+}
+
+/* Capped and self-scrolling: the cards above the chat can never push it out of
+   reach, however many recommendations a branch accumulates. */
+.director-stack {
+  flex: 0 0 auto;
+  min-height: 0;
+  max-height: min(34%, 300px);
+  overflow-y: auto;
+}
+
 .inspector-section,
 .source-hero,
 .provenance-list,
@@ -1226,46 +2103,9 @@ code,
 .remix-grid,
 .remix-preview,
 .director-content > .primary-button,
-.director-content > .champion-button {
+.director-stack > .champion-button {
   margin-right: 12px;
   margin-left: 12px;
-}
-
-.director-summary {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0 16px;
-  border-bottom: 1px solid var(--cc-edge);
-}
-
-.director-summary p {
-  margin: 0;
-  color: var(--cc-mist);
-  font-size: 11px;
-}
-
-.director-score {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--cc-lamp);
-}
-
-.director-score span {
-  display: grid;
-}
-
-.director-score strong {
-  font-family: "Bricolage Grotesque Variable", sans-serif;
-  font-size: 22px;
-  line-height: 1;
-}
-
-.director-score small {
-  color: var(--cc-mist);
-  font-size: 8px;
 }
 
 .inspector-section {
@@ -1337,9 +2177,9 @@ code,
 }
 
 .recommendation-card {
-  padding: 10px;
+  padding: 12px;
   border: 1px solid var(--cc-edge);
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--cc-slate);
 }
 
@@ -1349,16 +2189,37 @@ code,
 
 .recommendation-heading {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
   color: var(--cc-lamp);
   font-family: "Geist Mono Variable", monospace;
-  font-size: 8px;
+  font-size: 9px;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
+/* Pushes the applied tick to the far edge, keeping the two labels together. */
+.recommendation-heading > :last-child {
+  margin-left: auto;
+}
+
+.recommendation-source {
+  padding: 1px 5px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 999px;
+  color: var(--cc-mist);
+  letter-spacing: 0.04em;
+}
+
+.recommendation-source.source-ai {
+  border-color: color-mix(in srgb, var(--cc-lamp) 55%, var(--cc-edge));
+  color: var(--cc-lamp);
+}
+
 .recommendation-card h3 {
-  margin: 6px 0 5px;
-  font-size: 12px;
+  margin: 7px 0 5px;
+  font-size: 12.5px;
+  line-height: 1.3;
 }
 
 .recommendation-card p,
@@ -1366,7 +2227,8 @@ code,
   display: block;
   margin: 0;
   color: var(--cc-mist);
-  font-size: 10px;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .recommendation-card small {
@@ -1374,22 +2236,99 @@ code,
   font-family: "Geist Mono Variable", monospace;
 }
 
+/* The actual change, not a description of it. */
+.rec-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 7px 8px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 6px;
+  background: var(--cc-graphite);
+}
+
+.rec-preview__swatch {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  border: 1px solid var(--cc-edge-strong);
+  border-radius: 4px;
+}
+
+.rec-preview--swap .rec-preview__body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rec-preview--swap .rec-preview__body strong {
+  overflow: hidden;
+  color: var(--cc-chalk);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rec-preview--swap .rec-preview__body small {
+  margin-top: 0 !important;
+  color: var(--cc-mist);
+  font-family: inherit !important;
+  font-size: 9px;
+}
+
+.rec-preview--tokens {
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.rec-preview__token {
+  display: grid;
+  gap: 3px;
+}
+
+.rec-preview__pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--cc-mist);
+}
+
+.rec-preview__pair--value code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--cc-void);
+  color: var(--cc-chalk);
+  font-size: 9px;
+}
+
+.rec-preview__token small {
+  margin-top: 0 !important;
+  color: var(--cc-mist);
+  font-family: inherit !important;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .recommendation-card button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   min-height: 30px;
-  margin-top: 9px;
-  padding: 0 9px;
+  margin-top: 10px;
+  padding: 0 10px;
   border: 1px solid var(--cc-edge-strong);
-  border-radius: 5px;
+  border-radius: 7px;
   background: transparent;
-  font-size: 10px;
+  font-size: 10.5px;
+  transition: background 160ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.patch-field textarea {
-  min-height: 80px;
-  resize: vertical;
+.recommendation-card button:hover:not(:disabled) {
+  border-color: var(--cc-lamp-dim);
+  background: color-mix(in srgb, var(--cc-lamp) 8%, transparent);
 }
 
 .field-error {
@@ -1398,10 +2337,492 @@ code,
   font-size: 10px;
 }
 
+/* ── Design chat ─────────────────────────────────────────────────────── */
+
+.design-chat {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 0;
+}
+
+.design-chat-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.design-chat-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 9px;
+  background: var(--cc-void);
+}
+
+.design-chat-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 7px;
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--cc-mist);
+  font-size: 10px;
+  transition: background-color 0.18s, color 0.18s, transform 0.12s;
+}
+
+.design-chat-tabs button:active {
+  transform: scale(0.94);
+}
+
+.design-chat-tabs button.is-active {
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+  box-shadow: var(--cc-shadow-sm);
+}
+
+.design-chat-tabs em {
+  border-radius: 4px;
+  padding: 0 4px;
+  background: color-mix(in srgb, var(--cc-lamp) 16%, transparent);
+  color: var(--cc-lamp);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 9px;
+  font-style: normal;
+}
+
+.design-chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+
+.design-chat-actions .icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--cc-mist);
+  transition: background-color 0.15s, color 0.15s, transform 0.12s;
+}
+
+.design-chat-actions .icon-button:hover {
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+}
+
+.design-chat-actions .icon-button:active {
+  transform: scale(0.94);
+}
+
+.design-chat-menu {
+  position: relative;
+}
+
+.design-chat-menu-popover {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  z-index: 5;
+  display: grid;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 8px;
+  background: var(--cc-slate);
+  box-shadow: var(--cc-shadow-sm);
+}
+
+.design-chat-menu-popover button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 5px;
+  padding: 7px 8px;
+  background: transparent;
+  color: var(--cc-fail);
+  font-size: 11px;
+  text-align: left;
+}
+
+.design-chat-menu-popover button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cc-fail) 12%, transparent);
+}
+
+.design-chat-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.design-chat-empty {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
+  margin: auto 0;
+  padding: 20px 14px;
+  color: var(--cc-mist);
+  text-align: center;
+  font-size: 11px;
+}
+
+.design-chat-empty p {
+  margin: 0;
+  color: var(--cc-chalk);
+  font-size: 11px;
+}
+
+.design-chat-empty small {
+  max-width: 210px;
+  color: var(--cc-mist);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.design-chat-empty-glyph {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 10px;
+  background: var(--cc-graphite);
+  color: var(--cc-lamp);
+}
+
+.design-chat-entry {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.design-chat-row.is-user {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.design-chat-bubble {
+  margin: 0;
+  border: 1px solid var(--cc-edge);
+  border-radius: 12px 12px 4px 12px;
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+  padding: 7px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.design-chat-reply {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 20px;
+}
+
+.design-chat-reply-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  border: 0;
+  border-radius: 6px;
+  padding: 2px 5px 2px 4px;
+  margin-left: -4px;
+  background: transparent;
+  color: var(--cc-mist);
+  font-size: 10px;
+  transition: background-color 0.15s;
+}
+
+.design-chat-reply-meta:not(:disabled):hover {
+  background: var(--cc-graphite);
+}
+
+.design-chat-reply-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  border-radius: 4px;
+  padding: 0 2px 0 4px;
+  background: var(--cc-graphite);
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 9px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.design-chat-entry:hover .design-chat-reply-count,
+.design-chat-entry.is-expanded .design-chat-reply-count,
+.design-chat-reply-meta:focus-visible .design-chat-reply-count {
+  opacity: 1;
+}
+
+.design-chat-chevron {
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.design-chat-entry.is-expanded .design-chat-chevron {
+  transform: rotate(90deg);
+}
+
+.design-chat-delta {
+  display: grid;
+  gap: 5px;
+  margin: 2px 0 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.design-chat-delta li {
+  display: grid;
+  gap: 2px;
+  border-left: 2px solid var(--cc-edge-strong);
+  padding: 3px 0 3px 7px;
+}
+
+.design-chat-delta-key {
+  color: var(--cc-mist);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.design-chat-delta-values {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--cc-mist);
+}
+
+.design-chat-delta-values code {
+  min-width: 0;
+  overflow: hidden;
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.design-chat-delta-values .is-before {
+  color: var(--cc-mist);
+  text-decoration: line-through;
+  text-decoration-color: var(--cc-edge-strong);
+}
+
+.design-chat-delta-values .is-after {
+  color: var(--cc-lamp);
+}
+
+.design-chat-state-icon.is-live {
+  color: var(--cc-live);
+}
+
+.design-chat-state-icon.is-fail {
+  color: var(--cc-fail);
+}
+
+.design-chat-state-icon.is-muted {
+  color: var(--cc-mist);
+}
+
+.design-chat-reply-label {
+  color: var(--cc-chalk);
+  font-weight: 500;
+}
+
+.design-chat-reply-time::before {
+  content: "· ";
+}
+
+.design-chat-reply-body {
+  margin: 0;
+  color: var(--cc-chalk);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.design-chat-entry.state-reverted .design-chat-reply-body {
+  text-decoration: line-through;
+  text-decoration-color: var(--cc-edge-strong);
+}
+
+.design-chat-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cc-graphite);
+  color: var(--cc-mist);
+  opacity: 0;
+  transition: opacity 0.15s, background-color 0.15s, color 0.15s;
+}
+
+.design-chat-entry:hover .design-chat-delete,
+.design-chat-delete:focus-visible {
+  opacity: 1;
+}
+
+.design-chat-delete:hover {
+  background: color-mix(in srgb, var(--cc-fail) 18%, var(--cc-graphite));
+  color: var(--cc-fail);
+}
+
+.design-chat-typing {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--cc-mist);
+  font-size: 11px;
+}
+
+.design-chat-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.design-chat-dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cc-lamp);
+}
+
+.design-chat-composer {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--cc-edge);
+  border-radius: 12px;
+  background: var(--cc-graphite);
+  padding: 9px 9px 8px;
+  cursor: text;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.design-chat-composer:focus-within {
+  border-color: var(--cc-edge-strong);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc-lamp) 10%, transparent);
+}
+
+.design-chat-composer textarea {
+  min-height: 38px;
+  max-height: 132px;
+  border: 0;
+  background: transparent;
+  color: var(--cc-chalk);
+  font-size: 12px;
+  line-height: 1.45;
+  resize: none;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.design-chat-composer textarea:focus-visible {
+  outline: none;
+}
+
+.design-chat-composer-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.design-chat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin-right: auto;
+  border: 1px solid var(--cc-edge);
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: var(--cc-void);
+  color: var(--cc-mist);
+  font-size: 9px;
+}
+
+.design-chat-chip span {
+  min-width: 0;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.design-chat-hint {
+  color: var(--cc-mist);
+  font-family: "Geist Mono Variable", monospace;
+  font-size: 9px;
+}
+
+.design-chat-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--cc-lamp);
+  color: var(--cc-lamp-ink);
+  transition: transform 0.12s, background-color 0.18s, color 0.18s;
+}
+
+.design-chat-send:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.design-chat-send:disabled {
+  border-color: var(--cc-edge);
+  background: transparent;
+  color: var(--cc-mist);
+}
+
 .champion-button {
   width: calc(100% - 24px);
   margin-top: 14px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
+}
+
+.branch-delete-button {
+  width: calc(100% - 24px);
+  margin: 0 12px 18px;
 }
 
 .compact-empty {
@@ -1477,9 +2898,9 @@ code,
 .why-card,
 .guardrail-card,
 .remix-preview {
-  padding: 11px;
+  padding: 12px;
   border: 1px solid var(--cc-edge);
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--cc-slate);
 }
 
@@ -1487,13 +2908,15 @@ code,
 .remix-preview span {
   color: var(--cc-lamp);
   font-family: "Geist Mono Variable", monospace;
-  font-size: 8px;
+  font-size: 9.5px;
+  letter-spacing: 0.03em;
 }
 
 .why-card p {
   margin: 6px 0 0;
   color: var(--cc-mist);
-  font-size: 10px;
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .guardrail-card {
@@ -1510,12 +2933,13 @@ code,
 
 .guardrail-card strong {
   color: var(--cc-chalk);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .guardrail-card span {
   color: var(--cc-mist);
-  font-size: 9px;
+  font-size: 10px;
+  line-height: 1.4;
 }
 
 .remix-intro {
@@ -1600,27 +3024,134 @@ code,
   color: var(--cc-mist);
 }
 
+.workspace-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: var(--cc-overlay);
+}
+
+.workspace-transition-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 16px 22px;
+  border: 1px solid var(--cc-edge-strong);
+  border-radius: 8px;
+  background: var(--cc-slate);
+  color: var(--cc-chalk);
+  font-size: 13px;
+  box-shadow: var(--cc-shadow);
+}
+
+.workspace-transition-card .spin {
+  color: var(--cc-live);
+}
+
+.branch-delete-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--cc-overlay);
+}
+
+.branch-delete-modal {
+  width: min(390px, 100%);
+  padding: 20px;
+  border: 1px solid var(--cc-edge-strong);
+  border-radius: 8px;
+  background: var(--cc-slate);
+  box-shadow: var(--cc-shadow);
+}
+
+.branch-delete-modal-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 16px;
+  border: 1px solid color-mix(in srgb, var(--cc-fail) 56%, var(--cc-edge));
+  border-radius: 7px;
+  color: var(--cc-fail);
+  background: color-mix(in srgb, var(--cc-fail) 8%, var(--cc-graphite));
+}
+
+.branch-delete-modal .eyebrow {
+  margin-bottom: 5px;
+  color: var(--cc-fail);
+}
+
+.branch-delete-modal h2 {
+  margin: 0;
+  font-family: "Bricolage Grotesque Variable", sans-serif;
+  font-size: 20px;
+}
+
+.branch-delete-modal > p:last-of-type {
+  margin: 9px 0 18px;
+  color: var(--cc-mist);
+  font-size: 12px;
+}
+
+.branch-delete-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.branch-delete-modal-actions button {
+  width: 100%;
+}
+
 .mobile-menu,
 .mobile-panel-tabs {
   display: none;
 }
 
 /* Local generated branch preview */
+/* The offline branch simulation carries the same visual axes as the real
+   renderer — backdrop, surface fill, elevation — so the three directions read
+   as different here for the same reasons they do in the live iframe. */
 .branch-preview {
   position: relative;
   width: 100%;
   min-height: 448px;
   overflow: hidden;
   border-radius: 6px;
-  background: var(--pv-bg);
+  background: var(--pv-backdrop, var(--pv-bg));
   color: var(--pv-text);
   font-family: var(--pv-body);
-  transition: background-color var(--pv-duration) var(--pv-easing);
+  transition: background var(--pv-duration) var(--pv-easing);
 }
 
 .branch-preview button,
 .branch-preview input {
   font-family: inherit;
+}
+
+/* Panels use the manifest's surface treatment. Glass is behind @supports so a
+   browser without backdrop-filter gets an opaque panel, not a washed-out one. */
+.branch-preview > header,
+.branch-preview .preview-metrics > article,
+.branch-preview .preview-insights,
+.branch-preview .preview-activity,
+.branch-preview .preview-modal {
+  background: var(--pv-surface-fill, var(--pv-surface));
+  box-shadow: var(--pv-shadow, none);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .branch-preview > header,
+  .branch-preview .preview-metrics > article,
+  .branch-preview .preview-modal {
+    backdrop-filter: blur(var(--pv-blur, 0px)) saturate(1.4);
+    -webkit-backdrop-filter: blur(var(--pv-blur, 0px)) saturate(1.4);
+  }
 }
 
 .branch-preview > header {
@@ -1630,7 +3161,6 @@ code,
   min-height: 54px;
   padding: 0 calc(var(--pv-space) * 5);
   border-bottom: 1px solid var(--pv-border);
-  background: var(--pv-surface);
 }
 
 .preview-brand {
@@ -2229,6 +3759,22 @@ code,
     min-height: calc(100vh - 196px);
   }
 
+  /* One column, page-level scrolling: the chat no longer competes for a fixed
+     panel height, so let it flow and cap the history instead. */
+  .director-content.is-director {
+    display: block;
+    overflow: visible;
+  }
+
+  .director-stack {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .design-chat-body {
+    max-height: 55vh;
+  }
+
   .preview-panel {
     min-height: calc(100vh - 196px);
   }
@@ -2271,7 +3817,7 @@ code,
   }
 
   .toolbar-divider,
-  .stamp-menu label,
+  .stamp-menu > span,
   .zoom-control,
   .studio-footer .quiet-button {
     display: none;
@@ -2282,9 +3828,28 @@ code,
     width: 100%;
   }
 
-  .select-wrap,
-  .select-wrap select {
+  .stamp-trigger {
     width: 100%;
+  }
+
+  .stamp-popover {
+    width: 100%;
+  }
+
+  .design-controls {
+    order: 5;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .design-select select,
+  .intensity-control {
+    width: 100%;
+  }
+
+  .intensity-control {
+    grid-column: span 2;
   }
 
   .studio-footer {
@@ -2338,21 +3903,6 @@ code,
     flex: 1;
   }
 
-  .state-lock {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .state-lock > span {
-    padding: 0 0 5px;
-    border-right: 0;
-    border-bottom: 1px solid var(--cc-edge);
-  }
-
-  .state-lock > div {
-    width: 100%;
-    overflow-x: auto;
-  }
 
   .preview-frame-body {
     padding: 5px;

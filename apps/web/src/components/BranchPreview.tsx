@@ -12,11 +12,78 @@ import { useEffect, useMemo, useState } from 'react';
 import type { StateKind, VariantManifest } from '@canvascraft/schema';
 import { DEMO_SPEC } from '../lib/demo';
 
+/**
+ * Backdrop and surface treatments, mirrored from the branch template.
+ *
+ * This component is a *simulation* of a generated branch, shown only when no
+ * Daytona sandbox is serving the real thing — the iframe is always the source
+ * of truth, and the frame bar says so. It is kept on the same visual axes as
+ * the real renderer (backdrop, surface fill, elevation, motion language) rather
+ * than pixel-matched to it: a mock that reproduces the template exactly is a
+ * second copy of the template to keep in sync, and a mock that ignores those
+ * axes tells the reviewer the three directions look alike when they do not.
+ */
+function backdropFor(palette: VariantManifest['palette']): string {
+  const { background, surfaceRaised, accent, scheme } = palette;
+  const veil = scheme === 'dark' ? 22 : 12;
+
+  switch (palette.backdrop) {
+    case 'wash':
+      return `radial-gradient(120% 80% at 12% -10%, color-mix(in srgb, ${accent} ${veil}%, transparent) 0%, transparent 60%), ${background}`;
+    case 'aurora':
+      return `radial-gradient(65% 45% at 20% 6%, color-mix(in srgb, ${accent} ${veil + 10}%, transparent) 0%, transparent 62%), radial-gradient(60% 45% at 88% 26%, color-mix(in srgb, ${palette.positive} ${veil}%, transparent) 0%, transparent 60%), ${background}`;
+    case 'spotlight':
+      return `radial-gradient(70% 55% at 50% -15%, color-mix(in srgb, ${surfaceRaised} 85%, transparent) 0%, transparent 65%), ${background}`;
+    case 'grain':
+      return `linear-gradient(180deg, color-mix(in srgb, ${surfaceRaised} 55%, ${background}) 0%, ${background} 42%), ${background}`;
+    case 'flat':
+    default:
+      return background;
+  }
+}
+
+function surfaceFillFor(manifest: VariantManifest, raised: boolean): string {
+  const { palette, form } = manifest;
+  const base = raised ? palette.surfaceRaised : palette.surface;
+  const dark = palette.scheme === 'dark';
+
+  switch (form.surface) {
+    case 'glass':
+      return `color-mix(in srgb, ${base} ${dark ? 62 : 72}%, transparent)`;
+    case 'gradient':
+      return `linear-gradient(165deg, color-mix(in srgb, ${palette.accent} ${dark ? 12 : 7}%, ${base}) 0%, ${base} 46%, color-mix(in srgb, ${palette.background} ${dark ? 40 : 55}%, ${base}) 100%)`;
+    case 'outline':
+      return 'transparent';
+    case 'solid':
+    default:
+      return base;
+  }
+}
+
+const ELEVATION_SHADOW: Record<VariantManifest['form']['elevation'], (dark: boolean) => string> = {
+  flat: () => 'none',
+  hairline: () => '0 0 0 1px var(--pv-border)',
+  raised: (dark) =>
+    dark
+      ? '0 1px 1px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.4)'
+      : '0 1px 1px rgba(16,20,28,0.05), 0 4px 10px rgba(16,20,28,0.07)',
+  lifted: (dark) =>
+    dark
+      ? '0 2px 3px rgba(0,0,0,0.55), 0 10px 24px rgba(0,0,0,0.45)'
+      : '0 2px 3px rgba(16,20,28,0.06), 0 10px 24px rgba(16,20,28,0.09)',
+};
+
 function branchVars(manifest: VariantManifest): React.CSSProperties {
   const radius = manifest.form.radiusOuterPx;
+  const dark = manifest.palette.scheme === 'dark';
   return {
     '--pv-bg': manifest.palette.background,
+    '--pv-backdrop': backdropFor(manifest.palette),
     '--pv-surface': manifest.palette.surface,
+    '--pv-surface-fill': surfaceFillFor(manifest, false),
+    '--pv-surface-fill-raised': surfaceFillFor(manifest, true),
+    '--pv-blur': manifest.form.surface === 'glass' ? '14px' : '0px',
+    '--pv-shadow': ELEVATION_SHADOW[manifest.form.elevation](dark),
     '--pv-raised': manifest.palette.surfaceRaised,
     '--pv-border': manifest.palette.border,
     '--pv-text': manifest.palette.textPrimary,
@@ -31,6 +98,7 @@ function branchVars(manifest: VariantManifest): React.CSSProperties {
     '--pv-display': manifest.typography.displayFamily,
     '--pv-body': manifest.typography.bodyFamily,
     '--pv-duration': `${manifest.motion.durationMs}ms`,
+    '--pv-duration-fast': `${Math.round(manifest.motion.durationMs * 0.4)}ms`,
     '--pv-easing': manifest.motion.easing,
   } as React.CSSProperties;
 }
@@ -93,9 +161,14 @@ export function BranchPreview({
 
   const metrics = DEMO_SPEC.fixtures.find((entry) => entry.regionId === 'metric-shelf')?.records ?? [];
   const activity = DEMO_SPEC.fixtures.find((entry) => entry.regionId === 'activity-table')?.records ?? [];
-  const transition = reducedMotion ? { duration: 0 } : manifest.motion.preset === 'playful'
-    ? { type: 'spring' as const, stiffness: 300, damping: 22 }
-    : { duration: manifest.motion.durationMs / 1000 };
+  // Keyed off the motion *language*, not the preset: the preset is the run-wide
+  // tempo the toolbar locks, so branching on it made all three simulations move
+  // identically — the same bug the real renderer had.
+  const transition = reducedMotion
+    ? { duration: 0 }
+    : manifest.motion.language === 'spring'
+      ? { type: 'spring' as const, stiffness: 300, damping: 22 }
+      : { duration: manifest.motion.durationMs / 1000 };
 
   const regionClass = (id: string) => `preview-region ${selectedRegion === id ? 'is-highlighted' : ''}`;
 
@@ -192,7 +265,7 @@ export function BranchPreview({
                       setModalOpen(true);
                       onSelectRegion('insight-deck');
                     }}
-                    initial={reducedMotion ? false : { opacity: 0, x: manifest.motion.preset === 'editorial' ? 0 : -10 }}
+                    initial={reducedMotion ? false : { opacity: 0, x: manifest.motion.language === 'cut' ? 0 : -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ ...transition, delay: reducedMotion ? 0 : index * manifest.motion.staggerMs / 1000 }}
                   >
@@ -253,7 +326,7 @@ export function BranchPreview({
               aria-modal="true"
               aria-labelledby="insight-dialog-title"
               className={`${regionClass('insight-dialog')} preview-modal`}
-              initial={reducedMotion ? false : { opacity: 0, scale: manifest.motion.preset === 'editorial' ? 1 : 0.96, y: 10 }}
+              initial={reducedMotion ? false : { opacity: 0, scale: manifest.motion.language === 'cut' ? 1 : 0.96, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={transition}

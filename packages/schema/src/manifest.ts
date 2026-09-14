@@ -1,10 +1,19 @@
 import { z } from 'zod';
 import {
+  BackdropTreatment,
+  ButtonShape,
+  GENOME_MAX_LENGTH,
   HexColor,
   LicenseId,
+  MotionLanguage,
   MotionPreset,
+  PageArchetype,
   PatternSource,
   Slug,
+  SurfaceTreatment,
+  type MotionIntensity,
+  type RiskLevel,
+  type SemanticRole,
 } from './primitives.js';
 import { MatchSource } from './registry.js';
 import type { ScreenSpec } from './screen-spec.js';
@@ -36,6 +45,13 @@ export const PaletteTraits = z.object({
   critical: HexColor,
   /** Dark or light base. Affects the branch's own shadow and glow treatment. */
   scheme: z.enum(['light', 'dark']),
+  /**
+   * What sits behind the page. Lives in the palette group because it is made
+   * entirely of these colours — the renderer derives every gradient stop from
+   * `background`, `surfaceRaised`, and `accent` rather than inventing hues, so
+   * a Trait Remix that takes this palette takes a coherent backdrop with it.
+   */
+  backdrop: BackdropTreatment,
 });
 export type PaletteTraits = z.infer<typeof PaletteTraits>;
 
@@ -66,12 +82,18 @@ export const FormTraits = z.object({
   radiusStepPx: z.number().min(0).max(8),
   borderWidthPx: z.number().min(0.5).max(2),
   elevation: z.enum(['flat', 'hairline', 'raised', 'lifted']),
+  /**
+   * How a panel is filled. Orthogonal to `elevation`: elevation is how far a
+   * panel sits off the page, this is what it is made of. Glass needs a backdrop
+   * worth blurring, which is why the compiler pairs the two.
+   */
+  surface: SurfaceTreatment,
 });
 export type FormTraits = z.infer<typeof FormTraits>;
 
 /** Trait group: control treatment. */
 export const ControlTraits = z.object({
-  buttonShape: z.enum(['sharp', 'soft', 'pill']),
+  buttonShape: ButtonShape,
   buttonFill: z.enum(['solid', 'tonal', 'outline', 'ghost']),
   inputStyle: z.enum(['outlined', 'filled', 'underlined']),
   iconWeight: z.enum(['light', 'regular', 'bold']),
@@ -83,12 +105,30 @@ export type ControlTraits = z.infer<typeof ControlTraits>;
 /** Trait group: motion. A named preset plus bounded tuning. */
 export const MotionTraits = z.object({
   preset: MotionPreset,
-  /** Base duration for a standard transition. */
-  durationMs: z.number().int().min(80).max(600),
+  /**
+   * The mechanism, where `preset` is the tempo.
+   *
+   * Two directions on the same preset but different languages read as two
+   * different products; two directions on the same language differ only in
+   * pacing. This is the axis the toolbar deliberately does not lock.
+   */
+  language: MotionLanguage,
+  /**
+   * Base duration for a standard transition.
+   *
+   * The ceiling is 900ms rather than 600 because a scroll-driven reveal or a
+   * pinned hero legitimately runs longer than a button hover, and clamping
+   * those down to 600 flattened every direction onto the same timing.
+   */
+  durationMs: z.number().int().min(80).max(900),
   /** CSS timing function or a Motion spring descriptor. */
   easing: z.string().max(120),
-  /** Stagger between sibling items entering. 0 disables staggering. */
-  staggerMs: z.number().int().min(0).max(120),
+  /**
+   * Stagger between sibling items entering. 0 disables staggering. The ceiling
+   * matches the compiler's own clamp; they disagreed before, so an expressive
+   * cascade could be built and then rejected by this schema.
+   */
+  staggerMs: z.number().int().min(0).max(240),
   /** Scale of the entrance transform, 0–1. 0 means opacity only. */
   travel: z.number().min(0).max(1),
   /**
@@ -164,10 +204,21 @@ export const VariantManifest = z.object({
   /** Branch name, e.g. "Calm Trust". Shown on the plate. */
   name: z.string().max(60),
   /**
-   * The Design Genome: a one-line human summary such as
-   * "Midnight palette · rounded controls · calm motion".
+   * The kind of page every direction in this run is building.
+   *
+   * Deliberately *not* a trait group: it is chosen once in the canvas toolbar
+   * and shared, exactly like the Screen Spec, because three directions for
+   * three different kinds of website compare nothing. It sits here rather than
+   * only in the spec because the renderer needs it to pick a layout shell, and
+   * the renderer only ever receives the manifest.
    */
-  genome: z.string().max(140),
+  archetype: PageArchetype,
+  /**
+   * The Design Genome: a one-line human summary such as
+   * "Midnight palette · rounded controls · calm motion", with the locked
+   * toolbar axes appended by the compiler.
+   */
+  genome: z.string().max(GENOME_MAX_LENGTH),
   /** One sentence on what this direction is arguing for. */
   rationale: z.string().max(400),
 
@@ -239,6 +290,87 @@ export function findManifestIntegrityIssues(
 }
 
 /**
+ * Roles whose region is dense body content a reader scans rather than a
+ * showcase. An `expressive`-motion pattern in one of these is the shape of
+ * every "component overlaps / is truncated / animates on load" bug a generated
+ * page ships: it overflows its box, cycles content mid-read, or starts moving
+ * before the reader has looked at it.
+ *
+ * Canonical here: the orchestrator's selection guard imports this same set, so
+ * the pattern it keeps out of the candidate list and the pattern this backstop
+ * rejects can never drift apart.
+ */
+export const BODY_CONTENT_ROLES: ReadonlySet<SemanticRole> = new Set<SemanticRole>([
+  'insight-card',
+  'metric-tile',
+  'list-row',
+  'data-table',
+  'form-field',
+  'search-control',
+  'filter-control',
+  'tab-strip',
+]);
+
+/** The registry facts this backstop needs about one selected pattern. */
+export interface ManifestPatternContext {
+  name: string;
+  motionIntensity: MotionIntensity;
+  mobileRisk: RiskLevel;
+  fallbackId: string | null;
+}
+
+/**
+ * Run-blocking backstop for a manifest whose pattern selections fight their
+ * context.
+ *
+ * The orchestrator's `buildCandidates` already keeps these patterns out of the
+ * candidate list, so a deterministic direction can never reach this. It exists
+ * for the paths that bypass the candidate list — an AI-authored direction, a
+ * Trait Remix, a hand-edited manifest — where a wrong selection would otherwise
+ * only be caught by a person looking at the rendered branch.
+ *
+ * `resolvePattern` is supplied by the caller (which owns the registry) so this
+ * module stays registry-free. A selection whose record cannot be resolved is
+ * left alone: unknown records are already `findManifestIntegrityIssues`' job.
+ */
+export function findManifestContextIssues(
+  manifest: VariantManifest,
+  spec: ScreenSpec,
+  resolvePattern: (recordId: string) => ManifestPatternContext | undefined,
+): string[] {
+  const issues: string[] = [];
+  const roleByRegion = new Map(spec.regions.map((region) => [region.id, region.role]));
+
+  for (const selection of manifest.selections) {
+    const record = resolvePattern(selection.recordId);
+    const role = roleByRegion.get(selection.regionId);
+    if (!record || !role) continue;
+
+    if (record.motionIntensity === 'expressive' && BODY_CONTENT_ROLES.has(role)) {
+      issues.push(
+        `Branch "${manifest.name}" puts the expressive-motion pattern "${record.name}" on "${selection.regionId}" (${role}), which is scanned content and needs a still treatment.`,
+      );
+    } else if (
+      record.motionIntensity === 'expressive' &&
+      manifest.archetype === 'application' &&
+      role !== 'hero-statement'
+    ) {
+      issues.push(
+        `Branch "${manifest.name}" is an application surface but places the expressive-motion pattern "${record.name}" on "${selection.regionId}" (${role}); only a hero region may carry that motion here.`,
+      );
+    }
+
+    if (record.mobileRisk === 'high' && record.fallbackId === null) {
+      issues.push(
+        `Branch "${manifest.name}" selects "${record.name}" for "${selection.regionId}", which is high mobile risk with no declared narrow-width fallback.`,
+      );
+    }
+  }
+
+  return issues;
+}
+
+/**
  * Compose a new manifest from trait groups taken from parent manifests.
  *
  * This is the whole of Trait Remix. It operates on validated data, never on
@@ -261,6 +393,13 @@ export function composeRemix(args: {
   if (parentSpecs.size !== 1) {
     throw new Error('Trait Remix requires every parent manifest to belong to the same Screen Spec.');
   }
+  // Archetype is shared per run, so parents can only disagree if a manifest was
+  // hand-edited or came from another run. Composing across archetypes would
+  // hand the renderer a marketing motion language inside a dashboard shell.
+  const parentArchetypes = new Set(TRAIT_GROUPS.map((group) => sources[group].archetype));
+  if (parentArchetypes.size !== 1) {
+    throw new Error('Trait Remix requires every parent manifest to share one page archetype.');
+  }
 
   const traitOrigins: Lineage['traitOrigins'] = {
     palette: sources.palette.id,
@@ -278,6 +417,7 @@ export function composeRemix(args: {
     version: 1,
     id: args.id,
     name: args.name,
+    archetype: anchor.archetype,
     genome: args.genome,
     rationale: args.rationale,
     palette: sources.palette.palette,

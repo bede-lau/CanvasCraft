@@ -2,10 +2,17 @@ packages:
   - "apps/*"
   - "packages/schema"
   - "packages/registry"
+  - "packages/branch-qa"
 
 # packages/branch-template is deliberately EXCLUDED from the workspace.
 # It is a standalone project that gets copied verbatim into Daytona sandboxes,
 # so it must never resolve dependencies through the host workspace's node_modules.
+#
+# packages/branch-qa IS a workspace member. It renders the branch template's
+# components out-of-tree against every generated manifest and asserts they do
+# not overflow, truncate, break interactivity, or animate on load. It mirrors
+# the template's runtime libraries as its own devDependencies so the template's
+# package.json — the literal input to the Daytona snapshot — stays untouched.
 
 onlyBuiltDependencies:
   - esbuild

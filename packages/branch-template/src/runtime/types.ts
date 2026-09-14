@@ -170,6 +170,18 @@ export interface ScreenSpec {
   createdAt: string;
 }
 
+/** What kind of page this branch is. Selects the layout shell and vocabulary. */
+export type PageArchetype = 'marketing' | 'application' | 'portfolio' | 'ai-native';
+
+/** The mechanism a direction moves by, as opposed to how fast. */
+export type MotionLanguage = 'reveal' | 'cascade' | 'spring' | 'parallax' | 'cut';
+
+/** What a panel is made of. Orthogonal to how far it sits off the page. */
+export type SurfaceTreatment = 'solid' | 'glass' | 'gradient' | 'outline';
+
+/** What sits behind everything. */
+export type BackdropTreatment = 'flat' | 'wash' | 'aurora' | 'grain' | 'spotlight';
+
 export interface PaletteTraits {
   name: string;
   background: string;
@@ -183,6 +195,7 @@ export interface PaletteTraits {
   positive: string;
   critical: string;
   scheme: 'light' | 'dark';
+  backdrop: BackdropTreatment;
 }
 
 export interface TypographyTraits {
@@ -204,6 +217,7 @@ export interface FormTraits {
   radiusStepPx: number;
   borderWidthPx: number;
   elevation: 'flat' | 'hairline' | 'raised' | 'lifted';
+  surface: SurfaceTreatment;
 }
 
 export interface ControlTraits {
@@ -219,6 +233,7 @@ export type MotionPreset = 'calm' | 'playful' | 'editorial';
 
 export interface MotionTraits {
   preset: MotionPreset;
+  language: MotionLanguage;
   durationMs: number;
   easing: string;
   staggerMs: number;
@@ -234,7 +249,7 @@ export interface RegionSelection {
   license: string;
   licenseNotice: string | null;
   matchScore: number;
-  matchSource: 'nosana' | 'local';
+  matchSource: 'openai' | 'local';
   whyItFits: string;
   fallbackReason: string | null;
 }
@@ -258,6 +273,8 @@ export interface VariantManifest {
   version: 1;
   id: string;
   name: string;
+  /** Selects the layout shell, backdrop, and component vocabulary. */
+  archetype: PageArchetype;
   genome: string;
   rationale: string;
   palette: PaletteTraits;

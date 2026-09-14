@@ -8,7 +8,8 @@ import { SCREEN_SPEC } from './screen-spec';
 export const VARIANT_MANIFEST: VariantManifest = {
   version: 1,
   id: 'branch-calm',
-  name: 'Calm Trust',
+  name: 'Composed Depth',
+  archetype: 'application',
   genome: 'Mineral palette / soft controls / calm motion',
   rationale: 'Reduce cognitive noise so portfolio risk reads as measured and credible.',
   palette: {
@@ -24,6 +25,7 @@ export const VARIANT_MANIFEST: VariantManifest = {
     positive: '#347856',
     critical: '#9b4f49',
     scheme: 'light',
+    backdrop: 'wash',
   },
   typography: {
     displayFamily: 'ui-rounded, "Avenir Next", "Segoe UI", sans-serif',
@@ -42,7 +44,8 @@ export const VARIANT_MANIFEST: VariantManifest = {
     radiusOuterPx: 16,
     radiusStepPx: 4,
     borderWidthPx: 1,
-    elevation: 'hairline',
+    elevation: 'raised',
+    surface: 'gradient',
   },
   controls: {
     buttonShape: 'soft',
@@ -54,10 +57,11 @@ export const VARIANT_MANIFEST: VariantManifest = {
   },
   motion: {
     preset: 'calm',
-    durationMs: 260,
-    easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-    staggerMs: 40,
-    travel: 0.25,
+    language: 'reveal',
+    durationMs: 448,
+    easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    staggerMs: 60,
+    travel: 0.41,
     reducedMotion: 'fade-only',
   },
   selections: SCREEN_SPEC.regions.map((region) => ({

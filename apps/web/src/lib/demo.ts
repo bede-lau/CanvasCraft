@@ -14,6 +14,23 @@ import { assessRecord, getRegistryRecord, matchLocally } from '@canvascraft/regi
 const now = '2026-08-29T09:00:00.000+08:00';
 const specHash = '4df1e2c7b29e0c3de9801527c36562e9c52ce49b0ad2ffae421ce78fbcdd78d0';
 
+/**
+ * What the Canvas Studio actually opens on.
+ *
+ * The board used to open pre-loaded with the dashboard sketch below — nobody
+ * could tell that from an intentionally-drawn one, and it quietly steered
+ * every first run toward the same layout. The board now opens empty; this
+ * demo sketch (and the manifests/spec built from it) still exists purely to
+ * back the offline generation fallback, review-mode fixtures, and tests.
+ */
+export const EMPTY_CANVAS = CanvasDoc.parse({
+  version: 1,
+  id: 'canvas-blank',
+  size: { width: 1120, height: 720 },
+  createdAt: now,
+  updatedAt: now,
+});
+
 export const DEFAULT_CANVAS = CanvasDoc.parse({
   version: 1,
   id: 'canvas-demo',
@@ -240,12 +257,21 @@ export const DEMO_SPEC = ScreenSpec.parse({
   createdAt: now,
 });
 
+/**
+ * The offline demo's three directions.
+ *
+ * Kept deliberately close to what `buildDirections` produces for the
+ * `application` archetype, so the demo path and a real run show the same kind
+ * of difference between branches: same tempo, three motion languages, three
+ * surface treatments.
+ */
 function manifest(
   id: string,
   name: string,
   genome: string,
   rationale: string,
   preset: MotionPreset,
+  motion: Pick<VariantManifest['motion'], 'language' | 'durationMs' | 'staggerMs' | 'travel' | 'easing'>,
   palette: VariantManifest['palette'],
   form: VariantManifest['form'],
   controls: VariantManifest['controls'],
@@ -255,6 +281,7 @@ function manifest(
     version: 1,
     id,
     name,
+    archetype: DEMO_ARCHETYPE,
     genome,
     rationale,
     palette,
@@ -271,12 +298,7 @@ function manifest(
     },
     form,
     controls,
-    motion:
-      preset === 'calm'
-        ? { preset, durationMs: 260, easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)', staggerMs: 40, travel: 0.25, reducedMotion: 'fade-only' }
-        : preset === 'playful'
-          ? { preset, durationMs: 380, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', staggerMs: 70, travel: 0.7, reducedMotion: 'fade-only' }
-          : { preset, durationMs: 180, easing: 'cubic-bezier(0.2, 0, 0, 1)', staggerMs: 20, travel: 0.1, reducedMotion: 'instant' },
+    motion: { preset, ...motion, reducedMotion: preset === 'editorial' ? 'instant' : 'fade-only' },
     selections,
     lineage: {
       specId: DEMO_SPEC.id,
@@ -317,17 +339,21 @@ const baseSelections: VariantManifest['selections'] = DEMO_SPEC.regions.map((reg
     matchScore: localMatch?.score ?? 0.58,
     matchSource: 'local',
     whyItFits: localMatch?.rationale ?? `Gate-approved local fallback for the shared ${region.role} contract.`,
-    fallbackReason: localMatch ? null : 'Nosana is unavailable; the reviewed local catalogue supplied a compatible fallback.',
+    fallbackReason: localMatch ? null : 'OpenAI visual ranking is unavailable; the reviewed local catalogue supplied a compatible fallback.',
   };
 });
+
+/** The offline demo builds an application-archetype run. */
+const DEMO_ARCHETYPE = 'application' as const;
 
 export const INITIAL_MANIFESTS: VariantManifest[] = [
   manifest(
     'branch-calm',
-    'Calm Trust',
-    'Mineral palette · soft controls · calm motion',
+    'Composed Depth',
+    'Mineral palette · layered surfaces · sections that resolve as you reach them',
     'Reduces cognitive noise so portfolio risk reads as measured and credible.',
     'calm',
+    { language: 'reveal', durationMs: 448, staggerMs: 60, travel: 0.41, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
     {
       name: 'Mineral',
       background: '#f4f6f3',
@@ -341,17 +367,19 @@ export const INITIAL_MANIFESTS: VariantManifest[] = [
       positive: '#347856',
       critical: '#9b4f49',
       scheme: 'light',
+      backdrop: 'wash',
     },
-    { spaceUnitPx: 4, density: 'roomy', radiusOuterPx: 16, radiusStepPx: 4, borderWidthPx: 1, elevation: 'hairline' },
+    { spaceUnitPx: 5, density: 'roomy', radiusOuterPx: 18, radiusStepPx: 4, borderWidthPx: 1, elevation: 'raised', surface: 'glass' },
     { buttonShape: 'soft', buttonFill: 'solid', inputStyle: 'outlined', iconWeight: 'regular', iconSizePx: 18, focusRing: 'ring' },
     baseSelections,
   ),
   manifest(
     'branch-playful',
-    'Playful Momentum',
-    'Electric palette · pill controls · playful motion',
+    'Kinetic Signal',
+    'Electric palette · springy controls · groups that arrive in sequence',
     'Makes positive movement feel tangible while keeping the data contract intact.',
     'playful',
+    { language: 'spring', durationMs: 575, staggerMs: 152, travel: 1, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' },
     {
       name: 'Electric',
       background: '#10131a',
@@ -365,17 +393,19 @@ export const INITIAL_MANIFESTS: VariantManifest[] = [
       positive: '#69c38c',
       critical: '#e78279',
       scheme: 'dark',
+      backdrop: 'aurora',
     },
-    { spaceUnitPx: 4, density: 'regular', radiusOuterPx: 20, radiusStepPx: 5, borderWidthPx: 1, elevation: 'lifted' },
-    { buttonShape: 'pill', buttonFill: 'solid', inputStyle: 'filled', iconWeight: 'bold', iconSizePx: 18, focusRing: 'underglow' },
+    { spaceUnitPx: 4, density: 'regular', radiusOuterPx: 24, radiusStepPx: 6, borderWidthPx: 1, elevation: 'lifted', surface: 'gradient' },
+    { buttonShape: 'pill', buttonFill: 'solid', inputStyle: 'filled', iconWeight: 'bold', iconSizePx: 20, focusRing: 'underglow' },
     baseSelections,
   ),
   manifest(
     'branch-editorial',
     'Editorial Precision',
-    'Paper palette · sharp controls · editorial motion',
+    'Paper palette · flat planes · movement that never delays a read',
     'Prioritises hierarchy and scanning speed for dense, repeated review work.',
     'editorial',
+    { language: 'cut', durationMs: 210, staggerMs: 15, travel: 0.08, easing: 'cubic-bezier(0.2, 0, 0, 1)' },
     {
       name: 'Paper',
       background: '#f5f1e9',
@@ -389,9 +419,10 @@ export const INITIAL_MANIFESTS: VariantManifest[] = [
       positive: '#497253',
       critical: '#a34037',
       scheme: 'light',
+      backdrop: 'grain',
     },
-    { spaceUnitPx: 4, density: 'compact', radiusOuterPx: 4, radiusStepPx: 2, borderWidthPx: 1.5, elevation: 'flat' },
-    { buttonShape: 'sharp', buttonFill: 'outline', inputStyle: 'underlined', iconWeight: 'light', iconSizePx: 17, focusRing: 'outline' },
+    { spaceUnitPx: 6, density: 'compact', radiusOuterPx: 3, radiusStepPx: 1, borderWidthPx: 1, elevation: 'hairline', surface: 'solid' },
+    { buttonShape: 'sharp', buttonFill: 'outline', inputStyle: 'underlined', iconWeight: 'light', iconSizePx: 18, focusRing: 'outline' },
     baseSelections,
   ),
 ];
@@ -439,12 +470,13 @@ export const INITIAL_RECOMMENDATIONS: Recommendation[] = [
 ];
 
 export const RUN_STAGES = [
-  { actor: 'CanvasCraft', label: 'Mapping stamps and arrows', detail: '7 regions · 2 interactions' },
-  { actor: 'Local demo', label: 'Interpreting wireframe', detail: 'Deterministic Screen Spec fallback' },
-  { actor: 'Local matcher', label: 'Matching visual UI patterns', detail: 'Nosana unavailable · metadata fallback' },
-  { actor: 'CanvasCraft', label: 'Checking licences and compatibility', detail: 'Base UI stack approved' },
-  { actor: 'Local demo', label: 'Proposing three directions', detail: 'Schema-valid manifests from fixtures' },
-  { actor: 'Local preview', label: 'Preparing comparable branches', detail: 'Daytona unavailable · in-browser simulation' },
+  { stage: 'pre-pass', actor: 'CanvasCraft', label: 'Mapping stamps and arrows', detail: '7 regions · 2 interactions' },
+  { stage: 'interpreting', actor: 'Local demo', label: 'Interpreting wireframe', detail: 'Deterministic Screen Spec fallback' },
+  { stage: 'visual-matching', actor: 'Local matcher', label: 'Matching visual UI patterns', detail: 'OpenAI visual ranking unavailable · metadata fallback' },
+  { stage: 'licence-gate', actor: 'CanvasCraft', label: 'Checking licences and compatibility', detail: 'Base UI stack approved' },
+  { stage: 'proposing-directions', actor: 'Local demo', label: 'Proposing three directions', detail: 'Schema-valid manifests from fixtures' },
+  { stage: 'layout-audit', actor: 'Local demo', label: 'Auditing layout', detail: 'Static layout-risk pass · no revisions needed' },
+  { stage: 'sandbox-launch', actor: 'Local preview', label: 'Preparing comparable branches', detail: 'Daytona unavailable · in-browser simulation' },
 ] as const;
 
 export function updateManifest(

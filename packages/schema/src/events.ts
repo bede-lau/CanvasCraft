@@ -23,8 +23,10 @@ export const RunStage = z.enum([
   'visual-matching',
   'licence-gate',
   'proposing-directions',
+  'layout-audit',
   'materialising',
   'sandbox-launch',
+  'design-review',
   'ready',
 ]);
 export type RunStage = z.infer<typeof RunStage>;
@@ -96,7 +98,7 @@ export const RunEvent = z.discriminatedUnion('type', [
     matchSource: MatchSource,
     /** Shown as "Matching visual UI patterns" with candidates and confidence. */
     matches: z.array(PatternMatch),
-    /** Present when the Nosana endpoint was unavailable. Never hidden. */
+    /** Present when the OpenAI visual ranker was unavailable. Never hidden. */
     degradedReason: z.string().nullable().default(null),
   }),
 
@@ -158,6 +160,14 @@ export const RunEvent = z.discriminatedUnion('type', [
 
   z.object({
     ...base,
+    type: z.literal('patch-deleted'),
+    branchId: z.string(),
+    patchId: z.string(),
+    regionId: z.string(),
+  }),
+
+  z.object({
+    ...base,
     type: z.literal('champion-selected'),
     branchId: z.string(),
     /** Branch ids stopped or archived as a result. */
@@ -190,22 +200,26 @@ export const STAGE_LABELS: Record<RunStage, string> = {
   'visual-matching': 'Matching visual UI patterns',
   'licence-gate': 'Checking licences and compatibility',
   'proposing-directions': 'Proposing three directions',
+  'layout-audit': 'Auditing layout',
   materialising: 'Applying design directions',
   'sandbox-launch': 'Starting live branches',
+  'design-review': 'Reviewing each branch',
   ready: 'Branches live',
 };
 
 /** Which integration owns each stage. Rendered as an attribution in the strip. */
-export const STAGE_ACTOR: Record<RunStage, 'canvascraft' | 'ai' | 'nosana' | 'daytona'> = {
+export const STAGE_ACTOR: Record<RunStage, 'canvascraft' | 'ai' | 'daytona'> = {
   'canvas-received': 'canvascraft',
   'pre-pass': 'canvascraft',
   interpreting: 'ai',
   'awaiting-approval': 'canvascraft',
   'retrieval-requests': 'ai',
-  'visual-matching': 'nosana',
+  'visual-matching': 'ai',
   'licence-gate': 'canvascraft',
   'proposing-directions': 'ai',
+  'layout-audit': 'ai',
   materialising: 'canvascraft',
   'sandbox-launch': 'daytona',
+  'design-review': 'ai',
   ready: 'canvascraft',
 };

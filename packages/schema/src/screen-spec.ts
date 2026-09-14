@@ -208,12 +208,55 @@ export function findSpecIntegrityIssues(spec: ScreenSpec): string[] {
       if (!regionIds.has(childId)) {
         issues.push(`Region "${region.id}" nests unknown region "${childId}".`);
       }
+      if (childId === region.id) {
+        issues.push(`Region "${region.id}" nests itself.`);
+      }
+    }
+    if (new Set(region.children).size !== region.children.length) {
+      issues.push(`Region "${region.id}" lists the same child more than once.`);
     }
     for (const stateId of region.visibleInStates) {
       if (!stateIds.has(stateId)) {
         issues.push(`Region "${region.id}" references undeclared state "${stateId}".`);
       }
     }
+  }
+
+  /*
+   * Nesting has to be a forest, not a graph. The renderer walks `children`
+   * recursively from every unparented region, so a second parent renders a
+   * region twice and a cycle never terminates.
+   */
+  const parentOf = new Map<string, string>();
+  for (const region of spec.regions) {
+    for (const childId of region.children) {
+      if (!regionIds.has(childId) || childId === region.id) continue;
+      const existing = parentOf.get(childId);
+      if (existing && existing !== region.id) {
+        issues.push(`Region "${childId}" is nested inside both "${existing}" and "${region.id}".`);
+        continue;
+      }
+      parentOf.set(childId, region.id);
+    }
+  }
+  const settled = new Set<string>();
+  for (const startId of parentOf.keys()) {
+    if (settled.has(startId)) continue;
+    const path = [startId];
+    const onPath = new Set(path);
+    let current = parentOf.get(startId);
+    while (current && !settled.has(current)) {
+      if (onPath.has(current)) {
+        issues.push(`Region nesting forms a cycle through "${current}".`);
+        break;
+      }
+      path.push(current);
+      onPath.add(current);
+      current = parentOf.get(current);
+    }
+    // Whether this walk ended at a root or in a cycle, every region on it is
+    // now accounted for; revisiting one would only repeat the same finding.
+    for (const id of path) settled.add(id);
   }
 
   for (const interaction of spec.interactions) {

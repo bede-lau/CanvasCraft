@@ -46,33 +46,32 @@ CanvasCraft shortens that loop:
 The result is a faster path from an idea to a reviewable decision: not one
 opaque mockup, but three coherent, working directions with a clear lineage.
 
-## Integrated sponsor impact
+## Integrated product impact
 
 CanvasCraft is designed so each integrated platform changes the product outcome
 in a visible, meaningful way. Integrations are not hidden API checkboxes; their
 results appear directly in the generation trace, branch cards, provenance, and
 review workflow.
 
-### Nosana: visual intelligence grounded in the sketch
+### OpenAI: visual intelligence grounded in the sketch
 
-Nosana powers the visual-matching stage. In a credentialed live run, CanvasCraft
-calls a containerized CLIP image-embedding service deployed on Nosana GPU
-compute and sends each relevant canvas region to it alongside reviewed component
-thumbnails. Nosana returns ranked visual-similarity candidates with confidence
-scores, helping CanvasCraft select UI patterns that are visually appropriate for
-the actual wireframe rather than merely textually plausible.
+OpenAI powers the visual-matching stage. In a credentialed live run, CanvasCraft
+sends labelled comparison sheets containing each wireframe region and its
+reviewed component candidates to a dedicated vision reranker. The default is
+`gpt-5.6-luna`, chosen for economical, batched ranking; a stronger configured
+vision model remains available for canvas interpretation and design direction.
 
 That matters because a checkout panel, analytics card, inbox list, or filter
-drawer is defined by its visual structure as much as its label. The Nosana
-match feeds a curated Component Intelligence Registry, where licence,
-compatibility, mobile risk, accessibility guidance, and source provenance are
-checked before a candidate can reach a prototype branch.
+drawer is defined by its visual structure as much as its label. The model can
+only reorder candidates from the curated Component Intelligence Registry, where
+licence, compatibility, mobile risk, accessibility guidance, and source
+provenance are checked before a candidate can reach a prototype branch.
 
-**Impact:** GPU-assisted matching makes design retrieval more faithful to the
-user's visual intent, while the registry keeps the resulting prototypes
-traceable and license-aware. The reviewer can see whether a match came from
-Nosana or an explicitly labelled local fallback; CanvasCraft never fabricates a
-live sponsor call.
+**Impact:** Cost-conscious visual ranking makes design retrieval more faithful
+to the user's visual intent, while the registry keeps the resulting prototypes
+traceable and licence-aware. The reviewer can see whether a match came from
+OpenAI or an explicitly labelled local fallback; CanvasCraft never fabricates a
+model-ranked result.
 
 ### Daytona: three real prototypes, not three static mockups
 
@@ -95,11 +94,10 @@ champion, and automatically retire the branches that did not win. This reduces
 prototype waste while giving teams a much stronger artifact for user testing,
 demo feedback, and build planning.
 
-### AI: structured intent compilation, not unbounded generation
+### OpenAI: structured intent compilation, not unbounded generation
 
 CanvasCraft uses a provider-neutral, OpenAI-compatible AI endpoint to understand
-the visual canvas and produce structured outputs. The AI is deliberately not
-presented as a sponsor integration. Its role is to compile intent into a
+the visual canvas and produce structured outputs. Its role is to compile intent into a
 validated Screen Spec, retrieval requests, three Variant Manifests, design
 recommendations, and scoped patch instructions.
 
@@ -111,7 +109,7 @@ project wiring, safety boundaries, and comparison rules deterministic.
 ## What makes the project credible
 
 - **Visible integration trace:** The interface shows the actual sequence:
-  canvas interpretation -> Nosana visual matching -> Daytona branch launch ->
+  canvas interpretation -> OpenAI visual ranking -> Daytona branch launch ->
   review -> champion selection.
 - **Honest degradation:** The studio works offline for rehearsal and local
   development. A local match, simulated preview, or stored manifest is always
@@ -125,7 +123,7 @@ project wiring, safety boundaries, and comparison rules deterministic.
 - **Accessible from the start:** Generated branches honor keyboard access,
   focus visibility, contrast floors, touch-target sizing, responsive layouts,
   and reduced-motion preferences.
-- **Protected credentials:** The browser never sees AI, Nosana, or Daytona
+- **Protected credentials:** The browser never sees OpenAI or Daytona
   secrets. The orchestration service owns those credentials and proxies live
   preview capabilities.
 
@@ -138,7 +136,7 @@ Sketch a wireframe
 AI compiles a validated shared Screen Spec
         |
         v
-Nosana ranks visual UI-pattern candidates from curated thumbnails
+OpenAI ranks visual UI-pattern candidates from curated thumbnails
         |
         v
 CanvasCraft applies licence and compatibility gates
@@ -194,17 +192,15 @@ pnpm build
 
 ## Credentialed live integrations
 
-Copy `.env.example` to `.env` and configure an OpenAI-compatible endpoint, a
-deployed Nosana CLIP endpoint, and Daytona credentials plus a registered
-snapshot. These activate the live generation path. Browser code never receives
-these credentials.
+Copy `.env.example` to `.env` and configure an OpenAI-compatible endpoint and
+Daytona credentials plus a registered snapshot. These activate the live
+generation path. Browser code never receives these credentials.
 
 ```powershell
-pnpm nosana:build
 pnpm snapshot:build
 ```
 
-`pnpm nosana:build` prepares the GPU matcher image. `pnpm snapshot:build`
+`OPENAI_VISUAL_RANKER_MODEL` defaults to `gpt-5.6-luna`. `pnpm snapshot:build`
 prepares the Daytona branch image; register it as a Daytona Snapshot and place
 its identifier in `DAYTONA_SNAPSHOT`.
 
@@ -217,7 +213,7 @@ its identifier in `DAYTONA_SNAPSHOT`.
 - The Component Intelligence Registry is curated, source-attributed, and
   licence-gated. Third-party source export is disabled.
 - A live run must visibly identify its integration results. A local fallback is
-  always marked `local`, never presented as a sponsor call.
+  always marked `local`, never presented as a model-ranked result.
 
 ## Project documentation
 

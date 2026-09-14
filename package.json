@@ -14,10 +14,8 @@
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm typecheck",
     "test": "pnpm -r test",
-    "registry:index": "pnpm --filter @canvascraft/registry index",
     "registry:validate": "pnpm --filter @canvascraft/registry validate",
     "snapshot:build": "node scripts/build-daytona-snapshot.mjs",
-    "nosana:build": "node scripts/build-nosana-image.mjs",
     "doctor": "node scripts/doctor.mjs"
   },
   "devDependencies": {

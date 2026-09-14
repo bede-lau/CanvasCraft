@@ -11,9 +11,24 @@ import {
   type ReactNode,
 } from 'react';
 import gsap from 'gsap';
+import { motion } from 'motion/react';
+import clsx from 'clsx';
 import { useBranch } from '../runtime/branch-context';
 import { useScreen } from '../runtime/screen-store';
-import { RegionHeading, Skeleton, detailsOf, titleOf, type PatternComponent } from './kit';
+import { eyebrowFor } from '../runtime/archetype';
+import {
+  EmptyMessage,
+  LoadingAnnouncement,
+  RegionHeading,
+  Skeleton,
+  columnsOf,
+  detailsOf,
+  humanise,
+  numericValue,
+  titleOf,
+  usePressMotion,
+  type PatternComponent,
+} from './kit';
 
 /**
  * Expressive motion patterns.
@@ -220,10 +235,18 @@ function CardSwap({
       });
     };
 
-    swap();
-    interval.current = window.setInterval(swap, delay);
+    // The stack is placed statically above (placeNow); the cycle starts one
+    // `delay` later, never synchronously. Swapping a card the instant the
+    // section mounts throws the front card 500px through the layout before the
+    // reader has looked at it — the "animates on load" failure the QA audit
+    // guards, and the reason "01" was missing on first paint.
+    const first = window.setTimeout(() => {
+      swap();
+      interval.current = window.setInterval(swap, delay);
+    }, delay);
 
     return () => {
+      window.clearTimeout(first);
       if (interval.current !== null) window.clearInterval(interval.current);
       timeline.current?.kill();
     };
@@ -278,9 +301,12 @@ const CardSwapPattern: PatternComponent = ({ region, records, placeholder, onAct
       <RegionHeading region={region} />
       <CardSwap
         paused={reducedMotion}
-        easing={manifest.motion.preset === 'editorial' ? 'linear' : 'elastic'}
-        delay={manifest.motion.preset === 'playful' ? 3200 : 5000}
-        skewAmount={manifest.motion.preset === 'editorial' ? 2 : 6}
+        // Driven by the branch's motion language rather than its preset: the
+        // preset is the run-wide tempo the toolbar locks, so keying off it made
+        // every branch's stack behave identically.
+        easing={manifest.motion.language === 'cut' ? 'linear' : 'elastic'}
+        delay={manifest.motion.language === 'spring' ? 3200 : 5000}
+        skewAmount={manifest.motion.language === 'cut' ? 2 : 6}
         onCardClick={(index) => {
           dispatch({ type: 'select', index });
           if (interactive) onAct();
@@ -316,6 +342,150 @@ const CardSwapPattern: PatternComponent = ({ region, records, placeholder, onAct
   );
 };
 
+/**
+ * ── Data Table ─────────────────────────────────────────────────────────────
+ * Adapted from ReUI "Data Table" conventions (https://reui.io/).
+ * MIT License. Copyright belongs to the original component author.
+ *
+ * A sticky header and a per-row trend bar are what a plain `<table>` cannot
+ * offer on its own: a dense list stays legible past the fold, and a numeric
+ * column reads as a trend at a glance rather than as a column of digits.
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+const DataTablePattern: PatternComponent = ({ region, records, placeholder }) => {
+  const { manifest } = useBranch();
+  const eyebrow = eyebrowFor(region.role, manifest.archetype);
+
+  if (placeholder) {
+    return (
+      <>
+        <RegionHeading region={region} eyebrow={eyebrow} />
+        <LoadingAnnouncement label={region.label || 'table'} />
+        <Skeleton lines={6} />
+      </>
+    );
+  }
+
+  if (records.length === 0) {
+    return (
+      <>
+        <RegionHeading region={region} eyebrow={eyebrow} />
+        <EmptyMessage title="No rows" body="Nothing matches the current view." />
+      </>
+    );
+  }
+
+  const columns = columnsOf(records);
+  // A column counts as numeric when most rows parse as a number — "most"
+  // rather than "all", because a stray "—" placeholder should not disqualify
+  // an otherwise numeric column from getting its trend bar.
+  const numericColumn = columns.find(
+    (column) =>
+      records.filter((record) => numericValue(String(record[column] ?? '')) !== null).length >=
+      Math.ceil(records.length * 0.6),
+  );
+  const numericValues = numericColumn
+    ? records.map((record) => numericValue(String(record[numericColumn] ?? ''))?.amount ?? 0)
+    : [];
+  const maxValue = numericValues.length > 0 ? Math.max(...numericValues, 1) : 1;
+
+  return (
+    <>
+      <RegionHeading region={region} eyebrow={eyebrow} />
+      <div className="cc-tableWrap cc-tableWrap--sticky" data-region={region.id}>
+        <table className="cc-table">
+          <caption className="cc-visually-hidden">{region.purpose || region.label}</caption>
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th key={column} scope="col" className={clsx(column === numericColumn && 'cc-table__numeric')}>
+                  {humanise(column)}
+                </th>
+              ))}
+              {numericColumn ? <th scope="col" className="cc-visually-hidden">Trend</th> : null}
+            </tr>
+          </thead>
+          <tbody>
+            {records.map((record, index) => (
+              <tr key={index}>
+                {columns.map((column) => (
+                  <td key={column} className={clsx(column === numericColumn && 'cc-table__numeric')}>
+                    {String(record[column] ?? '—')}
+                  </td>
+                ))}
+                {numericColumn ? (
+                  <td className="cc-table__spark" aria-hidden="true">
+                    <span style={{ width: `${Math.max(6, (numericValues[index]! / maxValue) * 100)}%` }} />
+                  </td>
+                ) : null}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+};
+
+/**
+ * ── Tabs ───────────────────────────────────────────────────────────────────
+ * Adapted from coss ui "Tabs" conventions (https://ui.coss.com/).
+ * MIT License. Copyright belongs to the original component author.
+ *
+ * Real `role="tab"` semantics plus a `layoutId` indicator that slides between
+ * tabs rather than jumping — the one place a spring reads as feedback rather
+ * than decoration, because it is answering the click that just happened.
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+const TabsPattern: PatternComponent = ({ region, records, onAct, interactive }) => {
+  const { screen, dispatch } = useScreen();
+  const { manifest, stateChange } = useBranch();
+  const press = usePressMotion();
+  const items = records.length > 0 ? records : [{ title: region.label || 'Overview' }];
+
+  return (
+    <div className="cc-tabs" role="tablist" aria-label={region.label || 'Sections'} data-region={region.id}>
+      {items.map((record, index) => {
+        const id = `${region.id}-${index}`;
+        const active = screen.activeTabId === id || (screen.activeTabId === null && index === 0);
+        return (
+          <motion.button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            className={clsx('cc-tabs__tab', active && 'cc-tabs__tab--active')}
+            onClick={() => {
+              dispatch({ type: 'set-tab', tabId: id });
+              if (interactive) onAct();
+            }}
+            {...press}
+          >
+            {titleOf(record)}
+            {active ? (
+              <motion.span
+                className="cc-tabs__indicator"
+                layoutId={`${region.id}-tabs-indicator`}
+                // A spring only where the branch's language argues for one; every
+                // other branch gets the in-place state curve rather than the
+                // hard-coded 420/34 that used to make three directions slide
+                // their indicator at exactly the same speed.
+                transition={
+                  manifest.motion.language === 'spring'
+                    ? { type: 'spring', stiffness: 420, damping: 34 }
+                    : stateChange
+                }
+              />
+            ) : null}
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+};
+
 export const EXPRESSIVE_PATTERNS = {
   'react-bits-card-swap': CardSwapPattern,
+  'reui-data-table': DataTablePattern,
+  'coss-ui-tabs': TabsPattern,
 };

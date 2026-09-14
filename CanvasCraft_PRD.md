@@ -3,7 +3,7 @@ CanvasCraft
 Product Requirements Document
 
 Alternate name: WireLive
-Stage: Hackathon MVP
+Stage: Product MVP
 Primary outcome: Three comparable, live frontend prototype branches from a rough sketch or browser canvas
 Scope decision: Frontend-only generated branches with local mock state and state pages; no production backend
 Prepared for: Coding-agent implementation handoff
@@ -13,7 +13,7 @@ CanvasCraft turns a rough, interactive wireframe into a small set of polished, c
 
 1. Product Summary
 
-CanvasCraft is a visual prototyping agent for founders, product designers, PMs, and hackathon builders. Users begin with a napkin sketch, screenshot, or digital whiteboard. The product converts that intent into three responsive React/Vite frontend branches with a shared interaction model, polished visual hierarchy, local interaction states, and live embedded previews.
+CanvasCraft is a visual prototyping agent for founders, product designers, PMs, and product teams. Users begin with a napkin sketch, screenshot, or digital whiteboard. The product converts that intent into three responsive React/Vite frontend branches with a shared interaction model, polished visual hierarchy, local interaction states, and live embedded previews.
 
 The differentiator is not generic sketch-to-code. CanvasCraft treats the sketch as product intent, retrieves source-attributed UI patterns instead of inventing everything from scratch, and lets an AI Design Director make its UX and animation decisions visible, comparable, toggleable, and editable across deliberate design branches.
 
@@ -23,7 +23,7 @@ Founders who need a credible product prototype before engineering a backend.
 
 Product designers and PMs who want to turn workshop wireframes into a testable visual concept.
 
-Hackathon teams that need a striking, functional demo rather than a static landing page.
+Product teams that need a credible, functional prototype rather than a static landing page.
 
 Value Proposition
 
@@ -198,7 +198,7 @@ After a champion is selected, retain it and stop/archive the other sandboxes acc
 
 5. AI UX & Animation Co-Pilot
 
-The co-pilot is a senior-design layer, not an arbitrary aesthetic filter. It analyses hierarchy, touch targets, contrast, state coverage, readability, and interaction feedback, then proposes changes that the user may preview, apply, or revert. It is powered by a provider-neutral, OpenAI-compatible multimodal AI generator; this AI layer is not presented as a sponsor integration.
+The co-pilot is a senior-design layer, not an arbitrary aesthetic filter. It analyses hierarchy, touch targets, contrast, state coverage, readability, and interaction feedback, then proposes changes that the user may preview, apply, or revert. It is powered by a provider-neutral, OpenAI-compatible multimodal AI generator.
 
 Co-pilot surface
 
@@ -261,7 +261,7 @@ Selection Flow
 
 The OpenAI-compatible AI generator converts a canvas element into a semantic and visual retrieval request.
 
-Nosana returns visual-similarity candidates from the curated registry; local metadata narrows the search by compatibility and license.
+OpenAI vision reranks approved visual-similarity candidates from the curated registry; local metadata remains the transparent fallback for compatibility and licence-safe selection.
 
 The generator creates one shared Screen Spec plus branch-specific Variant Manifests, selecting one compatible pattern per branch or a neutral CanvasCraft fallback if no source is suitable.
 
@@ -303,7 +303,7 @@ Richer composed frontend patterns: app shells, frames, steppers, timelines, file
 
 Use only public/MIT free registry material. Exclude Pro/Ultimate blocks, templates, and icons from the registry; licensed materials may not be used to train or build a generative tool.
 
-Hackathon Catalogue Limit
+Curated Catalogue Limit
 
 Pre-curate 8–12 high-value patterns instead of live-scraping every catalogue. This keeps the agent reliable and makes source selection legible in the demo.
 
@@ -317,9 +317,10 @@ Suggested coverage:
 
 2–3 composed frontend blocks.
 
-7. Sponsor and Platform Integration Plan
+7. Platform Integration Plan
 
-Each sponsor must have a visible, meaningful role in the user flow. Do not treat a sponsor API call as a hidden checkbox. The AI generator is deliberately provider-neutral and must not be presented as a hackathon sponsor.
+Each platform has a visible, meaningful role in the user flow. Do not treat an
+integration call as a hidden checkbox.
 
 Integration
 
@@ -327,23 +328,15 @@ Product role
 
 Implementation in MVP
 
-What judges see
+What users see
 
-OpenAI-compatible AI generator (not a sponsor)
+OpenAI
 
-Design interpreter and Design Director.
+Design interpreter, Design Director, and visual pattern ranker.
 
-Use a configurable OpenAI-compatible multimodal endpoint to read the visual canvas plus structured notes; create the shared Screen Spec, three Variant Manifests, code instructions, and UX/motion explanations. Validate structured output before generation.
+Use a configurable OpenAI-compatible multimodal endpoint to read the visual canvas plus structured notes; create the shared Screen Spec, three Variant Manifests, code instructions, and UX/motion explanations. Use a separate economical vision model to rank batched, labelled sheets of registry-approved component candidates. Validate every structured output before it is used.
 
 “Interpreting wireframe”, “Proposing three directions”, and “Applying design direction” activity states.
-
-Nosana
-
-GPU-backed visual component matcher.
-
-Run a UI-image embedding/similarity service against the small curated catalogue of component thumbnails. Return the top visual matches for a sketched region; local metadata and the AI generator use the candidates to make a compatible selection.
-
-“Matching visual UI patterns” with top candidates and confidence.
 
 Daytona
 
@@ -354,7 +347,10 @@ Start from one prepared Vite/dependency snapshot, then create three independent 
 A branch-status strip, three switchable live previews, shared-interaction comparison, and the winning branch’s live URL/status.
 
 Integration principle
-The demo should show the trace in order: the AI generator establishes one shared product contract → Nosana grounds visual choices in curated UI patterns → Daytona makes competing frontend directions independently live. This makes the sponsor integrations part of the core product outcome rather than peripheral tooling.
+The product trace runs in order: OpenAI establishes one shared product contract
+→ the registry gate constrains approved UI patterns → OpenAI vision ranks those
+patterns against the wireframe → Daytona makes competing frontend directions
+independently live. The ranker cannot add a pattern outside the registry.
 
 8. High-Level Implementation Shape
 
@@ -368,7 +364,7 @@ React frontend with Canvas Studio, generation progress, three-panel review works
 
 Secure orchestration layer
 
-A minimal service that holds the OpenAI-compatible AI endpoint configuration, Nosana, and Daytona credentials. It exists to orchestrate the product; it is not a generated-app backend.
+A minimal service that holds OpenAI-compatible AI endpoint configuration and Daytona credentials. It exists to orchestrate the product; it is not a generated-app backend.
 
 Screen Spec
 
@@ -414,7 +410,7 @@ If a non-selected branch fails, show its status and a static fallback; keep the 
 
 9. Demo Story
 
-The demo must visibly prove both product quality and sponsor use in under two minutes.
+The product walkthrough should visibly prove both product quality and integration value in under two minutes.
 
 Time
 
@@ -426,7 +422,7 @@ Show a rough dashboard or product-wireframe canvas with a card stack, search/fil
 
 0:20–0:40
 
-Click Generate. Show the AI generator interpret intent, Nosana return pattern matches, and Daytona create three live design branches from the prepared snapshot.
+Click Generate. Show OpenAI interpret intent, OpenAI vision rank approved patterns, and Daytona create three live design branches from the prepared snapshot.
 
 0:40–1:10
 
@@ -458,7 +454,7 @@ The Design Director displays at least three actionable UX/motion recommendations
 
 At least one component/pattern from each named source is represented in the curated registry or CanvasCraft shell, with clear license gating.
 
-Nosana and Daytona are both called in the visible generation sequence and have a real role in the output.
+OpenAI vision ranking and Daytona both have a real role in the visible generation sequence.
 
 Exactly three concurrent live branches come from one Screen Spec and obey the identical state, interaction, accessibility, and responsive contracts.
 
@@ -484,7 +480,7 @@ Create the pre-baked Vite starter and Daytona snapshot with allowed dependencies
 
 Implement the provider-neutral OpenAI-compatible AI output schema for Screen Specs, Variant Manifests, recommendations, and patch instructions.
 
-Create a fixed 8–12-item Component Intelligence Registry with source, license, and suitability metadata, then implement the Nosana visual-matching call against its pre-indexed thumbnails.
+Create a fixed 8–12-item Component Intelligence Registry with source, licence, and suitability metadata, then implement OpenAI visual ranking against batched, labelled candidate sheets.
 
 Build the Daytona Branch Manager: create three branches in parallel, track status/URLs, and clean up non-champions.
 

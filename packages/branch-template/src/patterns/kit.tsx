@@ -1,5 +1,7 @@
 import clsx from 'clsx';
+import { motion, type Transition, type Variants } from 'motion/react';
 import type { CSSProperties, ReactNode } from 'react';
+import { useBranch } from '../runtime/branch-context';
 import type { FixtureRecord, SpecRegion, RegionSelection } from '../runtime/types';
 
 /**
@@ -58,15 +60,69 @@ export function Surface({
   );
 }
 
-export function RegionHeading({ region }: { region: SpecRegion }) {
+/**
+ * The small tracked-out label above a heading.
+ *
+ * The cheapest single device that makes a generated page read as authored: it
+ * gives a section a category before it gives it a name. Rendered as a sibling
+ * of the heading rather than inside it so it stays out of the accessible name.
+ */
+export function Eyebrow({ children }: { children: ReactNode }) {
+  return <p className="cc-eyebrow">{children}</p>;
+}
+
+export function RegionHeading({
+  region,
+  eyebrow = null,
+}: {
+  region: SpecRegion;
+  /** Category label shown above the heading. Null omits the whole line. */
+  eyebrow?: string | null;
+}) {
   if (!region.label) return null;
   const level = region.role === 'page-title' ? 1 : 2;
   const Tag = (level === 1 ? 'h1' : 'h2') as 'h1' | 'h2';
   return (
-    <Tag className={clsx('cc-heading', level === 1 ? 'cc-heading--page' : 'cc-heading--section')}>
-      {region.label}
-    </Tag>
+    <div className="cc-sectionHead">
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      <Tag className={clsx('cc-heading', level === 1 ? 'cc-heading--page' : 'cc-heading--section')}>
+        {region.label}
+      </Tag>
+    </div>
   );
+}
+
+/**
+ * The press vocabulary, as props to spread onto any `motion.*` element.
+ *
+ * Anticipation and squash-and-stretch are only convincing if every control in
+ * the branch winds up and deforms by the same amount — a page where the button
+ * has weight and the chip beside it does not reads as a bug rather than as a
+ * flourish. Returning props rather than a wrapper component keeps that shared
+ * while letting each caller stay the element it already was, which matters
+ * because several of these are inside a parent that is running its own
+ * entrance variants and cannot take a second `animate`.
+ *
+ * Deliberately no `whileFocus`: keyboard navigation is instant, and a control
+ * that inflates when tabbed to turns arrowing through a list into a wobble.
+ */
+export function usePressMotion(disabled = false): {
+  variants: Variants;
+  initial: string;
+  animate: string;
+  whileHover?: string;
+  whileTap?: string;
+  transition: Transition;
+} {
+  const { press, pressTransition } = useBranch();
+  return {
+    variants: press,
+    initial: 'rest',
+    animate: 'rest',
+    whileHover: disabled ? undefined : 'hover',
+    whileTap: disabled ? undefined : 'press',
+    transition: pressTransition,
+  };
 }
 
 export function Button({
@@ -82,15 +138,17 @@ export function Button({
   type?: 'button' | 'submit';
   disabled?: boolean;
 }) {
+  const press = usePressMotion(disabled);
   return (
-    <button
+    <motion.button
       type={type}
       className={clsx('cc-button', `cc-button--${tone}`)}
       onClick={onClick}
       disabled={disabled}
+      {...press}
     >
       {children}
-    </button>
+    </motion.button>
   );
 }
 
@@ -191,4 +249,22 @@ export function columnsOf(records: ReadonlyArray<FixtureRecord>, limit = 5): str
     for (const key of Object.keys(record)) seen.add(key);
   }
   return [...seen].slice(0, limit);
+}
+
+/**
+ * Splits a fixture value into a number and whatever wraps it.
+ *
+ * A metric only counts up if there is something to count, and fixtures carry
+ * things like `"$1,240"`, `"+12%"`, and `"Review"` in the same field. Returning
+ * null for the last of those is what keeps a status label from animating from
+ * zero to itself.
+ */
+export function numericValue(
+  value: string,
+): { prefix: string; amount: number; suffix: string } | null {
+  const match = /^(\D*?)([\d,]+(?:\.\d+)?)(\D*)$/.exec(value.trim());
+  if (!match) return null;
+  const amount = Number(match[2]!.replace(/,/g, ''));
+  if (!Number.isFinite(amount)) return null;
+  return { prefix: match[1] ?? '', amount, suffix: match[3] ?? '' };
 }

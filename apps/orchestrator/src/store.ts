@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, writeFile, appendFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rm, writeFile, appendFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import {
@@ -127,6 +127,23 @@ export class RunStore {
     await appendFile(path.join(this.runDir(runId), 'mutations.ndjson'), `${JSON.stringify(mutation)}\n`, 'utf8');
   }
 
+  /**
+   * Every run id on disk, newest-last by name.
+   *
+   * Used to work out which sandboxes are still reachable: a preview can only be
+   * opened through a persisted branch, so a sandbox no run points at is an
+   * orphan and is safe to stop.
+   */
+  async listRunIds(): Promise<string[]> {
+    try {
+      const entries = await readdir(this.runsDir, { withFileTypes: true });
+      return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+      throw error;
+    }
+  }
+
   async readRun(runId: string): Promise<RunRecordType | null> {
     try {
       const snapshotsDir = path.join(this.runDir(runId), 'snapshots');
@@ -151,6 +168,17 @@ export class RunStore {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
       throw error;
     }
+  }
+
+  /**
+   * Erases a run's entire directory — snapshots, branch artifacts, events,
+   * mutations. Deleting the workspace that owns a run means its branches are
+   * gone too, so nothing should be left for `listRunIds`/`readRun` to find
+   * or for the orphan sandbox sweep to reason about. `force: true` makes this
+   * idempotent: a run already gone (or never written) is not an error.
+   */
+  async deleteRun(runId: string): Promise<void> {
+    await rm(this.runDir(runId), { recursive: true, force: true });
   }
 
   async readMutations(runId: string): Promise<unknown[]> {

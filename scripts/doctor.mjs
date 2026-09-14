@@ -10,7 +10,6 @@ const expectedFiles = [
   'packages/schema/src/index.ts',
   'packages/registry/src/index.ts',
   'packages/branch-template/src/main.tsx',
-  'services/nosana-clip/main.py',
   'infra/daytona-snapshot/Dockerfile',
 ];
 
@@ -28,7 +27,6 @@ for (const relativePath of expectedFiles) {
 
 for (const [integration, variables] of [
   ['OpenAI generation', ['OPENAI_API_KEY']],
-  ['Nosana matching', ['NOSANA_ENDPOINT']],
   ['Daytona live branches', ['DAYTONA_API_KEY', 'DAYTONA_SNAPSHOT']],
 ]) {
   const missing = variables.filter((variable) => !process.env[variable]);

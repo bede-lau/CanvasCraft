@@ -7,11 +7,8 @@ export interface IntegrationCredentials {
     apiKey: string;
     baseUrl: string;
     visionModel: string;
+    visualRankerModel: string;
     textModel: string;
-  };
-  nosana?: {
-    endpoint: string;
-    apiKey: string | null;
   };
   daytona?: {
     apiKey: string;
@@ -35,7 +32,7 @@ export interface OrchestratorConfig {
       configured: boolean;
       detail: string;
     };
-    nosana: {
+    visualRanking: {
       mode: IntegrationMode;
       configured: boolean;
       detail: string;
@@ -60,7 +57,6 @@ function readNonNegativeInteger(value: string | undefined, fallback: number): nu
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): OrchestratorConfig {
   const aiConfigured = Boolean(env['OPENAI_API_KEY']);
-  const nosanaConfigured = Boolean(env['NOSANA_ENDPOINT']);
   const daytonaConfigured = Boolean(env['DAYTONA_API_KEY'] && env['DAYTONA_SNAPSHOT']);
 
   return {
@@ -75,15 +71,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): OrchestratorCo
               apiKey: env['OPENAI_API_KEY']!,
               baseUrl: env['OPENAI_BASE_URL'] ?? 'https://api.openai.com/v1',
               visionModel: env['OPENAI_VISION_MODEL'] ?? 'gpt-5.6',
+              visualRankerModel: env['OPENAI_VISUAL_RANKER_MODEL'] ?? 'gpt-5.6-luna',
               textModel: env['OPENAI_TEXT_MODEL'] ?? 'gpt-5.6-luna',
-            },
-          }
-        : {}),
-      ...(nosanaConfigured
-        ? {
-            nosana: {
-              endpoint: env['NOSANA_ENDPOINT']!.replace(/\/$/, ''),
-              apiKey: env['NOSANA_API_KEY'] ?? null,
             },
           }
         : {}),
@@ -108,12 +97,12 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): OrchestratorCo
           ? 'AI credentials are configured. The run uses strict structured output and falls back to the deterministic compiler on failure.'
           : 'No AI credentials are loaded; the deterministic local compiler is active.',
       },
-      nosana: {
-        mode: nosanaConfigured ? 'degraded' : 'offline',
-        configured: nosanaConfigured,
-        detail: nosanaConfigured
-          ? 'A Nosana endpoint is configured. Failed visual matching falls back to reviewed local registry metadata.'
-          : 'No Nosana endpoint is loaded; matching uses reviewed local registry metadata.',
+      visualRanking: {
+        mode: aiConfigured ? 'degraded' : 'offline',
+        configured: aiConfigured,
+        detail: aiConfigured
+          ? 'OpenAI vision ranking uses the configured low-cost reranker and falls back to reviewed local registry metadata on failure.'
+          : 'No OpenAI API key is loaded; visual ranking uses reviewed local registry metadata.',
       },
       daytona: {
         mode: daytonaConfigured ? 'degraded' : 'offline',

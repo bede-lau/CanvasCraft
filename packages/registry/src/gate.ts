@@ -64,8 +64,8 @@ export function findPatternCandidates(query: PatternQuery): RegistryRecord[] {
 }
 
 /**
- * Offline matcher: a transparent semantic fallback for an unavailable Nosana
- * endpoint. It ranks reviewed metadata and always identifies itself as local.
+ * Offline matcher: a transparent semantic fallback for an unavailable OpenAI
+ * visual ranker. It ranks reviewed metadata and always identifies itself as local.
  */
 export function matchLocally(query: PatternQuery): PatternMatch[] {
   const candidates = findPatternCandidates(query);
@@ -108,8 +108,13 @@ export function validateRegistry(): string[] {
     }
   }
 
-  if (REGISTRY_RECORDS.length < 8 || REGISTRY_RECORDS.length > 12) {
-    issues.push(`Registry must contain 8-12 reviewed records; found ${REGISTRY_RECORDS.length}.`);
+  // The catalogue is reviewed by hand, so it is bounded on purpose: a floor
+  // that guarantees real choice per role, and a ceiling that keeps every record
+  // something a person has actually looked at. The ceiling moved from 12 to 20
+  // when the archetype vocabulary added the compositions a landing page or a
+  // portfolio needs — not to make room for a scrape.
+  if (REGISTRY_RECORDS.length < 8 || REGISTRY_RECORDS.length > 20) {
+    issues.push(`Registry must contain 8-20 reviewed records; found ${REGISTRY_RECORDS.length}.`);
   }
 
   return issues;

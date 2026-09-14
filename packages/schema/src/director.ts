@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MotionPreset, Slug } from './primitives.js';
+import { MotionLanguage, MotionPreset, PageArchetype, Slug } from './primitives.js';
 import { PaletteTraits, ControlTraits, FormTraits, MotionTraits, TypographyTraits } from './manifest.js';
 
 /**
@@ -58,6 +58,11 @@ export const Recommendation = z.object({
   delta: ManifestDelta,
   /** Measured evidence where there is any, e.g. "contrast 3.1:1, needs 4.5:1". */
   evidence: z.string().max(240).default(''),
+  /**
+   * Who produced this. The UI labels the two differently on purpose: a measured
+   * finding is reproducible from the manifest, an AI one is a design argument.
+   */
+  source: z.enum(['measured', 'ai']).default('measured'),
   state: z.enum(['proposed', 'applied', 'reverted', 'dismissed']).default('proposed'),
   createdAt: z.string(),
 });
@@ -96,33 +101,59 @@ export type PatchInstruction = z.infer<typeof PatchInstruction>;
 export const MOTION_PRESETS: Record<MotionPreset, MotionTraits> = {
   calm: {
     preset: 'calm',
-    durationMs: 260,
+    language: 'reveal',
+    durationMs: 560,
     easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-    staggerMs: 40,
-    travel: 0.25,
+    staggerMs: 70,
+    travel: 0.45,
     reducedMotion: 'fade-only',
   },
   playful: {
     preset: 'playful',
-    durationMs: 380,
+    language: 'spring',
+    durationMs: 500,
     easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-    staggerMs: 70,
-    travel: 0.7,
+    staggerMs: 95,
+    travel: 0.8,
     reducedMotion: 'fade-only',
   },
   editorial: {
     preset: 'editorial',
-    durationMs: 180,
-    easing: 'cubic-bezier(0.2, 0, 0, 1)',
-    staggerMs: 20,
-    travel: 0.1,
+    language: 'cut',
+    durationMs: 300,
+    easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+    staggerMs: 34,
+    travel: 0.22,
     reducedMotion: 'instant',
   },
 };
 
 /** One-line explanation of each preset, shown in the inspector. */
 export const MOTION_PRESET_INTENT: Record<MotionPreset, string> = {
-  calm: 'Slow, low-travel easing. Movement confirms a change without asking for attention.',
+  calm: 'Long, low-overshoot easing. Sections resolve into place as you reach them.',
   playful: 'Overshooting spring with visible stagger. Movement celebrates the change.',
   editorial: 'Fast and nearly flat. Movement gets out of the way of reading.',
+};
+
+/** One-line explanation of each motion language, shown beside the preset. */
+export const MOTION_LANGUAGE_INTENT: Record<MotionLanguage, string> = {
+  reveal: 'Sections fade and rise as they enter the viewport, once each.',
+  cascade: 'Siblings arrive in sequence, so a group reads as a group.',
+  spring: 'Entrances overshoot and settle; pressing anything pushes back.',
+  parallax: 'Foreground and background move at different rates against the scroll.',
+  cut: 'No travel. Changes are instant and carried by type and colour.',
+};
+
+/**
+ * What each archetype is for, in the user's terms.
+ *
+ * Shown beside the toolbar control, because picking the wrong archetype is the
+ * most expensive mistake available on that toolbar: it changes the whole
+ * vocabulary, not one token.
+ */
+export const ARCHETYPE_INTENT: Record<PageArchetype, string> = {
+  marketing: 'Landing page. Oversized display type, moving gradient ground, scroll-driven reveals.',
+  application: 'Product surface. Bento panels, real depth, dense data, restrained spring feedback.',
+  portfolio: 'Editorial work. Large media, parallax, text-mask reveals, grain.',
+  'ai-native': 'AI product. Aurora ground, streaming and thinking primitives, prompt-shaped inputs.',
 };

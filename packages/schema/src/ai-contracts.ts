@@ -1,12 +1,16 @@
 import { z } from 'zod';
 import {
+  AI_GENOME_MAX_LENGTH,
+  BackdropTreatment,
   HexColor,
   InteractionKind,
   LayoutRegion,
+  MotionLanguage,
   MotionPreset,
   SemanticRole,
   Slug,
   StateKind,
+  SurfaceTreatment,
 } from './primitives.js';
 import { IntentTag } from './registry.js';
 import { RecommendationSeverity, RecommendationSurface } from './director.js';
@@ -169,6 +173,7 @@ export const AiPaletteDraft = z.object({
   positive: HexColor,
   critical: HexColor,
   scheme: z.enum(['light', 'dark']),
+  backdrop: BackdropTreatment,
 });
 export type AiPaletteDraft = z.infer<typeof AiPaletteDraft>;
 
@@ -192,6 +197,7 @@ export const AiFormDraft = z.object({
   radiusStepPx: z.number().min(0).max(8),
   borderWidthPx: z.number().min(0.5).max(2),
   elevation: z.enum(['flat', 'hairline', 'raised', 'lifted']),
+  surface: SurfaceTreatment,
 });
 export type AiFormDraft = z.infer<typeof AiFormDraft>;
 
@@ -216,8 +222,12 @@ export type AiSelectionDraft = z.infer<typeof AiSelectionDraft>;
 export const AiVariantDraft = z.object({
   /** Two words, title case, e.g. "Calm Trust". */
   name: z.string().max(60),
-  /** "Midnight palette · rounded controls · calm motion" — three traits, dot-separated. */
-  genome: z.string().max(140),
+  /**
+   * "Midnight palette · rounded controls · calm motion" — three traits,
+   * dot-separated. Shorter than the manifest's own cap on purpose: the compiler
+   * appends the locked toolbar axes to this before parsing the manifest.
+   */
+  genome: z.string().max(AI_GENOME_MAX_LENGTH),
   /** What this direction argues for, in one sentence. */
   rationale: z.string().max(400),
   palette: AiPaletteDraft,
@@ -225,6 +235,19 @@ export const AiVariantDraft = z.object({
   form: AiFormDraft,
   controls: AiControlsDraft,
   motionPreset: MotionPreset,
+  /**
+   * The direction's motion mechanism. Unlike `motionPreset` — which the toolbar
+   * locks and the compiler overwrites — this one survives, so it is the model's
+   * strongest lever for making three directions genuinely different rather than
+   * three palettes of one page.
+   */
+  motionLanguage: MotionLanguage,
+  /**
+   * How hard this direction leans on its language, relative to the run's
+   * preset. The compiler turns this into bounded duration, stagger, and travel
+   * multipliers, so a model can ask for "more" without inventing timings.
+   */
+  motionEmphasis: z.enum(['restrained', 'balanced', 'amplified']),
   selections: z.array(AiSelectionDraft),
 });
 export type AiVariantDraft = z.infer<typeof AiVariantDraft>;
@@ -253,18 +276,26 @@ export const AiDelta = z.object({
   paletteTextPrimary: HexColor.nullable(),
   paletteTextSecondary: HexColor.nullable(),
   paletteSurface: HexColor.nullable(),
+  /** Change what sits behind the page: flat, wash, aurora, grain, spotlight. */
+  paletteBackdrop: BackdropTreatment.nullable(),
   typographyBaseSizePx: z.number().nullable(),
+  typographyDisplayWeight: z.number().nullable(),
+  typographyDisplayTrackingEm: z.number().nullable(),
   typographyBodyLeading: z.number().nullable(),
   typographyScaleRatio: z.number().nullable(),
   formSpaceUnitPx: z.number().nullable(),
   formDensity: z.enum(['compact', 'regular', 'roomy']).nullable(),
   formRadiusOuterPx: z.number().nullable(),
   formElevation: z.enum(['flat', 'hairline', 'raised', 'lifted']).nullable(),
+  /** Change what panels are made of: solid, glass, gradient, outline. */
+  formSurface: SurfaceTreatment.nullable(),
   controlsButtonShape: z.enum(['sharp', 'soft', 'pill']).nullable(),
   controlsButtonFill: z.enum(['solid', 'tonal', 'outline', 'ghost']).nullable(),
   controlsFocusRing: z.enum(['ring', 'outline', 'underglow']).nullable(),
   controlsIconSizePx: z.number().nullable(),
   motionPreset: MotionPreset.nullable(),
+  /** Change the mechanism: reveal, cascade, spring, parallax, cut. */
+  motionLanguage: MotionLanguage.nullable(),
   motionDurationMs: z.number().nullable(),
   motionStaggerMs: z.number().nullable(),
   motionTravel: z.number().nullable(),

@@ -8,15 +8,23 @@ import { ZodError } from 'zod';
 import {
   ApplyRecommendationRequest,
   GenerateRequest,
+  PatchInstruction,
   PatchRequest,
+  Recommendation,
   RemixRequest,
   RunEvent,
   RunRecord,
   SelectChampionRequest,
   findCanvasIntegrityIssues,
+  findLayoutRiskIssues,
+  findManifestContextIssues,
   findManifestIntegrityIssues,
+  measureBranch,
+  type AiRecommendationDraft,
+  type ManifestPatternContext,
   type ManifestDelta,
-  type Recommendation,
+  type PatchInstruction as PatchInstructionType,
+  type Recommendation as RecommendationType,
   type RunEvent as RunEventType,
   type RunRecord as RunRecordType,
 } from '@canvascraft/schema';
@@ -30,20 +38,44 @@ import {
   directionSelectionOptions,
   hashSpec,
 } from './compiler.js';
-import { type OrchestratorConfig } from './config.js';
-import { interpretScreenSpec, proposeDirections } from './ai.js';
+import { type IntegrationCredentials, type OrchestratorConfig } from './config.js';
+import {
+  interpretScreenSpec,
+  proposeDirections,
+  proposePatch,
+  proposeRecommendations,
+  reviseDirections,
+} from './ai.js';
+import { aiDeltaToManifestDelta, deltaChangesManifest, measuredRecommendations } from './director.js';
 import { materializeBranch } from './branch-materializer.js';
 import { DaytonaBranchManager } from './daytona.js';
 import { applyDelta, captureDelta, createRemix, makePatch } from './mutations.js';
-import { rankWithNosana } from './nosana.js';
+import { rankWithOpenAi } from './visual-ranker.js';
 import { RunStore } from './store.js';
 
-interface MutationRecord {
-  type: 'recommendation-applied';
-  recommendationId: string;
-  branchId: string;
-  revertTo: ManifestDelta;
-}
+type MutationRecord =
+  | {
+      type: 'recommendation-applied';
+      recommendationId: string;
+      branchId: string;
+      revertTo: ManifestDelta;
+    }
+  | {
+      type: 'branch-deleted';
+      branchId: string;
+      branchName: string;
+      deletedAt: string;
+    }
+  | {
+      type: 'patch-applied';
+      patch: PatchInstructionType;
+    }
+  | {
+      type: 'patch-deleted';
+      patchId: string;
+      branchId: string;
+      revertTo: ManifestDelta;
+    };
 
 type EventInput<T> = T extends unknown ? Omit<T, 'id' | 'runId' | 'at'> : never;
 
@@ -57,6 +89,22 @@ type PublicRun = Omit<RunRecordType, 'branches'> & { branches: PublicBranch[] };
 
 function now(): string {
   return new Date().toISOString();
+}
+
+/**
+ * The registry facts {@link findManifestContextIssues} needs about a selected
+ * pattern, resolved by id. Keeps the schema package registry-free while still
+ * letting it reject a manifest whose selections fight their context.
+ */
+function patternContext(recordId: string): ManifestPatternContext | undefined {
+  const record = getRegistryRecord(recordId);
+  if (!record) return undefined;
+  return {
+    name: record.name,
+    motionIntensity: record.motionIntensity,
+    mobileRisk: record.mobileRisk,
+    fallbackId: record.fallbackId,
+  };
 }
 
 function previewProxyPath(branch: RunRecordType['branches'][number]): string {
@@ -84,35 +132,134 @@ function event(runId: string, input: EventInput<RunEventType>): RunEventType {
   return RunEvent.parse({ id: nanoid(), runId, at: now(), ...input });
 }
 
-function makeRecommendations(run: RunRecordType): Recommendation[] {
-  return run.branches.slice(0, 3).map((branch, index) => ({
-    id: `${branch.id}-recommendation`,
-    branchId: branch.id,
-    surface: index === 0 ? 'readability' : index === 1 ? 'motion' : 'touch-target',
-    severity: index === 2 ? 'improvement' : 'polish',
-    title:
-      index === 0
-        ? 'Increase body leading for long-form scanning'
-        : index === 1
-          ? 'Offer a calmer audition setting'
-          : 'Increase control size for touch use',
-    rationale:
-      index === 0
-        ? 'A small line-height increase improves scanability without changing content or layout.'
-        : index === 1
-          ? 'The direction stays expressive, while a shorter travel distance gives users a reversible lower-motion option.'
-          : 'Larger icons make repeated controls easier to target while retaining the same interaction contract.',
-    regionId: run.spec?.regions[index % run.spec.regions.length]?.id ?? null,
-    delta:
-      index === 0
-        ? { typography: { bodyLeading: Math.min(1.9, branch.manifest.typography.bodyLeading + 0.1) }, selectionSwaps: [] }
-        : index === 1
-          ? { motion: { travel: 0.35, durationMs: 300 }, selectionSwaps: [] }
-          : { controls: { iconSizePx: Math.min(24, branch.manifest.controls.iconSizePx + 2) }, selectionSwaps: [] },
-    evidence: index === 2 ? 'Touch targets remain governed by the shared 44px accessibility floor.' : 'Deterministic local design review.',
+/**
+ * Turns one branch's AI proposals into recommendations, discarding anything the
+ * measured pass already covers.
+ *
+ * A measured finding is reproducible from the manifest; an AI one is an
+ * argument. When both speak to the same surface the measurement wins, so the
+ * model can add insight but never talk over a real accessibility failure.
+ */
+function adoptAiRecommendations(args: {
+  branch: RunRecordType['branches'][number];
+  drafts: AiRecommendationDraft[];
+  measured: RecommendationType[];
+  regionIds: Set<string>;
+  createdAt: string;
+}): RecommendationType[] {
+  const coveredSurfaces = new Set(args.measured.map((entry) => entry.surface));
+  const used = new Set<string>();
+
+  return args.drafts.flatMap((draft) => {
+    if (coveredSurfaces.has(draft.surface)) return [];
+    const delta = aiDeltaToManifestDelta(draft.delta);
+    // A recommendation that changes nothing is advice, not a proposal.
+    if (!deltaChangesManifest(args.branch.manifest, delta)) return [];
+    if (delta.selectionSwaps.some((swap) => !args.regionIds.has(swap.regionId))) return [];
+    const id = `${args.branch.id}-ai-${draft.surface}`;
+    if (used.has(id)) return [];
+    used.add(id);
+
+    return [
+      Recommendation.parse({
+        id,
+        branchId: args.branch.id,
+        surface: draft.surface,
+        // Only a measurement can prove a blocker, so an AI claim is capped.
+        severity: draft.severity === 'blocker' ? 'improvement' : draft.severity,
+        title: draft.title.slice(0, 120),
+        rationale: draft.rationale.slice(0, 500),
+        regionId: draft.regionId && args.regionIds.has(draft.regionId) ? draft.regionId : null,
+        delta,
+        evidence: draft.evidence.slice(0, 240),
+        source: 'ai',
+        state: 'proposed',
+        createdAt: args.createdAt,
+      }),
+    ] satisfies RecommendationType[];
+  });
+}
+
+/**
+ * Interprets one design-chat request with the AI, or gives up.
+ *
+ * `null` means "the heuristic patch is the honest answer here": no credentials
+ * reached this far, the run has no spec to reason over, the transport failed, or
+ * the model proposed a delta that restates the manifest. A refusal is different
+ * — the model understood the request and it cannot be honoured without changing
+ * the Screen Spec — so it is thrown as a 422 and never quietly downgraded into a
+ * pattern swap the user did not ask for.
+ */
+async function aiPatchInstruction(args: {
+  credentials: NonNullable<IntegrationCredentials['ai']>;
+  run: RunRecordType;
+  branch: RunRecordType['branches'][number];
+  regionId: string;
+  request: string;
+  id: string;
+  createdAt: string;
+}): Promise<PatchInstructionType | null> {
+  const spec = args.run.spec;
+  if (!spec) return null;
+  const region = spec.regions.find((entry) => entry.id === args.regionId);
+  if (!region) return null;
+  const regionIds = new Set(spec.regions.map((entry) => entry.id));
+  const selectionOptions = directionSelectionOptions({ spec, candidates: args.run.candidates });
+  const approved = new Map(selectionOptions.map((entry) => [entry.regionId, new Set(entry.recordIds)]));
+
+  type PatchPlan =
+    | { refusalReason: string }
+    | { refusalReason: null; interpretation: string; delta: ManifestDelta };
+
+  let proposed: { value: PatchPlan };
+  try {
+    proposed = await proposePatch<PatchPlan>({
+      credentials: args.credentials,
+      spec,
+      manifest: args.branch.manifest,
+      region: { id: region.id, label: region.label, role: region.role },
+      selectionOptions,
+      request: args.request,
+      validate: (plan) => {
+        if (plan.refusalReason) return { refusalReason: plan.refusalReason };
+        const delta = aiDeltaToManifestDelta(plan.delta);
+        for (const swap of delta.selectionSwaps) {
+          if (!regionIds.has(swap.regionId)) {
+            throw new Error(`selectionSwaps names region "${swap.regionId}", which this screen does not contain.`);
+          }
+          if (!approved.get(swap.regionId)?.has(swap.recordId)) {
+            throw new Error(
+              `Pattern "${swap.recordId}" is not one of the gate-approved options for region "${swap.regionId}".`,
+            );
+          }
+        }
+        return { refusalReason: null, interpretation: plan.interpretation, delta };
+      },
+    });
+  } catch {
+    return null;
+  }
+
+  if (proposed.value.refusalReason !== null) {
+    const error = new Error(proposed.value.refusalReason);
+    Object.assign(error, { statusCode: 422 });
+    throw error;
+  }
+  const delta = proposed.value.delta;
+  if (!deltaChangesManifest(args.branch.manifest, delta)) return null;
+
+  return PatchInstruction.parse({
+    id: args.id,
+    branchId: args.branch.id,
+    regionId: args.regionId,
+    request: args.request,
+    interpretation: proposed.value.interpretation.slice(0, 400),
+    delta,
+    revertTo: captureDelta(args.branch.manifest, delta),
     state: 'proposed',
-    createdAt: run.createdAt,
-  }));
+    error: null,
+    createdAt: args.createdAt,
+  });
 }
 
 export async function buildApp(options: BuildAppOptions): Promise<FastifyInstance> {
@@ -165,15 +312,48 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     return run;
   };
 
+  /**
+   * Every sandbox id a persisted branch still points at, or `null` if that
+   * cannot be established.
+   *
+   * A preview is only reachable through a branch record, so this is the set of
+   * sandboxes that are doing something for somebody. `null` is returned rather
+   * than a partial set when any run on disk fails to read: the only consumer
+   * stops what is missing from this set, and guessing there would stop a live
+   * preview.
+   */
+  const collectLiveSandboxIds = async (): Promise<Set<string> | null> => {
+    const live = new Set<string>();
+    for (const id of await store.listRunIds()) {
+      let run: RunRecordType | null;
+      try {
+        run = await store.readRun(id);
+      } catch {
+        return null;
+      }
+      if (!run) continue;
+      for (const branch of run.branches) {
+        if (branch.sandboxId) live.add(branch.sandboxId);
+      }
+    }
+    return live;
+  };
+
+  /** Pushes a changed manifest to the live sandbox and returns the rebuilt branch. */
   const syncLiveBranch = async (
     run: RunRecordType,
     branch: RunRecordType['branches'][number],
-  ): Promise<void> => {
-    if (!options.config.credentials?.daytona || !run.spec || !branch.sandboxId) return;
+  ): Promise<RunRecordType['branches'][number]> => {
+    if (!run.spec) return branch;
     const files = materializeBranch(run.spec, branch.manifest);
-    const manager = new DaytonaBranchManager(options.config.credentials.daytona);
-    await manager.syncGeneratedModules(branch.sandboxId, files);
+    // Persist the regenerated files regardless of whether a live sandbox
+    // exists, so an applied manifest change is never lost to disk — only
+    // the sandbox push (and its rebuild) is conditional on having one.
     await store.writeBranchFiles(run.id, branch.id, files);
+    if (!options.config.credentials?.daytona || !branch.sandboxId) return branch;
+    const manager = new DaytonaBranchManager(options.config.credentials.daytona);
+    const logTail = await manager.syncGeneratedModules(branch.sandboxId, files);
+    return { ...branch, logTail, updatedAt: now() };
   };
 
   app.setErrorHandler((error: unknown, _request, reply) => {
@@ -265,7 +445,13 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       return reply.status(400).send({ error: 'canvas_integrity_error', issues: integrityIssues });
     }
 
-    const runId = `run-${nanoid(12).toLowerCase()}`;
+    // Honour a client-chosen id so the browser can stream events while this
+    // request is still running — but only when it is genuinely free, so a
+    // replayed or malformed id can never collide with or overwrite a real run.
+    const runId =
+      body.runId && (await store.readRun(body.runId)) === null
+        ? body.runId
+        : `run-${nanoid(12).toLowerCase()}`;
     const createdAt = now();
     let run = RunRecord.parse({
       version: 1,
@@ -342,21 +528,25 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     );
 
     await emit(event(runId, { type: 'stage-started', stage: 'visual-matching', label: 'Matching visual UI patterns' }));
-    let candidates = buildCandidates(spec);
+    // The archetype must reach the matcher, not just the compiler: without it
+    // every run resolved candidates against `application`'s intent tags, so a
+    // marketing or portfolio canvas almost never matched its own hero, marquee,
+    // or aurora-panel records no matter what the toolbar said.
+    let candidates = buildCandidates(spec, body.canvas.designPreferences.archetype);
     let matchingOutcome: 'ok' | 'degraded' = 'degraded';
-    let matchingDetail = options.config.integrations.nosana.detail;
-    if (options.config.credentials?.nosana) {
+    let matchingDetail = options.config.integrations.visualRanking.detail;
+    if (options.config.credentials?.ai) {
       try {
-        candidates = await rankWithNosana({
-          credentials: options.config.credentials.nosana,
+        candidates = await rankWithOpenAi({
+          credentials: options.config.credentials.ai,
           canvas: body.canvas,
           spec,
           candidates,
         });
         matchingOutcome = 'ok';
-        matchingDetail = 'Nosana CLIP ranked the reviewed candidate thumbnails against each canvas region.';
+        matchingDetail = 'OpenAI vision ranked the reviewed candidate sheets against each wireframe region.';
       } catch (error) {
-        matchingDetail = `Nosana matching failed; retained reviewed local matches. ${error instanceof Error ? error.message : ''}`.trim();
+        matchingDetail = `OpenAI visual ranking failed; retained reviewed local matches. ${error instanceof Error ? error.message : ''}`.trim();
       }
     }
     for (const candidate of candidates) {
@@ -366,7 +556,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
           regionId: candidate.regionId,
           matchSource: candidate.matches[0]?.matchSource ?? 'local',
           matches: candidate.matches,
-          degradedReason: candidate.matches[0]?.matchSource === 'nosana' ? null : matchingDetail,
+          degradedReason: candidate.matches[0]?.matchSource === 'openai' ? null : matchingDetail,
         }),
       );
     }
@@ -417,7 +607,14 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     );
 
     await emit(event(runId, { type: 'stage-started', stage: 'proposing-directions', label: 'Proposing three directions' }));
-    let manifests = buildDirections({ runId, spec, specHash: resolvedSpecHash, candidates, createdAt });
+    let manifests = buildDirections({
+      runId,
+      spec,
+      specHash: resolvedSpecHash,
+      candidates,
+      designPreferences: body.canvas.designPreferences,
+      createdAt,
+    });
     let directionsOutcome: 'ok' | 'degraded' = 'degraded';
     let directionsDetail = 'Three deterministic local directions were created without a live AI generator.';
     let contrastSummary =
@@ -428,12 +625,14 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
           credentials: options.config.credentials.ai,
           spec,
           selectionOptions: directionSelectionOptions({ spec, candidates }),
+          designPreferences: body.canvas.designPreferences,
           validate: (directionSet) =>
             buildDirectionsFromAi({
               runId,
               spec,
               specHash: resolvedSpecHash,
               candidates,
+              designPreferences: body.canvas.designPreferences,
               directionSet,
               createdAt,
             }),
@@ -452,10 +651,105 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       }
     }
     if (manifests.length !== 3) throw new Error(`Expected exactly three directions, received ${manifests.length}.`);
-    for (const manifest of manifests) {
-      const issues = findManifestIntegrityIssues(manifest, spec, resolvedSpecHash);
-      if (issues.length > 0) throw new Error(`Direction "${manifest.name}" failed integrity checks: ${issues.join(' ')}`);
+    const runIntegrity = (candidateManifests: typeof manifests) => {
+      for (const manifest of candidateManifests) {
+        const issues = [
+          ...findManifestIntegrityIssues(manifest, spec, resolvedSpecHash),
+          ...findManifestContextIssues(manifest, spec, patternContext),
+        ];
+        if (issues.length > 0) throw new Error(`Direction "${manifest.name}" failed integrity checks: ${issues.join(' ')}`);
+      }
+    };
+    runIntegrity(manifests);
+    await emit(
+      event(runId, {
+        type: 'stage-finished',
+        stage: 'proposing-directions',
+        outcome: directionsOutcome,
+        detail: directionsDetail,
+        durationMs: 0,
+      }),
+    );
+
+    // Layout audit: a static pass over each finalised manifest for the choices
+    // known to render badly — a region on the neutral fallback when a richer
+    // pattern was approved, a roomy density on a working surface, glass over a
+    // flat ground — plus any measured accessibility floor it misses. When the AI
+    // is configured, the defects are fed back for up to two revision rounds. The
+    // measured findings are kept regardless, so the loop never ships a run worse
+    // than it would have been without it.
+    await emit(event(runId, { type: 'stage-started', stage: 'layout-audit', label: 'Auditing layout' }));
+    const directionSelections = directionSelectionOptions({ spec, candidates });
+    const auditDirections = (candidateManifests: typeof manifests) =>
+      candidateManifests
+        .map((manifest) => {
+          const risk = findLayoutRiskIssues({ manifest, spec, selectionOptions: directionSelections });
+          const missed = measureBranch(manifest, spec.accessibility).filter((entry) => !entry.passes);
+          return {
+            branchName: manifest.name,
+            issues: [
+              ...risk.map((issue) => issue.detail),
+              ...missed.map((entry) => `${entry.label}: ${entry.evidence}`),
+            ],
+          };
+        })
+        .filter((entry) => entry.issues.length > 0);
+
+    let auditRounds = 0;
+    let auditDefects = auditDirections(manifests);
+    let auditOutcome: 'ok' | 'degraded' = auditDefects.length === 0 ? 'ok' : 'degraded';
+    let auditDetail =
+      auditDefects.length === 0
+        ? 'Every direction cleared the layout-risk and accessibility checks.'
+        : `${auditDefects.length} direction(s) had layout issues and no live AI generator was available to revise them.`;
+    if (auditDefects.length > 0 && options.config.credentials?.ai) {
+      while (auditDefects.length > 0 && auditRounds < 2) {
+        auditRounds += 1;
+        try {
+          const revised = await reviseDirections({
+            credentials: options.config.credentials.ai,
+            spec,
+            selectionOptions: directionSelections,
+            designPreferences: body.canvas.designPreferences,
+            current: manifests,
+            defects: auditDefects,
+            validate: (directionSet) =>
+              buildDirectionsFromAi({
+                runId,
+                spec,
+                specHash: resolvedSpecHash,
+                candidates,
+                designPreferences: body.canvas.designPreferences,
+                directionSet,
+                createdAt,
+              }),
+          });
+          if (revised.value.length !== 3) break;
+          runIntegrity(revised.value);
+          manifests = revised.value;
+          contrastSummary = revised.contrastSummary;
+          auditDefects = auditDirections(manifests);
+        } catch (error) {
+          auditDetail = `Layout revision round ${auditRounds} failed; kept the prior directions. ${
+            error instanceof Error ? error.message : ''
+          }`.trim();
+          auditDefects = auditDirections(manifests);
+          break;
+        }
+      }
+      if (!auditDetail.startsWith('Layout revision')) {
+        auditDetail =
+          auditDefects.length === 0
+            ? auditRounds === 0
+              ? 'Every direction cleared the layout-risk and accessibility checks.'
+              : `Layout issues cleared after ${auditRounds} revision round${auditRounds === 1 ? '' : 's'}.`
+            : `${auditDefects.length} direction(s) still have layout issues after ${auditRounds} revision round${
+                auditRounds === 1 ? '' : 's'
+              }: ${auditDefects.flatMap((entry) => entry.issues).join(' ')}`;
+      }
+      auditOutcome = auditDefects.length === 0 ? 'ok' : 'degraded';
     }
+
     let branches: RunRecordType['branches'] = manifests.map((manifest) => ({
       id: manifest.id,
       runId,
@@ -481,9 +775,9 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     await emit(
       event(runId, {
         type: 'stage-finished',
-        stage: 'proposing-directions',
-        outcome: directionsOutcome,
-        detail: directionsDetail,
+        stage: 'layout-audit',
+        outcome: auditOutcome,
+        detail: auditDetail,
         durationMs: 0,
       }),
     );
@@ -492,21 +786,68 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     let sandboxDetail = options.config.integrations.daytona.detail;
     if (options.config.credentials?.daytona) {
       const manager = new DaytonaBranchManager(options.config.credentials.daytona);
-      const launchedBranches: RunRecordType['branches'][number][] = [];
-      for (const branch of branches) {
-        await emit(
-          event(runId, {
-            type: 'branch-status',
-            branchId: branch.id,
-            status: 'creating',
-            detail: 'Creating Daytona sandbox from the configured snapshot.',
-          }),
+      let sweepNote = '';
+      try {
+        const reachable = await collectLiveSandboxIds();
+        // `null` means at least one run snapshot could not be read, so the set of
+        // reachable sandboxes is unknown. Sweeping on a partial set would stop a
+        // sandbox someone is still previewing, so the sweep is skipped instead.
+        if (reachable) {
+          const stopped = await manager.stopOrphanedSandboxes({
+            liveSandboxIds: reachable,
+            activeRunId: runId,
+          });
+          if (stopped.length > 0) {
+            sweepNote = ` Stopped ${stopped.length} orphaned sandbox${stopped.length === 1 ? '' : 'es'} left running by an earlier run.`;
+          }
+        }
+      } catch (error) {
+        // Reclaiming stale infrastructure is a cost optimisation. It must never
+        // be the reason a run cannot start.
+        app.log.warn(
+          `Orphaned-sandbox sweep failed: ${error instanceof Error ? error.message : 'unknown error'}`,
         );
-        const launched = await manager.launch({
-          runId,
-          branch,
-          files: materializedBranches.get(branch.id) ?? [],
-        });
+      }
+      // Branches are independent Daytona sandboxes, so launching them
+      // concurrently instead of one after another turns three sequential
+      // create+upload+build+boot cycles into one wall-clock cycle — the
+      // single largest lever on "time to live preview".
+      const launches = await Promise.all(
+        branches.map(async (branch) => {
+          await emit(
+            event(runId, {
+              type: 'branch-status',
+              branchId: branch.id,
+              status: 'creating',
+              detail: 'Creating Daytona sandbox from the configured snapshot.',
+            }),
+          );
+          const launch = await manager.launch({
+            runId,
+            branch,
+            files: materializedBranches.get(branch.id) ?? [],
+          });
+          return { branch, launch };
+        }),
+      );
+      const launchedBranches: RunRecordType['branches'][number][] = [];
+      for (const { branch, launch } of launches) {
+        // Two branches in one sandbox would overwrite each other's generated
+        // modules and serve a single shared bundle under three names. That is a
+        // silent, expensive failure, so it is reported as a failed branch rather
+        // than left to look like a working comparison.
+        const collision = launch.sandboxId
+          ? launchedBranches.find((entry) => entry.sandboxId === launch.sandboxId)
+          : undefined;
+        const launched = collision
+          ? {
+              ...launch,
+              status: 'failed' as const,
+              previewUrl: null,
+              previewToken: null,
+              error: `Sandbox ${launch.sandboxId} is already serving branch "${collision.name}". Branches may not share a sandbox.`,
+            }
+          : launch;
         await emit(
           event(runId, {
             type: 'branch-status',
@@ -524,9 +865,9 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       const servingCount = branches.filter((branch) => branch.status === 'serving').length;
       sandboxOutcome = servingCount === branches.length ? 'ok' : 'degraded';
       sandboxDetail =
-        servingCount === branches.length
+        (servingCount === branches.length
           ? 'Three Daytona preview branches are serving.'
-          : `${servingCount} of ${branches.length} Daytona branches are serving; failed branches remain visible.`;
+          : `${servingCount} of ${branches.length} Daytona branches are serving; failed branches remain visible.`) + sweepNote;
     } else {
       for (const branch of branches) {
         await emit(
@@ -560,7 +901,65 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       contrastSummary,
       updatedAt: now(),
     });
-    run = RunRecord.parse({ ...run, recommendations: makeRecommendations(run) });
+    await emit(event(runId, { type: 'stage-started', stage: 'design-review', label: 'Reviewing each branch' }));
+    const regionIds = new Set(spec.regions.map((region) => region.id));
+    const selectionOptions = directionSelectionOptions({ spec, candidates });
+    const recommendations: RecommendationType[] = [];
+    let reviewOutcome: 'ok' | 'degraded' = 'degraded';
+    let reviewDetail = 'Branches were reviewed against their measured accessibility floors only.';
+    // Each branch's AI review is an independent OpenAI call, so reviewing all
+    // three concurrently rather than one after another is another sequential
+    // stage turned into one wall-clock round trip.
+    const reviews = await Promise.all(
+      run.branches.map(async (branch) => {
+        const measured = measuredRecommendations({ branch, spec, candidates, createdAt });
+        if (!options.config.credentials?.ai) return { measured, ai: null };
+        try {
+          const proposed = await proposeRecommendations({
+            credentials: options.config.credentials.ai,
+            spec,
+            manifest: branch.manifest,
+            measurements: measureBranch(branch.manifest, spec.accessibility),
+            selectionOptions,
+            validate: (set) =>
+              adoptAiRecommendations({
+                branch,
+                drafts: set.recommendations,
+                measured,
+                regionIds,
+                createdAt,
+              }),
+          });
+          return { measured, ai: { ok: true as const, proposed } };
+        } catch (error) {
+          return { measured, ai: { ok: false as const, error } };
+        }
+      }),
+    );
+    for (const review of reviews) {
+      recommendations.push(...review.measured);
+      if (!review.ai) continue;
+      if (review.ai.ok) {
+        recommendations.push(...review.ai.proposed.value);
+        reviewOutcome = 'ok';
+        reviewDetail = review.ai.proposed.repaired
+          ? 'The AI reviewed each branch after one structured-output repair, on top of the measured findings.'
+          : 'The AI reviewed each branch on top of the measured accessibility findings.';
+      } else {
+        reviewDetail =
+          `AI design review failed; kept the measured findings. ${review.ai.error instanceof Error ? review.ai.error.message : ''}`.trim();
+      }
+    }
+    run = RunRecord.parse({ ...run, recommendations });
+    await emit(
+      event(runId, {
+        type: 'stage-finished',
+        stage: 'design-review',
+        outcome: reviewOutcome,
+        detail: reviewDetail,
+        durationMs: 0,
+      }),
+    );
     await store.writeInitialArtifacts(run);
     for (const branch of run.branches) {
       await store.writeBranchFiles(runId, branch.id, materializedBranches.get(branch.id) ?? []);
@@ -628,14 +1027,18 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
         const mutations = (await store.readMutations(runId)) as MutationRecord[];
         const applied = [...mutations]
           .reverse()
-          .find((entry) => entry.type === 'recommendation-applied' && entry.recommendationId === recommendation.id);
+          .find(
+            (
+              entry,
+            ): entry is Extract<MutationRecord, { type: 'recommendation-applied' }> =>
+              entry.type === 'recommendation-applied' && entry.recommendationId === recommendation.id,
+          );
         if (!applied) throw new Error('This recommendation has no recorded applied state to revert.');
         delta = applied.revertTo;
       }
       const nextManifest = applyDelta(branch.manifest, delta, run.candidates);
       const updatedAt = now();
-      const nextBranch = { ...branch, manifest: nextManifest, updatedAt };
-      await syncLiveBranch(run, nextBranch);
+      const nextBranch = await syncLiveBranch(run, { ...branch, manifest: nextManifest, updatedAt });
       run.branches[branchIndex] = nextBranch;
       const recommendationIndex = run.recommendations.findIndex((entry) => entry.id === recommendation.id);
       run.recommendations[recommendationIndex] = { ...recommendation, state: body.apply ? 'applied' : 'reverted' };
@@ -661,6 +1064,18 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       const run = await requireRun(runId);
       const createdAt = now();
       const manifest = createRemix({ id: `${runId}-remix-${nanoid(8).toLowerCase()}`, request: body, run, createdAt });
+      if (run.spec) {
+        // A remix composes trait groups from parent branches, so it can pair a
+        // parent's expressive pattern selection with another parent's archetype.
+        // Same backstop the directions get, so a remix cannot ship a context
+        // mismatch a person would only catch in the rendered preview.
+        const contextIssues = findManifestContextIssues(manifest, run.spec, patternContext);
+        if (contextIssues.length > 0) {
+          const error = new Error(contextIssues.join(' '));
+          Object.assign(error, { statusCode: 422 });
+          throw error;
+        }
+      }
       let branch: RunRecordType['branches'][number] = {
         id: manifest.id,
         runId,
@@ -712,6 +1127,90 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     });
   });
 
+  app.delete('/runs/:runId', async (request, reply) => {
+    const { runId } = request.params as { runId: string };
+    return withRunLock(runId, async () => {
+      const run = await requireRun(runId);
+      const sandboxIds = run.branches
+        .map((branch) => branch.sandboxId)
+        .filter((id): id is string => Boolean(id));
+
+      if (options.config.credentials?.daytona && sandboxIds.length > 0) {
+        const manager = new DaytonaBranchManager(options.config.credentials.daytona);
+        const results = await Promise.allSettled(sandboxIds.map((id) => manager.deleteSandbox(id)));
+        const failed = results.filter((result) => result.status === 'rejected').length;
+        if (failed > 0) {
+          return reply.status(502).send({
+            error: `Could not delete ${failed} of ${sandboxIds.length} live sandbox${
+              sandboxIds.length === 1 ? '' : 'es'
+            } for "${run.canvas.title}". Nothing was removed; retry deleting the workspace.`,
+          });
+        }
+      }
+
+      await store.deleteRun(runId);
+      return reply.status(204).send();
+    });
+  });
+
+  app.delete('/runs/:runId/branches/:branchId', async (request, reply) => {
+    const { runId, branchId } = request.params as { runId: string; branchId: string };
+    return withRunLock(runId, async () => {
+      const run = await requireRun(runId);
+      const branch = run.branches.find((entry) => entry.id === branchId);
+      if (!branch) return reply.status(404).send({ error: `Branch "${branchId}" was not found.` });
+      if (run.branches.length <= 1) {
+        return reply.status(409).send({ error: 'Keep at least one branch in the active run.' });
+      }
+      if (run.championBranchId === branch.id || branch.isChampion) {
+        return reply.status(409).send({ error: 'Choose another champion before deleting this branch.' });
+      }
+      const dependents = run.branches.filter(
+        (candidate) =>
+          candidate.id !== branch.id && candidate.manifest.lineage.parentBranchIds.includes(branch.id),
+      );
+      if (dependents.length > 0) {
+        return reply.status(409).send({
+          error: `Cannot delete "${branch.name}" while ${dependents.map((entry) => `"${entry.name}"`).join(', ')} depends on its lineage.`,
+        });
+      }
+
+      if (options.config.credentials?.daytona && branch.sandboxId) {
+        try {
+          await new DaytonaBranchManager(options.config.credentials.daytona).stopAndArchive(branch.sandboxId);
+        } catch (error) {
+          return reply.status(502).send({
+            error: `Could not archive the live branch before deletion. ${
+              error instanceof Error ? error.message : 'Daytona retirement failed.'
+            }`,
+          });
+        }
+      }
+
+      const deletedAt = now();
+      run.branches = run.branches.filter((entry) => entry.id !== branch.id);
+      run.recommendations = run.recommendations.filter((entry) => entry.branchId !== branch.id);
+      run.patches = run.patches.filter((entry) => entry.branchId !== branch.id);
+      run.updatedAt = deletedAt;
+      await store.appendMutation(runId, {
+        type: 'branch-deleted',
+        branchId: branch.id,
+        branchName: branch.name,
+        deletedAt,
+      } satisfies MutationRecord);
+      await store.appendSnapshot(run);
+      await emit(
+        event(runId, {
+          type: 'branch-status',
+          branchId: branch.id,
+          status: 'archived',
+          detail: 'Branch removed from the active run; historical snapshots remain available.',
+        }),
+      );
+      return publicRun(run);
+    });
+  });
+
   app.post('/runs/:runId/patches', async (request, reply) => {
     const { runId } = request.params as { runId: string };
     const body = PatchRequest.parse(request.body);
@@ -720,18 +1219,35 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       const branchIndex = run.branches.findIndex((entry) => entry.id === body.branchId);
       const branch = run.branches[branchIndex];
       if (!branch) throw new Error(`Branch "${body.branchId}" was not found.`);
-      const patch = makePatch({
-        id: `${branch.id}-patch-${nanoid(8).toLowerCase()}`,
-        branch,
-        regionId: body.regionId,
-        request: body.request,
-        candidates: run.candidates,
-        createdAt: now(),
-      });
+      const patchId = `${branch.id}-patch-${nanoid(8).toLowerCase()}`;
+      const createdAt = now();
+      // The heuristic is the floor, not the default: it cannot read a request it
+      // has no keyword for, so it is what runs when there is no AI, the AI fails,
+      // or the AI proposes nothing that would actually move.
+      const interpreted = options.config.credentials?.ai
+        ? await aiPatchInstruction({
+            credentials: options.config.credentials.ai,
+            run,
+            branch,
+            regionId: body.regionId,
+            request: body.request,
+            id: patchId,
+            createdAt,
+          })
+        : null;
+      const patch =
+        interpreted ??
+        makePatch({
+          id: patchId,
+          branch,
+          regionId: body.regionId,
+          request: body.request,
+          candidates: run.candidates,
+          createdAt,
+        });
       const manifest = applyDelta(branch.manifest, patch.delta, run.candidates);
       const applied = { ...patch, state: 'applied' as const };
-      const nextBranch = { ...branch, manifest, updatedAt: now() };
-      await syncLiveBranch(run, nextBranch);
+      const nextBranch = await syncLiveBranch(run, { ...branch, manifest, updatedAt: now() });
       run.branches[branchIndex] = nextBranch;
       run.patches.push(applied);
       run.updatedAt = now();
@@ -740,6 +1256,35 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       await store.appendSnapshot(run);
       await emit(event(runId, { type: 'patch-applied', branchId: branch.id, patchId: applied.id, regionId: applied.regionId }));
       return reply.status(201).send(applied);
+    });
+  });
+
+  app.delete('/runs/:runId/patches/:patchId', async (request, reply) => {
+    const { runId, patchId } = request.params as { runId: string; patchId: string };
+    return withRunLock(runId, async () => {
+      const run = await requireRun(runId);
+      const patchIndex = run.patches.findIndex((entry) => entry.id === patchId);
+      const patch = run.patches[patchIndex];
+      if (!patch) return reply.status(404).send({ error: `Patch "${patchId}" was not found.` });
+      const branchIndex = run.branches.findIndex((entry) => entry.id === patch.branchId);
+      const branch = run.branches[branchIndex];
+      if (!branch) return reply.status(404).send({ error: `Branch "${patch.branchId}" was not found.` });
+
+      const manifest = applyDelta(branch.manifest, patch.revertTo, run.candidates);
+      const nextBranch = await syncLiveBranch(run, { ...branch, manifest, updatedAt: now() });
+      run.branches[branchIndex] = nextBranch;
+      run.patches.splice(patchIndex, 1);
+      run.updatedAt = now();
+      await store.appendMutation(runId, {
+        type: 'patch-deleted',
+        patchId: patch.id,
+        branchId: patch.branchId,
+        revertTo: patch.revertTo,
+      } satisfies MutationRecord);
+      await store.appendManifestRevision(run, branch.id);
+      await store.appendSnapshot(run);
+      await emit(event(runId, { type: 'patch-deleted', branchId: patch.branchId, patchId: patch.id, regionId: patch.regionId }));
+      return publicRun(run);
     });
   });
 

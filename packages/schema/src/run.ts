@@ -56,6 +56,14 @@ export const GenerateRequest = z.object({
   canvasImage: z.string().nullable(),
   /** Branch count is fixed at three for the MVP; extras queue. See PRD §2. */
   branchCount: z.literal(3).default(3),
+  /**
+   * Optional client-chosen run id. `POST /runs` runs the whole pipeline before
+   * it answers, so without knowing the id up front the browser can only open
+   * the event stream once every stage has already finished. Supplying the id
+   * lets it subscribe while the run is still in flight. Honoured only when it
+   * matches the orchestrator's own id shape and no run holds it yet.
+   */
+  runId: z.string().regex(/^run-[a-z0-9]{6,40}$/).optional(),
 });
 export type GenerateRequest = z.infer<typeof GenerateRequest>;
 

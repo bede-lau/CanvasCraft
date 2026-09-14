@@ -11,6 +11,8 @@ export * from './canvas.js';
 export * from './screen-spec.js';
 export * from './registry.js';
 export * from './manifest.js';
+export * from './accessibility.js';
+export * from './layout-risk.js';
 export * from './director.js';
 export * from './branch.js';
 export * from './events.js';
