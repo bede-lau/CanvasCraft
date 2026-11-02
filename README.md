@@ -1,4 +1,23 @@
-# CanvasCraft
+<h1 align="center">CanvasCraft</h1>
+<p align="center">🏆 <b>2nd place · Daytona Hacksprint Singapore</b><br/><sub><a href="https://my.linkedin.com/in/king-hao-xiang-67127b2ba">Award announcement</a></sub></p>
+<p align="center"><b>One sketch. One product contract. Three working directions.</b><br/><sub>Sketch → compile intent → retrieve patterns → launch → compare → choose</sub></p>
+
+## ▍The system in one view
+
+```mermaid
+flowchart LR
+  A["Wireframe canvas<br/>stamps · arrows · notes"] --> B["Multimodal interpretation"]
+  B --> C["Validated shared<br/>Screen Spec"]
+  C --> D["Curated component registry<br/>licence + compatibility gates"]
+  D --> E["Three Variant Manifests"]
+  E --> F["Three Daytona sandboxes<br/>isolated live previews"]
+  F --> G["Compare states · remix<br/>select champion"]
+  C -. "offline rehearsal" .-> H["Labelled local fallback"]
+```
+
+The Screen Spec fixes product intent across variants; manifests vary the visual direction. Provider-backed ranking and Daytona previews require credentials. Local fallback results are explicitly labelled rather than represented as live integration results.
+
+---
 
 > Turn a rough wireframe into three live, comparable frontend directions - then
 > select, remix, and refine the one worth building.
