@@ -92,6 +92,16 @@ flowchart TB
     DAY --> REV["Review<br/>state lock · provenance · remix · champion"]:::stage
 ```
 
+## ▍Project gallery
+
+<table><tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/bede-lau/bede-lau.github.io/main/assets/img/canvascraft/canvascraft_1.jpeg" alt="CanvasCraft project screenshot, first view" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/bede-lau/bede-lau.github.io/main/assets/img/canvascraft/canvascraft_2.jpeg" alt="CanvasCraft project screenshot, second view" /></td>
+</tr></table>
+
+<sub>Images from the [project portfolio](https://bede-lau.github.io/); they may depict an earlier build.</sub>
+
+
 ## ▍The demo
 
 There is no captured screenshot of the running studio in this repository. `pnpm dev` is the demo. What is committed:
