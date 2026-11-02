@@ -2,6 +2,16 @@
 <p align="center">🏆 <b>2nd place · Daytona Hacksprint Singapore</b><br/><sub><a href="https://my.linkedin.com/in/king-hao-xiang-67127b2ba">Award announcement</a></sub></p>
 <p align="center"><b>One sketch. One product contract. Three working directions.</b><br/><sub>Sketch → compile intent → retrieve patterns → launch → compare → choose</sub></p>
 
+## ▍Project gallery
+
+<table><tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/bede-lau/bede-lau.github.io/main/assets/img/canvascraft/canvascraft_1.jpeg" alt="CanvasCraft project screenshot, first view" /></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/bede-lau/bede-lau.github.io/main/assets/img/canvascraft/canvascraft_2.jpeg" alt="CanvasCraft project screenshot, second view" /></td>
+</tr></table>
+
+<sub>Images from the [project portfolio](https://bede-lau.github.io/); they may depict an earlier build.</sub>
+
+
 ## ▍The system in one view
 
 ```mermaid
